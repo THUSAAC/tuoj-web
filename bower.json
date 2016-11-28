@@ -1,0 +1,22 @@
+{
+  "name": "tuoj-onsite-server",
+  "description": "",
+  "main": "",
+  "authors": [
+    "laekov <laekov.h@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/haoxizhong/TUOJ",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "MathJax": "^2.7.0",
+    "highlightjs": "^9.8.0"
+  }
+}

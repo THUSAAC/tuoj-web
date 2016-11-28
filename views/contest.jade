@@ -1,0 +1,23 @@
+extends contest_layout
+
+block content_contest
+	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info" }
+	div.container-fluid
+		div.page-header
+			h3 #{contesttitle}
+		table.table.table-hover
+			thead
+				tr
+					th #
+					th Problem
+			tbody
+				- for(var i = 0 ; i < problems.length;i++){
+					tr
+						td #{i}
+							- if (judges && judges[i]) {
+								a(href='/contests/#{contestid}/detail/#{judges[i]._id}')
+									span.label(class='label-#{statusMap[judges[i].status]}') #{now.status} 
+							- }
+						td
+							a(href='/contests/#{contestid}/problems/#{i}') #{problems[i].title}
+				- }

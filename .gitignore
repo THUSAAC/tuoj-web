@@ -1,0 +1,41 @@
+# Project
+*.dSYM
+*.swp
+
+# Public data
+public/test_data
+public/source
+public/down
+
+# npm
+node_modules
+*.log
+*.log.*
+*.gz
+
+# bower
+bower_components
+
+# OS X
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+# Idea
+.idea
+
+# Binary
+data/problems/
+datas/
+
+# Config
+server/config_local.js
