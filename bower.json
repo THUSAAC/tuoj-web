@@ -17,6 +17,8 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "MathJax": "^2.7.0",
-    "highlightjs": "^9.8.0"
+    "highlightjs": "^9.8.0",
+    "angular": "^1.5.9",
+    "datatables": "^1.10.12"
   }
 }

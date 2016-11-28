@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 	var session = req.session;
 	// console.log(session.user);
 	res.render('homepage', {
-        title: "CCF CCSP",
+        title: "TUOJ",
         user: session.user,
 		call: session.call,
         is_admin: req.session.is_admin
