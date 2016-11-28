@@ -1,7 +1,7 @@
-var Contest = require('./models/contest');
-var SubmitRecord = require('./models/submit_record');
-var RankList = require('./models/rank_list');
-var Judge = require('./models/judge');
+var Contest = require('../models/contest');
+var SubmitRecord = require('../models/submit_record');
+var RankList = require('../models/rank_list');
+var Judge = require('../models/judge');
 var Step = require('step');
 
 var updateRankList = function (c, rank_list, records, callback) {

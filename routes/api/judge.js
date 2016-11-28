@@ -2,7 +2,7 @@ var router = require('express').Router();
 var Judge = require('../../models/judge');
 var SubmitRecord = require('../../models/submit_record');
 var Step = require('step');
-var helper = require('../../helper');
+var helper = require('../../service/helper');
 var TOKEN = require('../../config').TOKEN;
 var JudgerMon = require('../../models/judgermon');
 
