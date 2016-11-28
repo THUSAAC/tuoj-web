@@ -1,3 +1,3 @@
 var config = require('./config');
-config.SITE_URL = 'https://ccsp.cspro.org';
+config.SITE_URL = 'http://localhost:3023';
 module.exports = config;
