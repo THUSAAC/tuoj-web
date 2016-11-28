@@ -13,6 +13,10 @@ node_modules
 *.log.*
 *.gz
 
+# psb and xcf
+*.psb
+*.xcf
+
 # bower
 bower_components
 
