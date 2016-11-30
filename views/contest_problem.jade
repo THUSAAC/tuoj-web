@@ -17,7 +17,7 @@ block content_contest
 			div.panel.panel-default
 				div.panel-heading
 					p 最近递交 
-						small.pull-right 已递交#{submitted_times}次, 剩余#{10-submitted_times}次
+						small.pull-right 已递交#{submitted_times}次
 				div.panel-body
 					table.table.table-hover
 						thead
@@ -36,32 +36,24 @@ block content_contest
 										a(href='/contests/#{contestid}/detail/#{now._id}')
 											span.label(class='label-#{statusMap[now.status]}') #{statusText[now.status]} 
 										- if (best_solution && now._id == best_solution) {
-											span.label.label-success 最好递交
+											span.label.label-success 有效提交
 										- }
 									td #{now.score}
 							- }
-			- if (submitted_times < 10) {
-				form(method='POST',action='/contests/#{contestid}/problems/#{problemid}/upload',enctype='multipart/form-data')
-					div.panel.panel-default
-						div.panel-heading
-							p 递交
-						div.panel-body
-							div.form-group
-								label 请选择语言
-								select.form-control(name='language')
-									- for (var i in langs) {
-										option(value='#{langs[i]}')= langs[i]
-									- }
-							div.form-group
-								label 请选择答案文件
-								input.form-control(name='inputfile',type='file',multiple='multiple')
-						div.panel-footer
-							div.form-group
-								input.btn.btn-success(type='submit' value='递交评测(剩余#{10 - submitted_times}次)')
-			- } else {
+			form(method='POST',action='/contests/#{contestid}/problems/#{problemid}/upload',enctype='multipart/form-data')
 				div.panel.panel-default
 					div.panel-heading
 						p 递交
 					div.panel-body
-						p 很遗憾, 您已用尽本题目的所有递交机会
-			- }
+						div.form-group
+							label 请选择语言
+							select.form-control(name='language')
+								- for (var i in langs) {
+									option(value='#{langs[i]}')= langs[i]
+								- }
+						div.form-group
+							label 请选择答案文件
+							input.form-control(name='inputfile',type='file',multiple='multiple')
+					div.panel-footer
+						div.form-group
+							input.btn.btn-success(type='submit' value='递交评测')

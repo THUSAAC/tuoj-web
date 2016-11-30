@@ -204,7 +204,7 @@ router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload',upload.single('inputfil
 			SubmitRecord.getSubmitRecord(req.session.uid, x._id, problemid, this);
 		}, function (err, x) {
 			if (err) throw err;
-            if (x.submitted_times > 10) throw (new Error("You do not have s"));
+            // if (x.submitted_times > 10) throw (new Error("You do not have s"));
 			submit_record = x;
 			submit_record.submitted_times += 1;
 			submit_record.save(this);
