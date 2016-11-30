@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var mongoose = require("mongoose");
+mongoose.Promise = require('bluebird');
 var session = require("express-session");
 var MongoStore = require('connect-mongo')(session);
 var autoIncrement = require("mongoose-auto-increment");
@@ -16,6 +17,7 @@ var app = express();
 
 // set up mongo connection and session
 mongoose.connect('mongodb://127.0.0.1/tuoj');
+
 autoIncrement.initialize(mongoose.connection);
 var EXPRESS_SESSION = require("./config").EXPRESS_SESSION;
 EXPRESS_SESSION.store = new MongoStore({ mongooseConnection: mongoose.connection });

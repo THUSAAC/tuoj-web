@@ -182,7 +182,17 @@ router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload',upload.single('inputfil
         return next(new Error("The solution size is at most 512 KB."));
     }
 
-    var suffix = {"g++": ".cpp", "java": ".java", "system": ".zip", "answer": ".ans", "system_g++": ".zip", "system_java": ".zip"};
+    var suffix = {
+		"pascal": ".pas",
+		"gcc": ".c",
+		"g++": ".cpp", 
+		"java": ".java", 
+		"system": ".zip", 
+		"answer": ".ans", 
+		"answerzip": ".zip",
+		"system_g++": ".zip", 
+		"system_java": ".zip"
+	};
 	source_file = randomstring.generate(15) + suffix[req.body.language];
 
 	var contestid=parseInt(req.params.cid);
@@ -327,7 +337,11 @@ router.get('/:contestId/detail/:judgeId', function(req, res, next) {
             renderArgs.total_time = total_time;
         } else {
             try {
-                renderArgs.source = fs.readFileSync(path.resolve(__dirname, '../public/source', doc.source_file));
+				if (doc.lang === 'answerzip') {
+					renderArgs.source = 'Unsupported format';
+				} else {
+					renderArgs.source = fs.readFileSync(path.resolve(__dirname, '../public/source', doc.source_file));
+				}
             } catch (error) {
             }
         }

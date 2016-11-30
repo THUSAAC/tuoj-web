@@ -41,7 +41,14 @@ router.post('/get_task/acm', function (req, res, next) {
 			console.error(err);
 		}
 	});
-	Judge.findOne({'status': 'Waiting', $or: [{'lang': 'g++'}, {'lang': 'java'}, {'lang': 'answer'}]}).populate('problem').exec(function (err, x) {
+	Judge.findOne({'status': 'Waiting', $or: [
+		{'lang': 'pascal'}, 
+		{'lang': 'gcc'}, 
+		{'lang': 'g++'}, 
+		{'lang': 'java'}, 
+		{'lang': 'answer'},
+		{'lang': 'answerzip'},
+	]}).populate('problem').exec(function (err, x) {
 		if (err) return next(err);
 		if (!x) {
 			return res.send({
