@@ -5,8 +5,8 @@ append head
 	script(type='text/javascript' src='/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML')
 
 block content_contest
-	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info", "Running success": "success", "Compile error": "primary", "Running timeout": "warning", "Running error": "warning" }
-	- var statusText = { "Accepted": "AC", "Wrong Answer": "WA", "Time Limit Exceeded": "TLE", "Memory Limit Exceeded": "MLE", "Runtime Error": "RE", "Compilation Error": "CE", "No Source": "NS", "Dangerous Program": "DP", "Waiting": "W", "Running": "R", "Compilation Success": "CS", "Running success": "AC", "Compile error": "CE", "Running timeout": "TLE", "Running error": "RE" }
+	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info", "Running success": "success", "Compile error": "primary", "Running timeout": "warning", "Running error": "warning", "Invisible": "info" }
+	- var statusText = { "Accepted": "AC", "Wrong Answer": "WA", "Time Limit Exceeded": "TLE", "Memory Limit Exceeded": "MLE", "Runtime Error": "RE", "Compilation Error": "CE", "No Source": "NS", "Dangerous Program": "DP", "Waiting": "W", "Running": "R", "Compilation Success": "CS", "Running success": "AC", "Compile error": "CE", "Running timeout": "TLE", "Running error": "RE", 'Invisible': 'H' }
 	div.row
 		div.col-xs-8
 			div.panel.panel-default
@@ -17,7 +17,6 @@ block content_contest
 			div.panel.panel-default
 				div.panel-heading
 					p 最近递交 
-						small.pull-right 已递交#{submitted_times}次, 剩余#{10-submitted_times}次
 				div.panel-body
 					table.table.table-hover
 						thead
@@ -35,9 +34,6 @@ block content_contest
 									td 
 										a(href='/contests/#{contestid}/detail/#{now._id}')
 											span.label(class='label-#{statusMap[now.status]}') #{statusText[now.status]} 
-										- if (best_solution && now._id == best_solution) {
-											span.label.label-success 最好递交
-										- }
 									td #{now.score}
 							- }
 			- if (submitted_times < 10) {
@@ -57,7 +53,7 @@ block content_contest
 								input.form-control(name='inputfile',type='file',multiple='multiple')
 						div.panel-footer
 							div.form-group
-								input.btn.btn-success(type='submit' value='递交评测(剩余#{10 - submitted_times}次)')
+								input.btn.btn-success(type='submit' value='递交评测')
 			- } else {
 				div.panel.panel-default
 					div.panel-heading

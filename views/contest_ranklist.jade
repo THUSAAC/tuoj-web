@@ -22,14 +22,14 @@ block content_contest
 									small= player.user.school
 								br
 								span= player.user.realname
-							td= player.total_score
+							td= player.total_score === 'unknown' ? '未知' : player.total_score
 							- for (var j in problems) {
 								- if (player.details[j] && player.details[j].judge_id !== "null" && player.details[j].judge_id) {
-									- if ((player.details[j].is_system && !is_frozen) || is_admin) {
+									- if (player.user.username === user || is_admin) {
 									td
-										a(href='/contests/#{contestid}/detail/#{player.details[j].judge_id}')= player.details[j].score
+										a(href='/contests/#{contestid}/detail/#{player.details[j].judge_id}')= player.details[j].score == 'submitted' ? '已提交' : player.details[j].score
 									- } else {
-										td= player.details[j].score
+										td= player.details[j].score == 'submitted' ? '已提交' : player.details[j].score
 									- }
 								- } else {
 									td

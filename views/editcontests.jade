@@ -26,5 +26,21 @@ block content
 				label 题目列表
 				textarea.form-control(name='gitlist', cols='70', rows=6) #{gitlist}
 			div.form-group
+				label
+					- if (hidden) {
+						input(type='checkbox' value='hidden' name='hidden' checked) 
+					- } else {
+						input(type='checkbox' value='hidden' name='hidden') 
+					- }
+					span 对普通用户隐藏比赛
+			div.form-group
+				label
+					- if (released) {
+						input(type='checkbox' value='released' name='released' checked) 
+					- } else {
+						input(type='checkbox' value='released' name='released') 
+					- }
+					span 对普通用户显示成绩
+			div.form-group
 				input.btn.btn-primary(type='submit' value='修改')
 	

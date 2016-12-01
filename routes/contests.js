@@ -15,6 +15,22 @@ var path = require('path')
 var upload = require('../config').MULTER_UPLOAD
 var randomstring = require('randomstring')
 var SOURCE_DIR = require('../config').SOURCE_DIR
+var ranklistService = require('../service/ranklist.service.js');
+
+var checkContestAvailable = function(req, res, next) {
+	var contestId = req.params.cid || req.params.contestId || req.params.id;
+	contest.findOne({
+		_id: contestId
+	}).exec(function(err, doc) {
+		if (!doc) {
+			return res.status(400).send('Contest does not exists');
+		}
+		if (doc.hidden && !req.session.is_admin) {
+			return res.status(400).send('Access denied');
+		}
+		next();
+	});
+};
 
 router.get('/', function(req, res, next) {
 	contest.find({},function(err,contestlist){
@@ -27,9 +43,13 @@ router.get('/', function(req, res, next) {
 		dict.contestlist=[];
         contestlist.forEach(function (item) {
             var d = new Date();
+			if (item.hidden && !req.session.is_admin) {
+				return;
+			}
             dict.contestlist.push({
                 id: item._id,
                 name: item.name,
+				hidden: item.hidden,
                 status: item.get_status(),
                 start_time: helper.timestampToString(item.start_time),
                 end_time: helper.timestampToString(item.end_time)
@@ -39,7 +59,7 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-router.get('/:id([0-9]+)',function(req,res,next){
+router.get('/:id([0-9]+)', checkContestAvailable, function(req,res,next){
 	var contestid=parseInt(req.params.id)
 	contest.findOne({_id:contestid}).populate('problems').exec(function(err,x){
 		if (err) return next(err)
@@ -64,11 +84,19 @@ router.get('/:id([0-9]+)',function(req,res,next){
 }) 
 
 
-router.get('/:id([0-9]+)/status',function(req,res,next){
+router.get('/:id([0-9]+)/status', checkContestAvailable,function(req,res,next){
+	var self = this;
 	var contestid=parseInt(req.params.id)
 	var page=parseInt(req.params.page)
 	var attr = {'contest':contestid}
 	Step(function() {
+		contest.findOne({ _id: contestid }, this);
+	}, function(err, contest) {
+		if (err || !contest) {
+			console.error(err);
+			return res.status(400).send('Contest not found'), undefined; 
+		}
+		self.released = contest.released || req.session.is_admin;
 		attr.user = req.session.uid;
 		judge.find(attr).sort('-_id').populate('problem').populate('user').populate('contest').exec(this);
 	}, function(err, judgelist){
@@ -96,7 +124,13 @@ router.get('/:id([0-9]+)/status',function(req,res,next){
 				judict.user=judgelist[i].user.username;
 			}
 			judict.status=judgelist[i].status;
+			if (!self.released && judict.status.match(/Compilation*/) === null) {
+				judict.status = 'Invisible';
+			}
 			judict.score=judgelist[i].score;
+			if (!self.released) {
+				judict.score = 0;
+			}
 			judict.lang = judgelist[i].lang;
 			var newtime=new Date();
 			newtime.setTime(judgelist[i].submitted_time);
@@ -118,9 +152,10 @@ router.post('/:id([0-9]+)/skip',function(req,res,next){
 	res.redirect('/contests/'+contestid+'/status/');
 })
 
-router.get('/:cid([0-9]+)/problems/:pid([0-9]+)',function(req,res,next){
-    var contestid=parseInt(req.params.cid)
-	var problemid=parseInt(req.params.pid)
+router.get('/:cid([0-9]+)/problems/:pid([0-9]+)', checkContestAvailable,function(req,res,next){
+	var self = this;
+    var contestid=parseInt(req.params.cid);
+	var problemid=parseInt(req.params.pid);
     contest.findOne({_id: contestid}).populate("problems").exec(function (err, c) {
 		if (err) return next(err);
         if (!c) return next();
@@ -129,6 +164,7 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)',function(req,res,next){
 
 		p = c.problems[problemid];
 		// console.log(p);
+		self.released = c.released || req.session.is_admin;
 
 		try {
 			var description = p.getDescriptionHTML();
@@ -156,10 +192,16 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)',function(req,res,next){
                 dict.judge_status = [];
 				var tmpStatus = [];
                 judge_staus.forEach(function (item) {
+					if (!self.released && item.status.match(/Compilation*/) === null) {
+						item.status = 'Invisible';
+					}
+					if (!self.released) {
+						item.score = 0;
+					}
                     tmpStatus.push({
                         _id: item._id,
-                        status: item.status,
                         submitted_time: helper.timestampToTimeString(item.submitted_time),
+                        status: item.status,
                         score: item.score
                     });
                 });
@@ -171,7 +213,7 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)',function(req,res,next){
 
 });
 
-router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload',upload.single('inputfile'),function(req,res,next){
+router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload', checkContestAvailable,upload.single('inputfile'),function(req,res,next){
 	// console.log(req.session);
 	if (typeof(req.file) == 'undefined') {
         // console.log("xx");
@@ -292,7 +334,8 @@ router.post('/rejudge/:id([0-9]+)/:judgeid([0-9]+)',function(req,res,next){
 	})
 });
 
-router.get('/:contestId/detail/:judgeId', function(req, res, next) {
+router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, res, next) {
+	var self = this;
     var contestId = req.params.contestId;
     var judgeId = req.params.judgeId;
     judge.findOne({ _id: judgeId }).populate('user').populate('problem').populate('contest').exec(function(err, doc) {
@@ -304,8 +347,8 @@ router.get('/:contestId/detail/:judgeId', function(req, res, next) {
             });
         }
 
+		self.released = doc.contest.released || req.session.is_admin;
         var has_permission = req.session.is_admin || (req.session.user  == doc.user.username); // 是管理员或者是自己的提交
-        has_permission |= !doc.contest.is_frozen() && doc.isSystem(); // 没有封榜且是系统题
 
         if (!has_permission) {
             return res.status(400).render('error', {
@@ -313,6 +356,18 @@ router.get('/:contestId/detail/:judgeId', function(req, res, next) {
                 message: 'Access denied'
             });
         }
+		if (!self.released && doc.status.match(/Compilation*/) === null) {
+			doc.status = 'Invisible';
+		}
+		if (!self.released) {
+			doc.score = 0;
+			for (var i in doc.results) {
+				doc.results[i].score = 0;
+				doc.results[i].status = 'Invisible';
+				doc.results[i].time = 'Invisible';
+				doc.results[i].memory = 'Invisible';
+			}
+		}
         var renderArgs = {
             id: doc._id,
             problem_id: doc.problem_id,
@@ -360,36 +415,22 @@ router.get('/:contestId/detail/:judgeId', function(req, res, next) {
     });
 });
 
-router.get('/:cid([0-9]+)/rank_list', function (req, res, next) {
+router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res, next) {
 	var contest_id = parseInt(req.params.cid);
-	contest.findOne({_id: contest_id}).populate('problems').exec(function (err, c) {
+	var attr = {_id: contest_id};
+	ranklistService.getRanklist(contest_id, req.session.uid, req.session.is_admin, function (err, ranklist) {
 		if (err) return next(err);
-		if (!c) return next();
-        user.findOne({_id: req.session.uid}, function (err, u) {
-            if (err) return next(err);
-            helper.generateRankList(c, u, function (err, rank_list) {
-                if (err) return next(err);
-                var renderArgs = {
-                    user: req.session.user,
-					call: req.session.call,
-                    is_admin: req.session.is_admin,
-					is_frozen: c.is_frozen(),
-                    contestid: c._id,
-                    problems: [],
-                    players: rank_list,
-					active: 'ranklist'
-                };
-                for (var i in c.problems) {
-                    if (c.problems[i].title) {
-                        renderArgs.problems.push({
-                            id: i,
-                            title: c.problems[i].title
-                        });
-                    }
-                }
-                res.status(200).render('contest_ranklist', renderArgs);
-            });
-        });
+		var renderArgs = {
+			user: req.session.user,
+			call: req.session.call,
+			is_admin: req.session.is_admin,
+			// is_frozen: c.is_frozen(),
+			contestid: contest_id,
+			problems: ranklist.problems,
+			players: ranklist.list,
+			active: 'ranklist'
+		};
+		res.status(200).render('contest_ranklist', renderArgs);
 	});
 });
 

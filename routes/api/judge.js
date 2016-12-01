@@ -89,19 +89,7 @@ router.post('/update_results/acm', function (req, res, next) {
 			x.updateStatus(req.body.results, this);
 		}, function(err, j) {
 			if (err) throw err;
-			x = j;
-            this();
-		}, function (err) {
-			if (err) throw err;
-			if (!(x.status == 'Running' || x.status == 'Waiting')) {
-				SubmitRecord.getSubmitRecord(x.user, x.contest, x.problem_id, this);
-			} else {
-				this(null, null);
-			}
-		}, function (err, s) {
-			if (err) throw err;
-			if (!s) return this(null);
-			s.update(x, this);
+			this(null);
 		}, function (err) {
 			if (err) {
 				res.send({
