@@ -4,7 +4,12 @@ div.fullheight {
 	min-height: 100%;
 	padding: 16%;
 }
+div.fullheight img {
+	width: 100%;
+	max-height: 150%;
+}
 
 .slogan {
 	font: arial 48px;
 }
+

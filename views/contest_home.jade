@@ -24,3 +24,6 @@ block content
 					a.list-group-item
 				- }
 			- }
+			- if (is_admin) {
+				a.list-group-item(href="/addcontests") 添加比赛
+			- }
