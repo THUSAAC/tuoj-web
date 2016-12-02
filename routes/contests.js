@@ -214,112 +214,39 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)', checkContestAvailable,function
 });
 
 router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload', checkContestAvailable,upload.single('inputfile'),function(req,res,next){
-	// console.log(req.session);
 	if (typeof(req.file) == 'undefined') {
-        // console.log("xx");
         return next(new Error("Undefined file."));
     }
-
     if (req.file.size > 0.5 * 1024 * 1024) {
         return next(new Error("The solution size is at most 512 KB."));
     }
 
-    var suffix = {
-		"pascal": ".pas",
-		"gcc": ".c",
-		"g++": ".cpp", 
-		"java": ".java", 
-		"system": ".zip", 
-		"answer": ".ans", 
-		"answerzip": ".zip",
-		"system_g++": ".zip", 
-		"system_java": ".zip"
-	};
-	source_file = randomstring.generate(15) + suffix[req.body.language];
+	var contest_id=parseInt(req.params.cid);
+	var contest_problem_id=parseInt(req.params.pid);
 
-	var contestid=parseInt(req.params.cid);
-	var problemid=parseInt(req.params.pid);
+	var c = null;
 
+	Step(function () {
+		contest.findOne({_id: contest_id}).populate('problems').exec(this);
+	}, function (err, new_contest) {
+		if (err) throw err;
+		c = new_contest;
+		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) throw new Error("No such problem.");
+		if (c.get_status() != 'in_progress') throw new Error('Contest is not in progress!');
 
-    contest.findOne({_id: contestid}).populate('problems').exec(function (err, x) {
-        if (err) return next(err);
-        if (!x) return next();
-        if (problemid >= x.problems.length) return next();
-        if (x.get_status() != 'in_progress') return next(new Error('Contest is not in progress!'));
-
-        p = x.problems[problemid];
-        var s;
-
-        if (p.meta.supported_languages.indexOf(req.body.language) < 0) return next(new Error('Unsupported languages.'));
-
-        Step(function() {
-			SubmitRecord.getSubmitRecord(req.session.uid, x._id, problemid, this);
-		}, function (err, x) {
-			if (err) throw err;
-            // if (x.submitted_times > 10) throw (new Error("You do not have s"));
-			submit_record = x;
-			submit_record.submitted_times += 1;
-			submit_record.save(this);
-            s = submit_record;
-		}, function(err) {
-			if (err) throw err;
-			fse.move(req.file.path, path.join(SOURCE_DIR, source_file), this);
-		}, function(err) {
-            if (err) throw err;
-
-            var newjudge = new judge({
-                user:req.session.uid,
-                contest: x._id,
-                problem: p._id,
-
-                problem_id: problemid,
-                subtask_id:0,
-
-                submitted_time:Date.now(),
-
-                // solution information
-                lang: req.body.language,
-                source_file: source_file,
-
-                // judge result
-                score: 0,
-                status: 'Waiting',
-                case_count: p.subtasks[0].testcase_count,
-                results: [{
-                    score: 0,
-                    memory: 0,
-                    time: 0,
-                    status: "Waiting"
-                }]
-            });
-            for (var i = 0;  i < newjudge.case_count; i++) {
-                if (newjudge.lang == 'system_g++' || newjudge.lang == 'system_java') {
-                    newjudge.results.push({
-                        score: 0,
-                        total: 0,
-                        correct: 0,
-                        time: 0
-                    });
-                } else {
-                    newjudge.results.push({
-                        score: 0,
-                        memory: 0,
-                        time: 0,
-                        status: "Waiting"
-                    });
-                }
-            }
-            // console.log(newjudge);
-
-            newjudge.save(this);
-        }, function (err, j) {
-            if (err) throw err;
-            s.update(j, this);
-        }, function (err) {
-            if (err) return next(err);
-            res.redirect('/contests/'+contestid+'/status/');
-        });
-    });
+		SubmitRecord.getSubmitRecord(req.session.uid, contest_id, contest_problem_id, this);
+	}, function (err, s) {
+		if (err) throw err;
+		s.submit_record += 1;
+		s.save(this)
+	},function (err) {
+		if (err) throw err;
+		var p = c.problems[contest_problem_id];
+		judge.new(p, req.file.path, req.body.language, req.session.uid, c, contest_problem_id, this);
+	},  function (err) {
+		if (err) return next(err);
+		else res.redirect('/contests/'+contest_id+'/status/');
+	});
 });
 
 router.post('/rejudge/:id([0-9]+)/:judgeid([0-9]+)',function(req,res,next){

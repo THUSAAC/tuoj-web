@@ -30,11 +30,24 @@ SubmitRecord.statics.getSubmitRecord = function (user_id, contest_id, contest_pr
 SubmitRecord.methods.update = function (judge, callback) {
     if (judge.status == "Compilation Error" || judge.status == "Compile error") {
         this.submitted_times -= 1;
-    } if (judge.score >= this.score) {
+    }
+    if (judge.score >= this.score) {
         this.score = judge.score;
         this.judge = judge._id;
     }
     this.save(callback);
+};
+
+SubmitRecord.methods.uploadLastSubmit = function (judge, callback) {
+    mongoose.model('submit_record').findOne({_id: this._id}).populate('judge').exec(function (err, s) {
+        if (judge.status == "Compilation Error" || judge.status == "Compile error") {
+            s.submitted_times -= 1;
+        } else if (!s.judge || s.judge.submitted_time < judge.submitted_time) {
+            s.score = judge.score;
+            s.judge = judge._id;
+        }
+        s.save(callback);
+    });
 };
 
 module.exports = mongoose.model("submit_record", SubmitRecord);

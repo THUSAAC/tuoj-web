@@ -82,27 +82,38 @@ router.post('/update_results/acm', function (req, res, next) {
 		return next();
 	}
 	var run_id  = parseInt(req.body.run_id);
-	Judge.findOne({_id: run_id}).populate('problem').exec(function (err, x) {
-		//if (err) return next(err);
-		if (!x) return next();
-		Step(function() {
-			x.updateStatus(req.body.results, this);
-		}, function(err, j) {
-			if (err) throw err;
-			this(null);
-		}, function (err) {
-			if (err) {
-				res.send({
-					"status": "failure",
-					"message": err.message,
-					"stack": err.stack
-				});
-			} else {
-				res.send({
-					"status": "success"
-				});
-			}
-		});
+
+	var j = null;
+
+	Step(function () {
+		Judge.findOne({_id: run_id}).populate('problem').exec(this);
+	}, function (err, judge) {
+		if (err) throw err;
+		j = judge;
+
+		if (!j) throw new Error("No such judge record.");
+		j.updateStatus(req.body.results, this);
+	}, function (err, judge) {
+		if (err) throw err;
+		j = judge;
+
+		SubmitRecord.getSubmitRecord(j.user, j.contest, j.problem_id, this);
+	}, function (err, s) {
+		if (err) throw err;
+
+		s.uploadLastSubmit(j, this);
+	},  function (err) {
+		if (err) {
+			res.send({
+				"status": "failure",
+				"message": err.message,
+				"stack": err.stack
+			});
+		} else {
+			res.send({
+				"status": "success"
+			});
+		}
 	});
 });
 
