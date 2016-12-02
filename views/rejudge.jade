@@ -1,0 +1,41 @@
+extends layout
+
+- var filtered = 0
+
+
+block content
+	div.container-fluid
+		h3 HJA Naive
+
+		table.table.table-hover
+			thead
+				tr
+					th #
+					th Tim
+					th Zhihu
+					th Hentai
+					th Deli
+					th What ghost
+					th Something Interesting
+				tbody
+					- if (filtered != 0) {
+					-	for (var a = judgelist.length-1; a >= 0; a-- ) {
+					-		var now = judgelist[a];
+					-		var able = 1;
+					-		if (able == 1) {
+								tr
+									td #{now.id}
+									td #{now.title}
+									td #{now.user}
+									td #{now.status}
+									td
+										a(href='/contest/#{now.contest}/detail/#{ now.id }') #{now.score}
+									td #{now.time}
+									td
+										form(method='POST' action='/api/rejudge' style:'display:none')
+											input.form-control(style:'display:none' name='id' value='{_id:#{now.id}}')
+										input.btn.btn-default(type='submit' value='Rejudge')
+					-		}
+					-	}
+					- }
+
