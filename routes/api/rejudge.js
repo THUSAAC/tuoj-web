@@ -8,7 +8,13 @@ router.post('/', function(req, res, next) {
 	if (!req.session.is_admin) {
 		return next();
 	}
-	judge.find(req.body).populate('contest').populate('problem').exec(function(err, doc) {
+	var now = req.body;
+	if (now._id == '') delete now['_id'];
+	if (now.title == '') delete now['title'];
+	if (now.user == '') delete now['user'];
+	if (now.status == '') delete now['status'];
+	if (now.score == '') delete now['score'];
+	judge.find(now).populate('contest').populate('problem').exec(function(err, doc) {
 		var relist = [];
 		for (var i in doc) {
 			relist.push(doc[i]._id);

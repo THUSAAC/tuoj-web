@@ -4,22 +4,32 @@ extends layout
 
 
 block content
-	iv.container-fluid
+	div.container-fluid
 		h3 HJA Naive
 
 		form(method='POST' action='/rejudge')
 			div.col-xs-6.col-md-4
-				input.form-control(name='id' value='' placeholder='id',style='margin-bottom:10px')
+				input.form-control(name='id' value='#{globalid}' placeholder='id',style='margin-bottom:10px')
 			div.col-xs-6.col-md-4
-				input.form-control(name='title' value='' placeholder='title',style='margin-bottom:10px')
+				input.form-control(name='title' value='#{globaltitle}' placeholder='title',style='margin-bottom:10px')
 			div.col-xs-6.col-md-4
-				input.form-control(name='user' value='' placeholder='user',style='margin-bottom:10px')
+				input.form-control(name='user' value='#{globaluser}' placeholder='user',style='margin-bottom:10px')
 			div.col-xs-6.col-md-4
-				input.form-control(name='status' value='' placeholder='status',style='margin-bottom:10px')
+				input.form-control(name='status' value='#{globalstatus}' placeholder='status',style='margin-bottom:10px')
 			div.col-xs-6.col-md-4
-				input.form-control(name='score' value='' placeholder='score',style='margin-bottom:10px')
+				input.form-control(name='score' value='#{globalscore}' placeholder='score',style='margin-bottom:10px')
 			div.col-xs-6.col-md-4
 				input.btn.btn-default(type='submit' value='Filter',style='margin-bottom:10px')
+
+		form(method='POST' action='/api/rejudge')
+			input.form-control(name='_id' value='#{globalid}' placeholder='id',style='display:none')
+			input.form-control(name='title' value='#{globaltitle}' placeholder='title',style='display:none')
+			input.form-control(name='user' value='#{globaluser}' placeholder='user',style='display:none')
+			input.form-control(name='status' value='#{globalstatus}' placeholder='status',style='display:none')
+			input.form-control(name='score' value='#{globalscore}' placeholder='score',style='display:none')
+			div.col-xs-6.col-md-4
+				input.btn.btn-default(type='submit' value='Rejudge All',style='margin-bottom:10px')
+
 
 		table.table.table-hover
 			thead

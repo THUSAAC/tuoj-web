@@ -11,14 +11,13 @@ router.get('/',function(req,res,next){
 	if (!req.session.is_admin) {
 		return next();
 	}
-	res.render('rejudge',{'judgelist':[]});
+	res.render('rejudge',{'judgelist':[],'globalid':'','globaltitle':'','globaluser':'','globalstatus':'','globalscore':''});
 });
 
 router.post('/',function(req,res,next){
 	if (!req.session.is_admin) {
 		return next();
 	}
-	console.log(req.body);
 	var page=req.body.page;
 	judge.find({}).populate("user").populate("problem").exec(function(err,judgelist) {
 		var len=judgelist.length;
@@ -51,6 +50,11 @@ router.post('/',function(req,res,next){
 			if (able) jlist.push(judict);
 		}
 		dict.judgelist=jlist;
+		dict.globalid=req.body.id;
+		dict.globaltitle=req.body.title;
+		dict.globaluser=req.body.user;
+		dict.globalstatus=req.body.status;
+		dict.globalscore=req.body.score;
 		res.render('rejudge',dict);
 	});
 });
