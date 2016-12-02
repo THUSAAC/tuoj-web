@@ -41,7 +41,7 @@ router.get('/', function(req, res, next) {
 			is_admin: req.session.is_admin
 		};
 		dict.contestlist=[];
-        contestlist.forEach(function (item) {
+        contestlist.reverse().forEach(function (item) {
             var d = new Date();
 			if (item.hidden && !req.session.is_admin) {
 				return;
@@ -55,7 +55,7 @@ router.get('/', function(req, res, next) {
                 end_time: helper.timestampToString(item.end_time)
             });
         });
-		res.render('contest_home',dict)
+		res.render('contest_home',dict);
 	});
 });
 

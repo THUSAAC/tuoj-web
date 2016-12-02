@@ -5,23 +5,20 @@ block content
 		ul.list-group
 			- for (var i in contestlist) {
 				a.list-group-item(href="#{(contestlist[i].status=='in_progress'||contestlist[i].status=='ended')?'/contests/'+contestlist[i].id:'#'}")
-						span.mono16
-							big 比赛: #{contestlist[i].name}
-							br
-							- if (contestlist[i].status == 'in_progress') {
-								span.label.label-success 进行中
-							- } else if (contestlist[i].status == 'ended') {
-								span.label.label-info 已结束
-							- } else {
-								span.label.label-danger 未开始
-							- }
-							- if (contestlist[i].hidden) {
-								span.label.label-warning 隐藏
-							- }
-						span.mono32 
-							span 开始时间: #{contestlist[i].start_time} 
-							br
-							span 结束时间: #{contestlist[i].end_time} 
+					p
+						big #{contestlist[i].name}&nbsp;&nbsp;
+						- if (contestlist[i].status == 'in_progress') {
+							span.label.label-success 进行中
+						- } else if (contestlist[i].status == 'ended') {
+							span.label.label-info 已结束
+						- } else {
+							span.label.label-danger 未开始
+						- }
+						- if (contestlist[i].hidden) {
+							span.label.label-warning 隐藏
+						- }
+					p 开始时间: #{contestlist[i].start_time} 
+					p 结束时间: #{contestlist[i].end_time} 
 				- if (is_admin) {
 					a.list-group-item(href='/editcontests/#{contestlist[i].id}') 编辑比赛
 					a.list-group-item
