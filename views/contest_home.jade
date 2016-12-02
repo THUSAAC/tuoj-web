@@ -15,12 +15,18 @@ block content
 							- } else {
 								span.label.label-danger 未开始
 							- }
+							- if (contestlist[i].hidden) {
+								span.label.label-warning 隐藏
+							- }
 						span.mono32 
 							span 开始时间: #{contestlist[i].start_time} 
 							br
 							span 结束时间: #{contestlist[i].end_time} 
-						- if (is_admin) {
-						span.mono16 
-							button.btn.btn-default(href='/editcontests/#{contestlist[i].id}') 编辑比赛
-						- }
+				- if (is_admin) {
+					a.list-group-item(href='/editcontests/#{contestlist[i].id}') 编辑比赛
+					a.list-group-item
+				- }
+			- }
+			- if (is_admin) {
+				a.list-group-item(href="/addcontests") 添加比赛
 			- }

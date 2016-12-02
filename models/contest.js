@@ -10,7 +10,11 @@ var Contest = new Schema({
 		type: Boolean,
 		default: false
 	},
-    problems: [{ type: Number, ref: "problem"}]
+    problems: [{ type: Number, ref: "problem"}],
+	hidden: {
+		type: Boolean,
+		default: false
+	}
 });
 Contest.plugin(autoIncrement.plugin, "Contest");
 

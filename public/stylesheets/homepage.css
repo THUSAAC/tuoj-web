@@ -3,8 +3,14 @@ div.fullheight {
 	height: 100%;
 	min-height: 100%;
 	padding: 16%;
+	text-align: center;
+}
+.center {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .slogan {
 	font: arial 48px;
 }
+
