@@ -131,7 +131,7 @@ Judge.methods.updateStatus = function (results, callback) {
                     self.results[test_id].score = case_score;
                 }
             } else {
-                self.results[test_id].score = Math.floor(result.score / 100 * case_score + 0.5);
+                self.results[test_id].score = Math.floor(result.score / 100 * case_score);
             }
         });
 
