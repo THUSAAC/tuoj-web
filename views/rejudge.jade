@@ -33,8 +33,8 @@ block content
 									td #{now.time}
 									td
 										form(method='POST' action='/api/rejudge' style:'display:none')
-											input.form-control(style:'display:none' name='id' value='{_id:#{now.id}}')
-										input.btn.btn-default(type='submit' value='Rejudge')
+											input.form-control(style:'display:none' name='_id' value='#{now.id}')
+											input.btn.btn-default(type='submit' value='Rejudge')
 					-		}
 					-	}
 					- }

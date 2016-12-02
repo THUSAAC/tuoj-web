@@ -4,7 +4,7 @@ var problem = require('../../models/problem.js')
 var judge = require('../../models/judge.js')
 var router = express.Router();
 
-router.post('/rejudge', function(req, res, next) {
+router.post('/', function(req, res, next) {
 	if (!req.session.is_admin) {
 		return next();
 	}
@@ -15,7 +15,7 @@ router.post('/rejudge', function(req, res, next) {
 			doc[i].rejudge(function(err, jdoc) {
 			});
 		}
-		res.send(relist);
+		res.redirect('/rejudge');
 	});
 });
 
