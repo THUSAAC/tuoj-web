@@ -46,3 +46,7 @@ datas/
 # Config
 server/config_local.js
 config/config_local.js
+
+#zhx
+run.sh
+*.swo
