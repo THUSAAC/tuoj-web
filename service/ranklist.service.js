@@ -37,10 +37,14 @@ module.exports.getRanklist = function(contestId, userId, fullRanklist, callback)
 		}
 		Judge.find(attr).populate('user').exec(this);
 	}, function(err, judges) {
+		const ignores = [ 'Waiting', 'Running', 'Dangerous Program', 'Compilation Error' ];
 		var list = [];
 		var userMap = {};
 		for (var i in judges) {
 			var judge = judges[i];
+			if (ignores.indexOf(judge.status) !== -1) {
+				continue;
+			}
 			if (userMap[judge.user._id] === undefined) {
 				userMap[judge.user._id] = list.length;
 				list.push({

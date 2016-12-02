@@ -8,7 +8,7 @@ router.post('/rejudge', function(req, res, next) {
 	if (!req.session.is_admin) {
 		return next();
 	}
-	judge.find(req.attr).populate('contest').populate('problem').exec(function(err, doc) {
+	judge.find(req.body).populate('contest').populate('problem').exec(function(err, doc) {
 		var relist = [];
 		for (var i in doc) {
 			relist.push(doc[i]._id);
