@@ -11,7 +11,7 @@ router.get('/',function(req,res,next){
 	if (!req.session.is_admin) {
 		return next();
 	}
-	res.render('rejudge',{'judgelist':[],'globalid':'','globaltitle':'','globaluser':'','globalstatus':'','globalscore':''});
+	res.render('rejudge',{'judgelist':[],'globalid':'','globaltitle':'','globaluser':'','globalstatus':'','globalscore':'','user':req.session.user,'is_admin':req.session.is_admin,'call':req.session.call});
 });
 
 router.post('/',function(req,res,next){
