@@ -4,8 +4,22 @@ extends layout
 
 
 block content
-	div.container-fluid
+	iv.container-fluid
 		h3 HJA Naive
+
+		form(method='POST' action='/rejudge')
+			div.col-xs-6.col-md-4
+				input.form-control(name='id' value='' placeholder='id',style='margin-bottom:10px')
+			div.col-xs-6.col-md-4
+				input.form-control(name='title' value='' placeholder='title',style='margin-bottom:10px')
+			div.col-xs-6.col-md-4
+				input.form-control(name='user' value='' placeholder='user',style='margin-bottom:10px')
+			div.col-xs-6.col-md-4
+				input.form-control(name='status' value='' placeholder='status',style='margin-bottom:10px')
+			div.col-xs-6.col-md-4
+				input.form-control(name='score' value='' placeholder='score',style='margin-bottom:10px')
+			div.col-xs-6.col-md-4
+				input.btn.btn-default(type='submit' value='Filter',style='margin-bottom:10px')
 
 		table.table.table-hover
 			thead
@@ -33,7 +47,7 @@ block content
 									td #{now.time}
 									td
 										form(method='POST' action='/api/rejudge' style:'display:none')
-											input.form-control(style:'display:none' name='_id' value='#{now.id}')
+											input.form-control(style='display:none' name='_id' value='#{now.id}')
 											input.btn.btn-default(type='submit' value='Rejudge')
 					-		}
 					-	}

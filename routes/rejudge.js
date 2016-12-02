@@ -8,6 +8,17 @@ var judge = require('../models/judge.js');
 var user = require('../models/user.js');
 
 router.get('/',function(req,res,next){
+	if (!req.session.is_admin) {
+		return next();
+	}
+	res.render('rejudge',{'judgelist':[]});
+});
+
+router.post('/',function(req,res,next){
+	if (!req.session.is_admin) {
+		return next();
+	}
+	console.log(req.body);
 	var page=req.body.page;
 	judge.find({}).populate("user").populate("problem").exec(function(err,judgelist) {
 		var len=judgelist.length;
@@ -18,7 +29,6 @@ router.get('/',function(req,res,next){
 		var jlist=[];
 		for(var i=0;i<len;i++){
 			var judict={};
-			//console.log(judgelist[i].user.username)
 			judict.id=judgelist[i]._id;
 			judict.title=judgelist[i].problem.title;
 			if (!judgelist[i].user) {
@@ -32,7 +42,13 @@ router.get('/',function(req,res,next){
 			var newtime=new Date();
 			newtime.setTime(judgelist[i].submitted_time);
 			judict.time=newtime.toLocaleString();
-			jlist.push(judict);
+			var able=true;
+			if (req.body.id!='' && req.body.id!=judict.id) able=false;
+			if (req.body.title!='' && req.body.title!=judict.title) able=false;
+			if (req.body.user!='' && req.body.user!=judict.user) able=false;
+			if (req.body.status!='' && req.body.status!=judict.status) able=false;
+			if (req.body.score!='' && req.body.score!=judict.score) able=false;
+			if (able) jlist.push(judict);
 		}
 		dict.judgelist=jlist;
 		res.render('rejudge',dict);
