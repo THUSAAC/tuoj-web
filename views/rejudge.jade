@@ -14,16 +14,16 @@ block content
 		div.form-group.col-xs-6.col-md-4
 			input.form-control(placeholder='Judge id' ng-model='filter._id')
 		div.form-group.col-xs-6.col-md-4
-			input.form-control(placeholder='Problem title' ng-model='filter.title')
+			input.form-control(placeholder='Problem id' ng-model='filter.problem')
 		div.form-group.col-xs-6.col-md-4
-			input.form-control(placeholder='Username' ng-model='filter.user')
+			input.form-control(placeholder='User id' ng-model='filter.user')
 		div.form-group.col-xs-6.col-md-4
 			input.form-control(placeholder='Status' ng-model='filter.status')
 		div.form-group.col-xs-6.col-md-4
 			input.form-control(placeholder='Score' ng-model='filter.score')
 		div.form-group.col-xs-6.col-md-4
-			button.btn.btn-danger(ng-click='rejudgeList()') 重测列表
-			button.btn.btn-default(style='margin-left: 10px' ng-click='updateList()') 更新
+			button.btn.btn-danger(style='margin-right: 10px' ng-click='rejudgeList()') 重测列表
+			button.btn.btn-default(style='margin-right: 10px' ng-click='updateList()') 更新
 			label
 				input(type='checkbox' ng-model='autoref')
 				span 自动更新
@@ -40,8 +40,8 @@ block content
 			tbody
 				tr(ng-repeat='judge in list' ng-click='see(judge)' style='cursor: pointer')
 					td {{ judge._id }}
-					td {{ judge.problem.title }}
-					td {{ judge.user.realname }} ( {{ judge.user.username }} )
+					td {{ judge.problem._id }} {{ judge.problem.title }}
+					td {{ judge.user.realname }} ({{ judge.user._id }} {{ judge.user.username }})
 					td {{ judge.status }}
 					td {{ judge.score }}
 					td {{ judge.submitted_time | date: 'yyyy-MM-dd HH:mm:ss' }}
