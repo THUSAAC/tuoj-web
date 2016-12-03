@@ -5,8 +5,8 @@ var baseDir = path.resolve(__dirname, '..'),
 
 config = {
 	BASE_DIR: baseDir,
-    DATA_DIR: path.resolve(baseDir, "../data"),
-    PROB_DIR: path.resolve(baseDir, "../data", "problems"),
+    DATA_DIR: path.resolve(baseDir, "data"),
+    PROB_DIR: path.resolve(baseDir, "data", "problems"),
     USER_SOL_DIR: path.resolve(baseDir, "data", "user_solutions"),
     TMP_DIR: path.resolve(baseDir, "data", "tmp"),
     SOURCE_DIR: path.resolve(baseDir, 'public', 'source'),
