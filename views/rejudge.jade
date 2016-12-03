@@ -5,7 +5,8 @@ extends layout
 
 block content
 	div.container-fluid
-		h3 HJA Naive
+		div.page-header
+			h3 状态和重测
 
 		form(method='POST' action='/rejudge')
 			div.col-xs-6.col-md-4
@@ -47,13 +48,12 @@ block content
 					-		var now = judgelist[a];
 					-		var able = 1;
 					-		if (able == 1) {
-								tr
+								tr(onclick="window.location.href='/contests/#{now.contest}/detail/#{ now.id }'" style='cursor: pointer;')
 									td #{now.id}
 									td #{now.title}
 									td #{now.user}
 									td #{now.status}
-									td
-										a(href='/contest/#{now.contest}/detail/#{ now.id }') #{now.score}
+									td #{now.score}
 									td #{now.time}
 									td
 										form(method='POST' action='/api/rejudge' style:'display:none')
