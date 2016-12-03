@@ -8,11 +8,11 @@ router.post('/', function(req, res, next) {
     }
     var attr = {};
     try {
-        attr = JSON.stringify(req.queryAttr);
+        attr = JSON.parse(req.body.queryAttr);
     } catch (error) {
         return res.send({ error: error });
     }
-    Judge.find(attr).exec(function(err, doc) {
+    Judge.find(attr).populate('problem').populate('user').exec(function(err, doc) {
         res.send({ data: doc });
     });
 });

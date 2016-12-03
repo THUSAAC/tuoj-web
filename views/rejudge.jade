@@ -1,38 +1,33 @@
 extends layout
 
+append head
+	script(src='/bower_components/angular/angular.min.js')
+	script(src='/javascripts/rejudge.min.js')
+
 - var filtered = 0
 
 
 block content
-	div.container-fluid
+	div.container-fluid(ng-controller='RejudgeCtrl')
 		div.page-header
 			h3 状态和重测
-
-		form(method='POST' action='/rejudge')
-			div.col-xs-6.col-md-4
-				input.form-control(name='id' value='#{globalid}' placeholder='id',style='margin-bottom:10px')
-			div.col-xs-6.col-md-4
-				input.form-control(name='title' value='#{globaltitle}' placeholder='title',style='margin-bottom:10px')
-			div.col-xs-6.col-md-4
-				input.form-control(name='user' value='#{globaluser}' placeholder='user',style='margin-bottom:10px')
-			div.col-xs-6.col-md-4
-				input.form-control(name='status' value='#{globalstatus}' placeholder='status',style='margin-bottom:10px')
-			div.col-xs-6.col-md-4
-				input.form-control(name='score' value='#{globalscore}' placeholder='score',style='margin-bottom:10px')
-			div.col-xs-6.col-md-4
-				input.btn.btn-default(type='submit' value='Filter',style='margin-bottom:10px')
-
-		form(method='POST' action='/api/rejudge')
-			input.form-control(name='_id' value='#{globalid}' placeholder='id',style='display:none')
-			input.form-control(name='title' value='#{globaltitle}' placeholder='title',style='display:none')
-			input.form-control(name='user' value='#{globaluser}' placeholder='user',style='display:none')
-			input.form-control(name='status' value='#{globalstatus}' placeholder='status',style='display:none')
-			input.form-control(name='score' value='#{globalscore}' placeholder='score',style='display:none')
-			div.col-xs-6.col-md-4
-				input.btn.btn-default(type='submit' value='Rejudge All',style='margin-bottom:10px')
-
-
-		table.table.table-hover
+		div.form-group.col-xs-6.col-md-4
+			input.form-control(placeholder='Judge id' ng-model='filter._id')
+		div.form-group.col-xs-6.col-md-4
+			input.form-control(placeholder='Problem title' ng-model='filter.title')
+		div.form-group.col-xs-6.col-md-4
+			input.form-control(placeholder='Username' ng-model='filter.user')
+		div.form-group.col-xs-6.col-md-4
+			input.form-control(placeholder='Status' ng-model='filter.status')
+		div.form-group.col-xs-6.col-md-4
+			input.form-control(placeholder='Score' ng-model='filter.score')
+		div.form-group.col-xs-6.col-md-4
+			button.btn.btn-danger(ng-click='rejudgeList()') 重测列表
+			button.btn.btn-default(style='margin-left: 10px' ng-click='updateList()') 更新
+			label
+				input(type='checkbox' ng-model='autoref')
+				span 自动更新
+		table.table.table-hover.table-striped
 			thead
 				tr
 					th #
@@ -41,25 +36,15 @@ block content
 					th Status
 					th Score
 					th Time
-					th Something Interesting
-				tbody
-					- if (filtered != 0) {
-					-	for (var a = judgelist.length-1; a >= 0; a-- ) {
-					-		var now = judgelist[a];
-					-		var able = 1;
-					-		if (able == 1) {
-								tr(onclick="window.location.href='/contests/#{now.contest}/detail/#{ now.id }'" style='cursor: pointer;')
-									td #{now.id}
-									td #{now.title}
-									td #{now.user}
-									td #{now.status}
-									td #{now.score}
-									td #{now.time}
-									td
-										form(method='POST' action='/api/rejudge' style:'display:none')
-											input.form-control(style='display:none' name='_id' value='#{now.id}')
-											input.btn.btn-default(type='submit' value='Rejudge')
-					-		}
-					-	}
-					- }
+					th Rejudge
+			tbody
+				tr(ng-repeat='judge in list' ng-click='see(judge)' style='cursor: pointer')
+					td {{ judge._id }}
+					td {{ judge.problem.title }}
+					td {{ judge.user.realname }} ( {{ judge.user.username }} )
+					td {{ judge.status }}
+					td {{ judge.score }}
+					td {{ judge.submitted_time | date: 'yyyy-MM-dd HH:mm:ss' }}
+					td
+						button.btn.btn-primary(ng-click='rejudge(judge._id)') 重测
 
