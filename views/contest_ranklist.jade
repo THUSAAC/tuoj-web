@@ -14,10 +14,12 @@ block content_contest
 							a(href='/contests/#{contestid}/problems/#{problems[i].id}')= problems[i].title
 					- }
 				tbody
+					- var rank = 1;
 					- for (var i in players) {
 						- var player = players[i];
+						- if (i !== '0' && player.total_score === players[i - 1].total_score) { } else { rank = parseInt(i) + 1; }
 						tr(class="#{(player.user.username==user)?'active':''}")
-							td #{parseInt(i) + 1}
+							td= rank
 							td
 								small= player.user.school
 							td= player.user.realname
