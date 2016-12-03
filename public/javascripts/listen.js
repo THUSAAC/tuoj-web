@@ -9,12 +9,12 @@
                         window.location.href = res.text.split(' ')[1];
                     } else {
                         alert('请注意:\n' + res.text);
-                        $.post('/api/notification/receive', { notification: res.text }, function(res) {
-                            if (res.error) {
-                                console.error(res.error);
-                            }
-                        });
                     }
+					$.post('/api/notification/receive', { notification: res.text }, function(res) {
+						if (res.error) {
+							console.error(res.error);
+						}
+					});
 				}
 			});
 			setTimeout(fetch, 8192);
