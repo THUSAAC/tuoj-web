@@ -75,6 +75,7 @@ router.get('/:id([0-9]+)',function(req,res,next){
 		dict.enddate=getdate(x.end_time);
 		dict.endtime=gettime(x.end_time);
 		dict.contestid=contestid;
+        dict.dashboard = x.dashboard;
 		dict.hidden = x.hidden;
 		dict.released = x.released;
 		// console.log(dict);
@@ -104,6 +105,7 @@ router.post('/:id([0-9]+)/edited',function(req,res,next){
 		x.problems=[];
 		x.hidden = req.body.hidden;
 		x.released = req.body.released;
+		x.dashboard = req.body.dashboard;
 		for (var i=0;i<len;i++)
 			x.problems.push(parseInt(problemlist[i]));
 		x.save(function (err, x) {

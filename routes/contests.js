@@ -78,6 +78,7 @@ router.get('/:id([0-9]+)', checkContestAvailable, function(req,res,next){
 		dict.end = new Date().setTime(x.end).toLocaleString();
         dict.status = x.get_status();
 		dict.active = 'problems';
+        dict.dashboard = x.dashboard;
 		//console.log(x.problems[0])
 		res.render('contest',dict);
 	})

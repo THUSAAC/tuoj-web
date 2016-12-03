@@ -10,6 +10,7 @@ var Contest = new Schema({
 		type: Boolean,
 		default: false
 	},
+	dashboard: String,
     problems: [{ type: Number, ref: "problem"}],
 	hidden: {
 		type: Boolean,

@@ -1,0 +1,17 @@
+extends layout
+
+append head
+	script(src='/javascripts/broadcast.js')
+
+block content
+	div.container-fluid
+		div.form-group
+			label 你要说什么?
+			input.form-control(type='text' id='text')
+		div.form-group
+			span.text-info(id='info')
+			span.text-danger(id='error')
+		div.form-group
+			button.btn.btn-default(id='submit') 发射
+
+

@@ -26,6 +26,9 @@ block content
 				label 题目列表
 				textarea.form-control(name='gitlist', cols='70', rows=6) #{gitlist}
 			div.form-group
+				label 通告
+				textarea.form-control(name='dashboard') #{dashboard}
+			div.form-group
 				label
 					- if (hidden) {
 						input(type='checkbox' value='hidden' name='hidden' checked) 

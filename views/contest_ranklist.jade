@@ -6,6 +6,7 @@ block content_contest
 			table.table.table-hover
 				thead
 					th #
+					th 学校
 					th 选手
 					th 分数
 					- for (var i in problems) {
@@ -18,10 +19,8 @@ block content_contest
 						tr(class="#{(player.user.username==user)?'active':''}")
 							td #{parseInt(i) + 1}
 							td
-								span
-									small= player.user.school
-								br
-								span= player.user.realname
+								small= player.user.school
+							td= player.user.realname
 							td= player.total_score === 'unknown' ? '未知' : player.total_score
 							- for (var j in problems) {
 								- if (player.details[j] && player.details[j].judge_id !== "null" && player.details[j].judge_id) {

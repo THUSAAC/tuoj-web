@@ -66,6 +66,7 @@ app.use("/addcontests", admin_required);
 app.use("/problem_pool", admin_required);
 app.use("/status", admin_required);
 app.use("/rejudge", admin_required);
+app.use("/broadcast", admin_required);
 app.use("/editcontests", admin_required);
 
 // add router
@@ -76,6 +77,7 @@ app.use('/contests',require("./routes/contests"));
 app.use('/api', require('./routes/api'));
 app.use('/status',require('./routes/status'));
 app.use('/rejudge',require('./routes/rejudge'));
+app.use('/broadcast',require('./routes/broadcast'));
 app.use('/faq', require('./routes/faq'));
 app.use('/editcontests',require('./routes/editcontests'))
 
