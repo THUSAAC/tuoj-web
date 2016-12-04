@@ -100,9 +100,10 @@ Judge.statics.new = function (problem, uploaded_file_path, language, user_id, co
         judge.save(this);
     }, function(err, j) {
         if (err) throw err;
+        // console.log(problem);
         // The best practice recommend repopulate it than directly assign object to it.
         j.problem = problem;
-        j.rejudge(this);
+        j.rejudge(problem, this);
     }, function (err, j) {
         if (err) return callback(err);
         else return callback(null, j);
@@ -161,15 +162,15 @@ Judge.methods.updateStatus = function (results, callback) {
     }
 };
 
-Judge.methods.rejudge = function (callback) {
+Judge.methods.rejudge = function (problem, callback) {
     this.judge_start_time = undefined;
     this.judge_end_time = undefined;
     this.status = 'Waiting';
     this.score = 0;
-    if (this.problem && this.problem.subtask[0]) {
+    this.problem = problem;
+    if (this.problem && this.problem.subtasks[0]) {
         this.case_count = this.problem.subtasks[0].testcase_count;
     } else {
-        this.case_count = 0;
     }
     this.results = [{
         score: 0,
