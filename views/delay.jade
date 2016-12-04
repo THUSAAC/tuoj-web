@@ -1,0 +1,42 @@
+extends layout
+
+append head
+	script(src='/bower_components/angular/angular.min.js')
+	script(src='/javascripts/delay.js')
+
+block content
+	div.container-fluid(ng-controller='DelayCtrl')
+		div.page-header
+			h3 选手延时
+		table.table.table-hover.table-striped
+			thead
+				th #
+				th 比赛
+				th 选手ID
+				th 选手名称
+				th 延时值(min)
+				th 操作
+			tbody
+				tr
+					td New
+					td 
+						input.form-control(type='text' ng-model='newDelay.contestId' placeholder='比赛ID')
+					td 
+						input.form-control(type='text' ng-model='newDelay.username' placeholder='选手用户名')
+					td
+					td
+						input.form-control(type='text' ng-model='newDelay.value' placeholder='延时时间')
+					td
+						button.btn.btn-default(ng-click='applyNewDelay()') 新建
+						button.btn.btn-default(ng-click='updateDelayList()') 刷新
+						span.text-danger {{ textError }}
+						span.text-info {{ textInfo }}
+				tr(ng-repeat='delay in delayList')
+					td {{ $index }}
+					td {{ delay.contest._id }} {{ delay.contest.title }}
+					td {{ delay.user._id }} {{ delay.user.username }}
+					td {{ delay.user.school }} {{ delay.user.realname }}
+					td 
+						input.form-control(type='text' ng-model='delay.value')
+					td
+						button.btn.btn-default(ng-click='updateDelay(delay)') 更新

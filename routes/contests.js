@@ -15,7 +15,8 @@ var path = require('path')
 var upload = require('../config').MULTER_UPLOAD
 var randomstring = require('randomstring')
 var SOURCE_DIR = require('../config').SOURCE_DIR
-var ranklistService = require('../service/ranklist.service.js');
+var ranklistService = require('../service/ranklist.service');
+var Delay = require('../service/delay.service');
 
 var checkContestAvailable = function(req, res, next) {
 	var contestId = req.params.cid || req.params.contestId || req.params.id;
@@ -51,9 +52,9 @@ router.get('/', function(req, res, next) {
                 id: item._id,
                 name: item.name,
 				hidden: item.hidden,
-                status: item.get_status(),
+                status: item.get_status(Delay.getDelaySync(req.session.uid, item._id)),
                 start_time: helper.timestampToString(item.start_time),
-                end_time: helper.timestampToString(item.end_time)
+                end_time: helper.timestampToString(Number(item.end_time) + Delay.getDelaySync(req.session.uid, item._id) * 60 * 1000)
             });
         });
 		res.render('contest_home',dict);
@@ -77,7 +78,7 @@ router.get('/:id([0-9]+)', checkContestAvailable, function(req,res,next){
 		dict.problems=x.problems;
 		dict.start = new Date().setTime(x.star).toLocaleString();
 		dict.end = new Date().setTime(x.end).toLocaleString();
-        dict.status = x.get_status();
+        dict.status = x.get_status(Delay.getDelaySync(req.session.uid, contestid));
 		dict.active = 'problems';
         dict.dashboard = x.dashboard;
 		//console.log(x.problems[0])
@@ -238,7 +239,7 @@ router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload', checkContestAvailable,
 		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) {
 			return res.status(400).send("No such problem."), undefined;
 		}
-		if (c.get_status() != 'in_progress' && !req.session.is_admin && !req.session.is_staff) {
+		if (c.get_status(Delay.getDelaySync(req.session.uid, contest_id)) != 'in_progress' && !req.session.is_admin && !req.session.is_staff) {
 			return res.status(400).send('Contest is not in progress!'), undefined;
 		}
 
