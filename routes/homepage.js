@@ -39,6 +39,7 @@ router.post('/login',function(req,res,next){
 		req.session.user = username;
 		req.session.call = x.realname;
 		req.session.is_admin = x.is_admin;
+		req.session.is_staff = x.is_staff;
 		req.session.uid = x._id;
         res.redirect('/');
 	});

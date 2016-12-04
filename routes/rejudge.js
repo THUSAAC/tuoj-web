@@ -8,7 +8,7 @@ var judge = require('../models/judge.js');
 var user = require('../models/user.js');
 
 router.get('/',function(req,res,next){
-	if (!req.session.is_admin) {
+	if (!req.session.is_admin && !req.session.is_staff) {
 		return next();
 	}
 	res.render('rejudge',{'judgelist':[],'globalid':'','globaltitle':'','globaluser':'','globalstatus':'','globalscore':'','user':req.session.user,'is_admin':req.session.is_admin,'call':req.session.call});

@@ -22,7 +22,9 @@ block content
 		div.form-group.col-xs-6.col-md-4
 			input.form-control(placeholder='Score' ng-model='filter.score')
 		div.form-group.col-xs-6.col-md-4
-			button.btn.btn-danger(style='margin-right: 10px' ng-click='rejudgeList()') 重测列表
+			- if (is_admin) {
+				button.btn.btn-danger(style='margin-right: 10px' ng-click='rejudgeList()') 重测列表
+			- }
 			button.btn.btn-default(style='margin-right: 10px' ng-click='updateList()') 更新
 			label
 				input(type='checkbox' ng-model='autoref')
@@ -47,5 +49,7 @@ block content
 					td {{ judge.score }}
 					td {{ judge.submitted_time | date: 'yyyy-MM-dd HH:mm:ss' }}
 					td
-						button.btn.btn-primary(ng-click='rejudge(judge._id)') 重测
+						- if (is_admin) {
+							button.btn.btn-primary(ng-click='rejudge(judge._id)') 重测
+						- }
 
