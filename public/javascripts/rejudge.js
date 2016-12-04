@@ -10,6 +10,7 @@
 		   }
            $http.post('/api/status', { queryAttr: JSON.stringify($scope.filter) }).then(function(res) {
                $scope.list = res.data.data.reverse();
+			   $scope.lastUpdateTime = Date.now();
            });
        };
        $scope.rejudge = function(_id) {
