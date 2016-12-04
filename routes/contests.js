@@ -263,7 +263,7 @@ router.post('/rejudge/:id([0-9]+)/:judgeid([0-9]+)',function(req,res,next){
     var judgeId = parseInt(req.params.judgeid);
 	judge.findOne({_id:judgeId}).populate('contest').populate('problem').exec(function(err,x){
         if (err) return next(err);
-        x.rejudge(function (err, x) {
+        x.rejudge(x.problem, function (err, x) {
             if (err) return next(err);
             res.redirect('/contests/' + x.contest._id + '/detail/' + x._id);
         });
