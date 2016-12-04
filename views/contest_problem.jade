@@ -3,6 +3,7 @@ extends contest_layout
 append head
 	script(type="text/x-mathjax-config") MathJax.Hub.Config({ tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ], processEscapes: true } });
 	script(type='text/javascript' src='/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML')
+	script(src='/javascripts/time.js')
 
 block content_contest
 	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info", "Running success": "success", "Compile error": "primary", "Running timeout": "warning", "Running error": "warning", "Invisible": "info"  }
@@ -40,6 +41,19 @@ block content_contest
 										- }
 									td #{now.score}
 							- }
+			div.panel.panel-default
+				div.panel-heading
+					p 当前服务器时间
+				div.panel-body
+					-	var myDate = new Date();
+					-	var hours = myDate.getHours();
+					-	if (hours < 10) hours = "0" + hours;
+					-	var minutes = myDate.getMinutes();
+					-	if (minutes < 10) minutes = "0" + minutes;
+					-	var seconds = myDate.getSeconds();
+					-	if (seconds < 10) seconds = "0" + seconds;
+					-	var result = hours + ':' + minutes + ':' + seconds;
+					div(id="nowtimes") #{result}
 			form(method='POST',action='/contests/#{contestid}/problems/#{problemid}/upload',enctype='multipart/form-data')
 				div.panel.panel-default
 					div.panel-heading
