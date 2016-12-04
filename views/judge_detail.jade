@@ -7,6 +7,7 @@ append head
 
 block content_contest
 	div.row
+		h3 整体信息
 		table.table.table-hover
 			thead
 				tr
@@ -25,12 +26,15 @@ block content_contest
 					td #{ res.lang }
 					td #{ res.status }
 					td #{ res.score }
-	- if (!(res.lang == 'system_g++' || res.lang == 'system_java')) {
 	div.row
-		pre
-			code(class="#{ res.lang }")= res.source
-	- }
+		h3 答案
+		- if (res.source !== 'Unsupported format') {
+			pre
+				code(class="#{ res.lang }")= res.source
+		- }
+		a(href='/api/judge/getAnswerFile/#{res.id}') 下载
 	div.row
+		h3 测试点信息
 		table.table.table-hover
 			- if (res.lang == 'system_g++' || res.lang == 'system_java') {
 			thead
