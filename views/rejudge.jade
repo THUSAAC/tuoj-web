@@ -12,7 +12,7 @@ block content
 		div.page-header
 			h3 状态和重测
 		div.form-group.col-xs-6.col-md-4
-			input.form-control(placeholder='Judge id' ng-model='filter._id')
+			input.form-control(placeholder='Judge id' ng-model='filter.id')
 		div.form-group.col-xs-6.col-md-4
 			input.form-control(placeholder='Problem id' ng-model='filter.problem')
 		div.form-group.col-xs-6.col-md-4
@@ -36,6 +36,7 @@ block content
 					th #
 					th Title
 					th User
+					th Language
 					th Status
 					th Score
 					th Time
@@ -45,6 +46,7 @@ block content
 					td {{ judge._id }}
 					td {{ judge.problem._id }} {{ judge.problem.title }}
 					td {{ judge.user.realname }} ({{ judge.user._id }} {{ judge.user.username }})
+					td {{ judge.lang }}
 					td {{ judge.status }}
 					td {{ judge.score }}
 					td {{ judge.submitted_time | date: 'yyyy-MM-dd HH:mm:ss' }}
