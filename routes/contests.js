@@ -302,6 +302,7 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
 				doc.results[i].status = 'Invisible';
 				doc.results[i].time = 'Invisible';
 				doc.results[i].memory = 'Invisible';
+				doc.results[i].extInfo = undefined;
 			}
 		}
         var renderArgs = {

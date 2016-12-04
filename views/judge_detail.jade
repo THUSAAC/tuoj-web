@@ -69,6 +69,7 @@ block content_contest
 					th 时间(ms)
 					th 空间(KB)
 					th 得分
+					th 评测信息
 			tbody
 				- for (var i in res.results) {
 					- if (i == 0) { continue; }
@@ -80,10 +81,12 @@ block content_contest
 							td -
 							td -
 							td -
+							td -
 						- } else {
 							td= cs.time
 							td= cs.memory
 							td= cs.score
+							td= cs.extInfo
 						- }
 				- }
 			- }
