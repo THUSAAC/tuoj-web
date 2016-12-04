@@ -5,8 +5,8 @@ append head
 	script(type='text/javascript' src='/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML')
 
 block content_contest
-	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info", "Running success": "success", "Compile error": "primary", "Running timeout": "warning", "Running error": "warning" }
-	- var statusText = { "Accepted": "AC", "Wrong Answer": "WA", "Time Limit Exceeded": "TLE", "Memory Limit Exceeded": "MLE", "Runtime Error": "RE", "Compilation Error": "CE", "No Source": "NS", "Dangerous Program": "DP", "Waiting": "W", "Running": "R", "Compilation Success": "CS", "Running success": "AC", "Compile error": "CE", "Running timeout": "TLE", "Running error": "RE" }
+	- var statusMap = { "Accepted": "success", "Wrong Answer": "danger", "Time Limit Exceeded": "warning", "Memory Limit Exceeded": "warning", "Runtime Error": "warning", "Compilation Error": "primary", "No Source": "warning", "Dangerous Program": "primary", "Waiting": "info", "Running": "info", "Compilation Success": "info", "Running success": "success", "Compile error": "primary", "Running timeout": "warning", "Running error": "warning", "Invisible": "info"  }
+	- var statusText = { "Accepted": "AC", "Wrong Answer": "WA", "Time Limit Exceeded": "TLE", "Memory Limit Exceeded": "MLE", "Runtime Error": "RE", "Compilation Error": "CE", "No Source": "NS", "Dangerous Program": "DP", "Waiting": "W", "Running": "R", "Compilation Success": "CS", "Running success": "AC", "Compile error": "CE", "Running timeout": "TLE", "Running error": "RE", "Invisible": "H" }
 	div.row
 		div.col-xs-8
 			div.panel.panel-default
