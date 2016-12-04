@@ -55,5 +55,27 @@ router.post('/broadcast', function(req, res) {
     });
 });
 
+router.post("/notification", function(req, res) {
+	if (!req.session.is_admin) {
+		return res.redirect("/login");
+	}
+	var text = req.body.text;
+	var uid = req.body.uid;
+	User.update({
+		_id : uid
+	}, {
+		$set: {
+			notification: text
+		}
+	}, {
+		multi: true
+	}).exec(function(error, raw) {
+		if (error) {
+			return res.send({error : error});
+		}
+		return res.send({ res :raw});
+	});
+});
+
 module.exports = router;
 

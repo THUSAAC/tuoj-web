@@ -1,0 +1,34 @@
+extends layout
+
+append head
+	script(src='/bower_components/angular/angular.min.js')
+	script(src='/javascripts/user.js')
+
+block content 
+	div.container-fluid(ng-controller='UserCtrl')
+		div.page-header
+			h3 HJA Naive
+
+		table.table.table-hover.table-striped
+			thead
+				tr
+					th 9#
+					th UserName
+					th RealName
+					th School
+					th Password
+					th Logout
+					th Notification
+				tbody
+					tr(ng-repeat='user in userlist')
+						td {{ user._id }}
+						td {{ user.username }}
+						td {{ user.realname }}
+						td {{ user.school }}
+						td {{ user.password }}
+						td
+							button.btn.btn-primary(ng-click='getLogout(user._id)') Logout
+						td
+							div.form-group.col-xs-6.col-md-4
+								input.form-control(placeholder='Say something' ng-model='user.notification')
+							button.btn.btn-danger(ng-click='shoot(user)') Send
