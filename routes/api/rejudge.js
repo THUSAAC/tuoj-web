@@ -18,7 +18,7 @@ router.post('/', function(req, res, next) {
 		var relist = [];
 		for (var i in doc) {
 			relist.push(doc[i]._id);
-			doc[i].rejudge(function(err, jdoc) {
+			doc[i].rejudge(doc[i].problem, function(err, jdoc) {
 			});
 		}
 		res.redirect('/rejudge');
