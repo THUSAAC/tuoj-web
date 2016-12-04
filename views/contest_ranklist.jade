@@ -11,7 +11,7 @@ block content_contest
 					th 分数
 					- for (var i in problems) {
 						th
-							a(href='/contests/#{contestid}/problems/#{problems[i].id}')= problems[i].title
+							a(href='/contests/#{contestid}/problems/#{i}')= problems[i].title
 					- }
 				tbody
 					- var rank = 1;
