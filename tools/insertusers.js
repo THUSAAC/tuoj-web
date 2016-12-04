@@ -8,7 +8,7 @@ var userList = [{
 	username: 'root',
 	password: 'root',
 	realname: '管理员',
-	school: 'Tsinghua U.',
+	school: '清华大学',
 	is_admin: 1
 }, {
 	username: 'player0',
@@ -25,6 +25,14 @@ var userList = [{
 	password: 'player',
 	realname: '赵汉卿',
 	school: '野鸡大学',
+}];
+
+userList = [{
+	username: 'staff0',
+	password: 'tktkddd',
+	realname: '出题人',
+	school: '北京大学',
+	is_staff: true
 }];
 
 var cnt = 0;

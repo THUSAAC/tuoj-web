@@ -100,9 +100,10 @@ Judge.statics.new = function (problem, uploaded_file_path, language, user_id, co
         judge.save(this);
     }, function(err, j) {
         if (err) throw err;
+        // console.log(problem);
         // The best practice recommend repopulate it than directly assign object to it.
         j.problem = problem;
-        j.rejudge(this);
+        j.rejudge(problem, this);
     }, function (err, j) {
         if (err) return callback(err);
         else return callback(null, j);
@@ -124,6 +125,7 @@ Judge.methods.updateStatus = function (results, callback) {
             self.results[test_id].status = result["status"];
             self.results[test_id].time = result["time"];
             self.results[test_id].memory = result["memory"];
+            self.results[test_id].extInfo = result["extInfo"];
 
             var case_score = self.problem.getCaseScore(self.subtask_id, test_id - 1);
             if (typeof(result.score) == 'undefined') {
@@ -160,12 +162,16 @@ Judge.methods.updateStatus = function (results, callback) {
     }
 };
 
-Judge.methods.rejudge = function (callback) {
+Judge.methods.rejudge = function (problem, callback) {
     this.judge_start_time = undefined;
     this.judge_end_time = undefined;
     this.status = 'Waiting';
     this.score = 0;
-    this.case_count = this.problem.subtasks[0].testcase_count;
+    this.problem = problem;
+    if (this.problem && this.problem.subtasks[0]) {
+        this.case_count = this.problem.subtasks[0].testcase_count;
+    } else {
+    }
     this.results = [{
         score: 0,
         memory: 0,

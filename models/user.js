@@ -8,7 +8,8 @@ var User = new Schema({
 	school: String,
     password: String,
 	notification: String,
-    is_admin: {type: Boolean, default: false}
+    is_admin: {type: Boolean, default: false},
+	is_staff: {type: Boolean, default: false}
 });
 User.plugin(autoIncrement.plugin, "User");
 

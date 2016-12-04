@@ -5,6 +5,8 @@ var Step = require('step');
 var helper = require('../../service/helper');
 var TOKEN = require('../../config').TOKEN;
 var JudgerMon = require('../../models/judgermon');
+var fs = require('fs-extra');
+var path = require('path');
 
 router.get('/topjudger', function(req, res, next) {
 	JudgerMon.find({}, function(err, doc) {
@@ -15,6 +17,24 @@ router.get('/topjudger', function(req, res, next) {
 				doc: doc
 			});
 		}
+	});
+});
+
+router.get('/getAnswerFile/:id', function(req, res, next) {
+	Judge.findOne({
+		_id: req.params.id
+	}).exec(function(error, judge) {
+		if (error || !judge) {
+			return res.send('No such answer');
+		}
+		if (!req.session.is_admin && !req.session.is_staff && judge.user !== req.session.uid) {
+			return next();
+		}
+		var dataPath = path.resolve(__dirname, '../../public/source', judge.source_file);
+		fs.ensureFileSync(dataPath);
+		res.status(200).sendFile(dataPath, {}, function(error) {
+			res.status(400).send(error);
+		});
 	});
 });
 

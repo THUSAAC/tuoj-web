@@ -1,7 +1,7 @@
 var path = require("path");
 var multer  = require('multer');
 
-var baseDir = path.resolve(__dirname, '..'),
+var baseDir = path.resolve(__dirname, '..');
 
 config = {
 	BASE_DIR: baseDir,

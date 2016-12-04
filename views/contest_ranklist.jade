@@ -11,7 +11,7 @@ block content_contest
 					th 分数
 					- for (var i in problems) {
 						th
-							a(href='/contests/#{contestid}/problems/#{problems[i].id}')= problems[i].title
+							a(href='/contests/#{contestid}/problems/#{i}')= problems[i].title
 					- }
 				tbody
 					- var rank = 1;
@@ -26,7 +26,7 @@ block content_contest
 							td= player.total_score === 'unknown' ? '未知' : player.total_score
 							- for (var j in problems) {
 								- if (player.details[j] && player.details[j].judge_id !== "null" && player.details[j].judge_id) {
-									- if (player.user.username === user || is_admin) {
+									- if (player.user.username === user || canViewCode) {
 									td
 										a(href='/contests/#{contestid}/detail/#{player.details[j].judge_id}')= player.details[j].score == 'submitted' ? '已提交' : player.details[j].score
 									- } else {

@@ -15,7 +15,8 @@ var path = require('path')
 var upload = require('../config').MULTER_UPLOAD
 var randomstring = require('randomstring')
 var SOURCE_DIR = require('../config').SOURCE_DIR
-var ranklistService = require('../service/ranklist.service.js');
+var ranklistService = require('../service/ranklist.service');
+var Delay = require('../service/delay.service');
 
 var checkContestAvailable = function(req, res, next) {
 	var contestId = req.params.cid || req.params.contestId || req.params.id;
@@ -25,7 +26,7 @@ var checkContestAvailable = function(req, res, next) {
 		if (!doc) {
 			return res.status(400).send('Contest does not exists');
 		}
-		if (doc.hidden && !req.session.is_admin) {
+		if (doc.hidden && !req.session.is_admin && !req.session.is_staff) {
 			return res.status(400).send('Access denied');
 		}
 		next();
@@ -38,21 +39,22 @@ router.get('/', function(req, res, next) {
 		var dict={
 			user: req.session.user,
 			call: req.session.call,
-			is_admin: req.session.is_admin
+			is_admin: req.session.is_admin,
+			prestart: req.session.is_admin || req.session.is_staff
 		};
 		dict.contestlist=[];
         contestlist.reverse().forEach(function (item) {
             var d = new Date();
-			if (item.hidden && !req.session.is_admin) {
+			if (item.hidden && !req.session.is_admin && !req.session.is_staff) {
 				return;
 			}
             dict.contestlist.push({
                 id: item._id,
                 name: item.name,
 				hidden: item.hidden,
-                status: item.get_status(),
+                status: item.get_status(Delay.getDelaySync(req.session.uid, item._id)),
                 start_time: helper.timestampToString(item.start_time),
-                end_time: helper.timestampToString(item.end_time)
+                end_time: helper.timestampToString(Number(item.end_time) + Delay.getDelaySync(req.session.uid, item._id) * 60 * 1000)
             });
         });
 		res.render('contest_home',dict);
@@ -76,7 +78,7 @@ router.get('/:id([0-9]+)', checkContestAvailable, function(req,res,next){
 		dict.problems=x.problems;
 		dict.start = new Date().setTime(x.star).toLocaleString();
 		dict.end = new Date().setTime(x.end).toLocaleString();
-        dict.status = x.get_status();
+        dict.status = x.get_status(Delay.getDelaySync(req.session.uid, contestid));
 		dict.active = 'problems';
         dict.dashboard = x.dashboard;
 		//console.log(x.problems[0])
@@ -97,7 +99,7 @@ router.get('/:id([0-9]+)/status', checkContestAvailable,function(req,res,next){
 			console.error(err);
 			return res.status(400).send('Contest not found'), undefined; 
 		}
-		self.released = contest.released || req.session.is_admin;
+		self.released = contest.released || req.session.is_admin || req.session.is_staff;
 		attr.user = req.session.uid;
 		judge.find(attr).sort('-_id').populate('problem').populate('user').populate('contest').exec(this);
 	}, function(err, judgelist){
@@ -160,12 +162,14 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)', checkContestAvailable,function
     contest.findOne({_id: contestid}).populate("problems").exec(function (err, c) {
 		if (err) return next(err);
         if (!c) return next();
-        if (c.get_status() == 'unstarted' && !req.session.is_admin) return next(new Error('Contest is not in progress!'));
+        if (c.get_status() == 'unstarted' && !req.session.is_admin && !req.session.is_staff) {
+			return next(new Error('Contest is not in progress!'));
+		}
 		if (!c || problemid < 0 || problemid > c.problems.length) next()
 
 		p = c.problems[problemid];
 		// console.log(p);
-		self.released = c.released || req.session.is_admin;
+		self.released = c.released || req.session.is_admin || req.session.is_staff;
 
 		try {
 			var description = p.getDescriptionHTML();
@@ -232,8 +236,12 @@ router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload', checkContestAvailable,
 	}, function (err, new_contest) {
 		if (err) throw err;
 		c = new_contest;
-		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) throw new Error("No such problem.");
-		if (c.get_status() != 'in_progress') throw new Error('Contest is not in progress!');
+		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) {
+			return res.status(400).send("No such problem."), undefined;
+		}
+		if (c.get_status(Delay.getDelaySync(req.session.uid, contest_id)) != 'in_progress' && !req.session.is_admin && !req.session.is_staff) {
+			return res.status(400).send('Contest is not in progress!'), undefined;
+		}
 
 		SubmitRecord.getSubmitRecord(req.session.uid, contest_id, contest_problem_id, this);
 	}, function (err, s) {
@@ -255,7 +263,7 @@ router.post('/rejudge/:id([0-9]+)/:judgeid([0-9]+)',function(req,res,next){
     var judgeId = parseInt(req.params.judgeid);
 	judge.findOne({_id:judgeId}).populate('contest').populate('problem').exec(function(err,x){
         if (err) return next(err);
-        x.rejudge(function (err, x) {
+        x.rejudge(x.problem, function (err, x) {
             if (err) return next(err);
             res.redirect('/contests/' + x.contest._id + '/detail/' + x._id);
         });
@@ -275,8 +283,9 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
             });
         }
 
-		self.released = doc.contest.released || req.session.is_admin;
-        var has_permission = req.session.is_admin || (req.session.user  == doc.user.username); // 是管理员或者是自己的提交
+		self.released = doc.contest.released || req.session.is_admin || req.session.is_staff;
+        var has_permission = req.session.is_admin || req.session.is_staff || (req.session.user  == doc.user.username); 
+		// 是管理员或者是自己的提交
 
         if (!has_permission) {
             return res.status(400).render('error', {
@@ -294,6 +303,7 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
 				doc.results[i].status = 'Invisible';
 				doc.results[i].time = 'Invisible';
 				doc.results[i].memory = 'Invisible';
+				doc.results[i].extInfo = undefined;
 			}
 		}
         var renderArgs = {
@@ -346,12 +356,13 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
 router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res, next) {
 	var contest_id = parseInt(req.params.cid);
 	var attr = {_id: contest_id};
-	ranklistService.getRanklist(contest_id, req.session.uid, req.session.is_admin, function (err, ranklist) {
+	ranklistService.getRanklist(contest_id, req.session.uid, req.session.is_admin || req.session.is_staff, function (err, ranklist) {
 		if (err) return next(err);
 		var renderArgs = {
 			user: req.session.user,
 			call: req.session.call,
 			is_admin: req.session.is_admin,
+			canViewCode: req.session.is_admin || req.session.is_staff,
 			// is_frozen: c.is_frozen(),
 			contestid: contest_id,
 			problems: ranklist.problems,
@@ -363,3 +374,4 @@ router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res,
 });
 
 module.exports = router;
+

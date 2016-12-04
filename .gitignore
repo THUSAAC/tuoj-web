@@ -45,8 +45,11 @@ datas/
 
 # Config
 server/config_local.js
-config/config_local.js
+config/config.js
 
 #zhx
 run.sh
 *.swo
+
+# data
+tools/import_cttc
