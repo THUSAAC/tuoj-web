@@ -54,20 +54,29 @@ var login_required = function(req,res,next){
 };
 var admin_required = function(req,res,next) {
     if (!req.session.is_admin) {
-        err = new Error("Not Found");
-        err.status = 404;
-        next(err);
-    } else {
-        next();
+        return res.status(400).send('Access deined');
     }
+    next();
 };
 app.use("/contests", login_required);
 app.use("/addcontests", admin_required);
 app.use("/problem_pool", admin_required);
-app.use("/status", admin_required);
-app.use("/rejudge", admin_required);
-app.use("/broadcast", admin_required);
+// app.use("/status", admin_required);
+// app.use("/rejudge", admin_required);
+// app.use("/broadcast", admin_required);
 app.use("/editcontests", admin_required);
+
+var staticAdminModules = [ 'rejudge', 'broadcast', 'delay' ];
+staticAdminModules.forEach(function(moduleName) {
+    app.get('/' + moduleName, admin_required, function(req, res, next) {
+        res.render(moduleName, {
+            user: req.session.user,
+            is_admin: req.session.is_admin,
+            call: req.session.call
+        });
+    });
+    console.log('Static page ' + moduleName + ' loaded');
+});
 
 // add router
 app.use("/", require("./routes/homepage"));
@@ -75,9 +84,9 @@ app.use("/problem_pool", require("./routes/problem_pool"));
 app.use('/addcontests',require("./routes/addcontests"));
 app.use('/contests',require("./routes/contests"));
 app.use('/api', require('./routes/api'));
-app.use('/status',require('./routes/status'));
-app.use('/rejudge',require('./routes/rejudge'));
-app.use('/broadcast',require('./routes/broadcast'));
+// app.use('/status',require('./routes/status'));
+// app.use('/rejudge',require('./routes/rejudge'));
+// app.use('/broadcast',require('./routes/broadcast'));
 app.use('/faq', require('./routes/faq'));
 app.use('/editcontests',require('./routes/editcontests'))
 

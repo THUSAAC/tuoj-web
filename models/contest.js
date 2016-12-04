@@ -24,11 +24,15 @@ Contest.methods.is_frozen = function () {
     return remain < 2*60*60*1000 && (remain > 0 || !this.released);
 };
 
-Contest.methods.get_status = function () {
+Contest.methods.get_status = function (delay) {
     var now = Date.now();
+    var offset = 0;
+    if (delay !== undefined) {
+        offset = delay * 60 * 1000;
+    }
     if (now < this.start_time) {
         return 'unstarted';
-    } else if (now > this.end_time) {
+    } else if (now > this.end_time + offset) {
         return 'ended';
     } else {
         return 'in_progress';

@@ -166,7 +166,11 @@ Judge.methods.rejudge = function (callback) {
     this.judge_end_time = undefined;
     this.status = 'Waiting';
     this.score = 0;
-    this.case_count = this.problem.subtasks[0].testcase_count;
+    if (this.problem && this.problem.subtask[0]) {
+        this.case_count = this.problem.subtasks[0].testcase_count;
+    } else {
+        this.case_count = 0;
+    }
     this.results = [{
         score: 0,
         memory: 0,
