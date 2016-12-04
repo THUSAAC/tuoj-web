@@ -45,7 +45,7 @@ module.exports.getRanklist = function(contestId, userId, fullRanklist, callback)
 			if (ignores.indexOf(judge.status) !== -1) {
 				continue;
 			}
-			if (judge.user.is_admin) {
+			if (judge.user.is_admin || judge.user.is_staff) {
 				continue;
 			}
 			if (userMap[judge.user._id] === undefined) {

@@ -4,7 +4,7 @@ block content
 	div(class="article")
 		ul.list-group
 			- for (var i in contestlist) {
-				a.list-group-item(href="#{(contestlist[i].status=='in_progress'||contestlist[i].status=='ended')?'/contests/'+contestlist[i].id:'#'}")
+				a.list-group-item(href="#{(contestlist[i].status=='in_progress'||contestlist[i].status=='ended'||prestart)?'/contests/'+contestlist[i].id:'#'}")
 					p
 						big #{contestlist[i].name}&nbsp;&nbsp;
 						- if (contestlist[i].status == 'in_progress') {

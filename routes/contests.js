@@ -25,7 +25,7 @@ var checkContestAvailable = function(req, res, next) {
 		if (!doc) {
 			return res.status(400).send('Contest does not exists');
 		}
-		if (doc.hidden && !req.session.is_admin) {
+		if (doc.hidden && !req.session.is_admin && !req.session.is_staff) {
 			return res.status(400).send('Access denied');
 		}
 		next();
@@ -38,12 +38,13 @@ router.get('/', function(req, res, next) {
 		var dict={
 			user: req.session.user,
 			call: req.session.call,
-			is_admin: req.session.is_admin
+			is_admin: req.session.is_admin,
+			prestart: req.session.is_admin || req.session.is_staff
 		};
 		dict.contestlist=[];
         contestlist.reverse().forEach(function (item) {
             var d = new Date();
-			if (item.hidden && !req.session.is_admin) {
+			if (item.hidden && !req.session.is_admin && !req.session.is_staff) {
 				return;
 			}
             dict.contestlist.push({
@@ -97,7 +98,7 @@ router.get('/:id([0-9]+)/status', checkContestAvailable,function(req,res,next){
 			console.error(err);
 			return res.status(400).send('Contest not found'), undefined; 
 		}
-		self.released = contest.released || req.session.is_admin;
+		self.released = contest.released || req.session.is_admin || req.session.is_staff;
 		attr.user = req.session.uid;
 		judge.find(attr).sort('-_id').populate('problem').populate('user').populate('contest').exec(this);
 	}, function(err, judgelist){
@@ -160,12 +161,14 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)', checkContestAvailable,function
     contest.findOne({_id: contestid}).populate("problems").exec(function (err, c) {
 		if (err) return next(err);
         if (!c) return next();
-        if (c.get_status() == 'unstarted' && !req.session.is_admin) return next(new Error('Contest is not in progress!'));
+        if (c.get_status() == 'unstarted' && !req.session.is_admin && !req.session.is_staff) {
+			return next(new Error('Contest is not in progress!'));
+		}
 		if (!c || problemid < 0 || problemid > c.problems.length) next()
 
 		p = c.problems[problemid];
 		// console.log(p);
-		self.released = c.released || req.session.is_admin;
+		self.released = c.released || req.session.is_admin || req.session.is_staff;
 
 		try {
 			var description = p.getDescriptionHTML();
@@ -232,8 +235,12 @@ router.post('/:cid([0-9]+)/problems/:pid([0-9]+)/upload', checkContestAvailable,
 	}, function (err, new_contest) {
 		if (err) throw err;
 		c = new_contest;
-		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) throw new Error("No such problem.");
-		if (c.get_status() != 'in_progress') throw new Error('Contest is not in progress!');
+		if (contest_problem_id >= c.problems.length || contest_problem_id < 0) {
+			return res.status(400).send("No such problem."), undefined;
+		}
+		if (c.get_status() != 'in_progress' && !req.session.is_admin && !req.session.is_staff) {
+			return res.status(400).send('Contest is not in progress!'), undefined;
+		}
 
 		SubmitRecord.getSubmitRecord(req.session.uid, contest_id, contest_problem_id, this);
 	}, function (err, s) {
@@ -275,8 +282,9 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
             });
         }
 
-		self.released = doc.contest.released || req.session.is_admin;
-        var has_permission = req.session.is_admin || (req.session.user  == doc.user.username); // 是管理员或者是自己的提交
+		self.released = doc.contest.released || req.session.is_admin || req.session.is_staff;
+        var has_permission = req.session.is_admin || req.session.is_staff || (req.session.user  == doc.user.username); 
+		// 是管理员或者是自己的提交
 
         if (!has_permission) {
             return res.status(400).render('error', {
@@ -346,12 +354,13 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
 router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res, next) {
 	var contest_id = parseInt(req.params.cid);
 	var attr = {_id: contest_id};
-	ranklistService.getRanklist(contest_id, req.session.uid, req.session.is_admin, function (err, ranklist) {
+	ranklistService.getRanklist(contest_id, req.session.uid, req.session.is_admin || req.session.is_staff, function (err, ranklist) {
 		if (err) return next(err);
 		var renderArgs = {
 			user: req.session.user,
 			call: req.session.call,
 			is_admin: req.session.is_admin,
+			canViewCode: req.session.is_admin || req.session.is_staff,
 			// is_frozen: c.is_frozen(),
 			contestid: contest_id,
 			problems: ranklist.problems,
@@ -363,3 +372,4 @@ router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res,
 });
 
 module.exports = router;
+

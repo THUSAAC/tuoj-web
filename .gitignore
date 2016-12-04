@@ -50,3 +50,6 @@ config/config_local.js
 #zhx
 run.sh
 *.swo
+
+# data
+tools/import_cttc
