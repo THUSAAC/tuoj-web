@@ -27,6 +27,7 @@ block content
 			label
 				input(type='checkbox' ng-model='autoref')
 				span 自动更新
+				span(ng-if='autoref') {{ lastUpdateTime | date: 'HH:mm:ss' }}
 		table.table.table-hover.table-striped
 			thead
 				tr
