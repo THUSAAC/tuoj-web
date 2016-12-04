@@ -124,6 +124,7 @@ Judge.methods.updateStatus = function (results, callback) {
             self.results[test_id].status = result["status"];
             self.results[test_id].time = result["time"];
             self.results[test_id].memory = result["memory"];
+            self.results[test_id].extInfo = result["extInfo"];
 
             var case_score = self.problem.getCaseScore(self.subtask_id, test_id - 1);
             if (typeof(result.score) == 'undefined') {
