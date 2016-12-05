@@ -13,8 +13,9 @@ html(ng-app='tuoj-web')
 			script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
 			script(src='/javascripts/listen.min.js')
 	body
-		div.container-fluid(ng-app='tuoj-web')
-			div.container-fluid
+		div.col-xs-0.col-md-1
+		div.col-xs-12.col-md-10
+			div.row
 				nav.navbar.navbar-default
 					div.container-fluid
 						div.navbar-header
@@ -48,6 +49,6 @@ html(ng-app='tuoj-web')
 										a 您好, #{call ? call : user}
 									li
 										a(href="/logout") 注销
-			div.content-main
-				div.container-fluid
+			div.row
+				div.content-main
 					block content
