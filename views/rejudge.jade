@@ -24,7 +24,7 @@ block content
 			- }
 			button.btn.btn-default(style='margin-right: 10px' ng-click='updateList()') 更新
 			label
-				input(type='checkbox' ng-model='autoref')
+				input(type='checkbox' ng-model='autoref' checked)
 				span 自动更新
 				span(ng-if='autoref') {{ lastUpdateTime | date: 'HH:mm:ss' }}
 		table.table.table-hover.table-striped
