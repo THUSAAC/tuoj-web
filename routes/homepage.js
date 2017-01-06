@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Step = require('step');
 
 var User = require('../models/user.js');
 /* GET home page. */
@@ -44,4 +45,27 @@ router.post('/login',function(req,res,next){
         res.redirect('/');
 	});
 });
+
+router.post('/sign_up', function(req, res, next) {
+	var username = req.body.username;
+	var password = req.body.password;
+	var email = req.body.email;
+
+	var user = new User({
+		username: username,
+		password: password,
+		email: email
+	});
+
+	Step(function () {
+		user.validate_info(this);
+    }, function (err) {
+		if (err) throw err;
+		user.save(this);
+	}, function (err) {
+		if (err) return next(err);
+		res.redirect("/login");
+	});
+});
+
 module.exports = router;

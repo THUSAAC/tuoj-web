@@ -7,10 +7,17 @@ var User = new Schema({
 	realname: String,
 	school: String,
     password: String,
+	email: String,
 	notification: String,
     is_admin: {type: Boolean, default: false},
 	is_staff: {type: Boolean, default: false}
 });
 User.plugin(autoIncrement.plugin, "User");
+
+User.methods.validate_info = function (callback) {
+	// TODO: validate the username and the email;
+
+	return callback();
+};
 
 module.exports = mongoose.model("user", User);

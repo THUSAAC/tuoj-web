@@ -1,8 +1,8 @@
 extends layout
 
 block content
-	div.row
-		div.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+	div.container-fluid
+		div.col-md-6.col-xs-12
 			form(method='POST' action='/login')
 				div.panel.panel-default
 					div.panel-heading 
@@ -16,3 +16,20 @@ block content
 							input.form-control(type='password' name='password' placeholder='Password')
 					div.panel-footer
 						button.btn.btn-default(type='submit') 登入
+		div.col-md-6.col-xs-12
+			form(method='POST' action='/sign_up')
+				div.panel.panel-default
+					div.panel-heading
+						p 还没有账号？快来注册！
+					div.panel-body
+						div.form-group
+							label(for='username') 用户名
+							input.form-control(type='text' name='username' placeholder='Username')
+						div.form-group
+							label(for='password') 密码
+							input.form-control(type='password' name='password' placeholder='Password')
+						div.email
+							label(for='password') 邮箱
+							input.form-control(type='text' name='email' placeholder='请输入你的常用邮箱')
+					div.panel-footer
+						button.btn.btn-default(type='submit') 注册
