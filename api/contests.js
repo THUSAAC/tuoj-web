@@ -1,6 +1,5 @@
 var express = require('express')
 var router = express.Router()
-var git = require('nodegit')
 var markdown = require('markdown').markdown
 var fs = require('fs')
 var fse = require('fs-extra')

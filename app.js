@@ -35,13 +35,10 @@ app.use(function(req, res, next) {
     }
 });
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client')));
 app.use(session(EXPRESS_SESSION));
 
 // check user whether has proper privilege
@@ -58,13 +55,13 @@ var admin_required = function(req,res,next) {
     }
     next();
 };
-app.use("/contests", login_required);
+/*app.use("/contests", login_required);
 app.use("/addcontests", admin_required);
 app.use("/problem_pool", admin_required);
-// app.use("/status", admin_required);
-// app.use("/rejudge", admin_required);
-// app.use("/broadcast", admin_required);
-app.use("/editcontests", admin_required);
+app.use("/status", admin_required);
+app.use("/rejudge", admin_required);
+app.use("/broadcast", admin_required);
+app.use("/editcontests", admin_required);*/
 
 var staticAdminModules = [ 'rejudge', 'broadcast', 'delay' , 'user'];
 staticAdminModules.forEach(function(moduleName) {
@@ -79,54 +76,19 @@ staticAdminModules.forEach(function(moduleName) {
 });
 
 // add router
-app.use("/", require("./routes/homepage"));
-app.use("/problem_pool", require("./routes/problem_pool"));
-app.use('/addcontests',require("./routes/addcontests"));
-app.use('/contests',require("./routes/contests"));
-app.use('/api', require('./routes/api'));
-// app.use('/status',require('./routes/status'));
-// app.use('/rejudge',require('./routes/rejudge'));
-// app.use('/broadcast',require('./routes/broadcast'));
-app.use('/faq', require('./routes/faq'));
-app.use('/editcontests',require('./routes/editcontests'))
+app.use("/", require("./api/homepage"));
+app.use("/problem_pool", require("./api/problem_pool"));
+app.use('/addcontests',require("./api/addcontests"));
+app.use('/contests',require("./api/contests"));
+app.use('/api', require('./api/api'));
+// app.use('/status',require('./api/status'));
+// app.use('/rejudge',require('./api/rejudge'));
+// app.use('/broadcast',require('./api/broadcast'));
+app.use('/faq', require('./api/faq'));
+app.use('/editcontests',require('./api/editcontests'))
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+	res.status(200).sendFile(path.resolve(__dirname, 'client/index.html'));
 });
-
-// Error Handler
-console.log("env = " + app.get('env'));
-if (app.get('env') === 'development') {
-    // error handlers
-    // development error handler
-    // will print stacktrace
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            status: err.status,
-            error: err,
-            //user: req.session.user,
-            //is_admin: req.session.is_admin
-        });
-    });
-}  else {
-    // production error handler
-    // no stacktraces leaked to user
-    app.use(function(err, req, res, next) {
-        // console.log("in production error handler");
-        res.status(err.status || 500);
-        res.render("error", {
-            message: err.message,
-            status: err.status,
-            error: {},
-            //user: req.session.user,
-            //is_admin: req.session.is_admin
-        });
-    });
-}
 
 module.exports = app;

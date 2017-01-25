@@ -4,7 +4,6 @@ var contest = require('../models/contest.js')
 var path = require("path");
 var randomstring = require("randomstring");
 var fse = require("fs-extra");
-var git = require("nodegit");
 
 // Import configurations
 var CONFIG = require("../config");
