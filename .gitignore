@@ -1,13 +1,9 @@
+# Zipped files
+client/dists/*
+
 # Project
 *.dSYM
 *.swp
-
-# Public data
-# We should add .gitignore into each folders rather than there, otherwise these folder will be deleted in git and cause
-# some error
-#public/test_data
-#public/source
-#public/down
 
 # npm
 node_modules
@@ -44,13 +40,12 @@ Desktop.ini
 datas/
 
 # Config
-server/config_local.js
-#config/config.js
+# server/config_local.js
+config/config.js
 
 #zhx
 run.sh
 *.swo
-config/config_local.js
 
 # data
 tools/import_cttc

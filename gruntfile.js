@@ -12,12 +12,14 @@ module.exports = function(grunt) {
                         console.log(event.colour);
                     });
                 },
-                env: {},
-                cwd: __dirname,
-                ext: 'js',
-                watch: [ 'api', 'modules', 'app.js', 'index.js' ],
-                delay: 1000,
-                legacyWatch: true
+				options: {
+					env: { },
+					cwd: __dirname,
+					ext: 'js',
+					watch: [ 'api/*', 'modules/*', 'app.js', 'index.js' ],
+	                delay: 1000,
+					legacyWatch: true
+				}
             }
         },
 		concat: {
@@ -25,26 +27,27 @@ module.exports = function(grunt) {
 				files: {
 					'client/dists/lib.angular.js': angularFiles,
 					'client/dists/router.js': [ 'client/router/*' ],
-					'client/dists/controller.js': [ 'client/modules/*' ],
+					'client/dists/controller.js': [ 'client/modules/*.js' ],
 				}
 			}
 		},
 		watch: {
-			files: [ 'client/*.js' ],
-			tasks: [ 'concat' ]
+			dev: {
+				files: [ 'client/router/*.js', 'client/modules/*/*.js' ],
+				tasks: [ 'concat' ]
+			}
 		},
 		concurrent: {
-			dev: [
-				[ 'concat', 'watch'],
-				[ 'nodemon' ]
-			],
-			options: {
-				logCurrentOutput: true
+			dev: {
+				tasks: [ 'concat', 'watch', 'nodemon' ],
+				options: {
+					logConcurrentOutput: true
+				}
 			}
 		}
     });
+	require('load-grunt-tasks')(grunt);
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', [ 'concat', 'nodemon' ]);
-    grunt.registerTask('fg', [ 'concat', 'watch' ]);
+    grunt.registerTask('default', [ 'concurrent' ]);
 };

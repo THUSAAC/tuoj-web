@@ -1,4 +1,4 @@
-<html>
+<html ng-app='tuoj-web'>
 	<head>
 		<meta http-equiv='Content-Type', content='text/html; charset=utf-8'/>
 		<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'/>
@@ -6,9 +6,12 @@
 		<link rel='stylesheet' href='/stylesheets/style.css'/>
 		<script src='/bower_components/jquery/dist/jquery.min.js'></script>
 		<script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-		<script src='/bower_components/angular/angular.js'></script>
+		<script src='/dists/lib.angular.js'></script>
 		<script src='/dists/router.js'></script>
+		<title ng-bind='$state.current.name'></title>
 	</head>
-	<body ng-app='tuoj-web'>
+	<body>
+		<div ui-view class='container'></div>
+		<p>State url = {{ $state.current.url }}</p>
 	</body>
 </html>
