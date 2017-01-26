@@ -1,0 +1,6 @@
+<ul class='list-group'>
+	<li class='list-group-item' ng-repeat='c in list'>
+		<h3><a href='#!/contest/{{ c.id }}'>{{ c.title }}</a></h3>
+		<p>开始时间: {{ c.beginTime | date : 'yyyy:mm:dd hh:mm:ss a' }}</p>
+	</li>
+</ul>

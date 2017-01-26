@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 				files: {
 					'client/dists/lib.angular.js': angularFiles,
 					'client/dists/router.js': [ 'client/router/*' ],
-					'client/dists/controller.js': [ 'client/modules/*.js' ],
+					'client/dists/controller.js': [ 'client/modules/*/*.js' ],
 				}
 			}
 		},

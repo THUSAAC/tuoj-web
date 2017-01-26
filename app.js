@@ -76,7 +76,6 @@ staticAdminModules.forEach(function(moduleName) {
 });
 
 // add router
-app.use("/", require("./api/homepage"));
 app.use("/problem_pool", require("./api/problem_pool"));
 app.use('/addcontests',require("./api/addcontests"));
 app.use('/contests',require("./api/contests"));

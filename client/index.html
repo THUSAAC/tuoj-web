@@ -7,11 +7,12 @@
 		<script src='/bower_components/jquery/dist/jquery.min.js'></script>
 		<script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
 		<script src='/dists/lib.angular.js'></script>
+		<script src='/dists/controller.js'></script>
 		<script src='/dists/router.js'></script>
 		<title ng-bind='$state.current.name'></title>
 	</head>
 	<body>
+		<ng-include src="'/modules/common/nav.html'"></ng-include>
 		<div ui-view class='container'></div>
-		<p>State url = {{ $state.current.url }}</p>
 	</body>
 </html>
