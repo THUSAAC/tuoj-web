@@ -20,6 +20,8 @@
     "highlightjs": "^9.8.0",
     "angular": "^1.6.1",
     "datatables": "^1.10.12",
-    "angular-ui-router": "^0.4.2"
+    "angular-ui-router": "^0.4.2",
+    "oclazyload": "^1.0.9",
+    "showdown": "^1.6.0"
   }
 }

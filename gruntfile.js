@@ -1,6 +1,8 @@
 'use strict';
 var angularFiles = [ 'client/bower_components/angular/angular.min.js', 
-	'client/bower_components/angular-ui-router/release/angular-ui-router.min.js' ];
+	'client/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+	'client/bower_components/oclazyload/dist/ocLazyLoad.min.js',
+];
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.initConfig({

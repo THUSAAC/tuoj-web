@@ -87,7 +87,7 @@ app.use('/faq', require('./api/faq'));
 app.use('/editcontests',require('./api/editcontests'))
 
 app.use(function(req, res, next) {
-	res.status(200).sendFile(path.resolve(__dirname, 'client/index.html'));
+	res.status(404).send('Page not found');
 });
 
 module.exports = app;

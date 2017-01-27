@@ -1,3 +1,11 @@
 <div class='page-header'>
 	<h1>{{ problem.title }}</h1>
 </div>
+<div class='col-md-8 col-sm-12'>
+	<div id='problemtext'></div>
+	<div ng-if='needReload'>
+		<a ng-click='updateProblem()' href=''>题目描述加载出错, 单击此处重新加载</a>
+	</div>
+</div>
+<div class='col-md-4 col-sm-12'>
+</div>

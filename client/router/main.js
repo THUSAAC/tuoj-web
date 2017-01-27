@@ -8,7 +8,8 @@ var mainCtrl = [ '$scope', '$http', function($scope, $http) {
 } ];
 
 angular.module('tuoj-web', [
-	'ui.router'
+	'ui.router',
+	'oc.lazyLoad'
 ]).run([ 
 	'$rootScope', 
 	'$state', 
@@ -44,7 +45,18 @@ angular.module('tuoj-web', [
 		}).state('contestproblem', {
 			url: '/contest/:contestId/problem/:problemId',
 			templateUrl: '/modules/contest/problem.html',
-			controller: contestProblemCtrl
+			controller: contestProblemCtrl,
+			resolve: {
+				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
+					return $ocLazyLoad.load([ {
+						name: 'MathJax',
+						files: [ '/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML' ]
+					}, {
+						name: 'showdown',
+						files: [ '/bower_components/showdown/dist/showdown.min.js' ]
+					} ]);
+				} ]
+			}
 		}).state('user', {
 			url: '/user',
 			abstract: true
