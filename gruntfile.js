@@ -27,16 +27,19 @@ module.exports = function(grunt) {
 		concat: {
 			dev: {
 				files: {
-					'client/dists/lib.angular.js': angularFiles,
 					'client/dists/router.js': [ 'client/router/*' ],
 					'client/dists/controller.js': [ 'client/modules/*/*.js' ],
+				}
+			}, lib: {
+				files: {
+					'client/dists/lib.angular.js': angularFiles,
 				}
 			}
 		},
 		watch: {
 			dev: {
 				files: [ 'client/router/*.js', 'client/modules/*/*.js' ],
-				tasks: [ 'concat' ]
+				tasks: [ 'concat:dev' ]
 			}
 		},
 		concurrent: {

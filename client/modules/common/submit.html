@@ -1,0 +1,36 @@
+<div class='panel panel-default'>
+	<div class='panel-heading'>
+		<p>递交答案</p>
+	</div>
+	<div class='panel-body'>
+		<div class='form-group'>
+			<div class='col-md-10 col-sm-6'>
+				<input type='file' class='form-control' id='answer' multiple='multiple'/>
+			</div>
+			<div class='col-md-2 col-sm-6'>
+				<button class='btn btn-primary' ng-click='addAnswers()'>添加</button>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='lang'>语言和编译选项</label>
+			<select ng-options='lang as lang.name for lang in problem.langs' ng-model='submit.lang'></select>
+		</div>
+		<table class='table table-hover table-striped' ng-repeat='ans in answers'>
+			<tr>
+				<td>原文件名</td>
+				<td>{{ ans.filename }}</td>
+			</tr>
+			<tr>
+				<td>答案编号</td>
+				<td><input class='form-control' ng-model='ans.num' type='number'/></td>
+			<tr>
+				<td>预览</td>
+				<td><pre><code>{{ ans.code }}</code></pre></td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	<div class='panel-footer'>
+		<button class='btn btn-success'>递交评测<small ng-if='submit.left !== undefined'>(剩余{{ submit.left }}次)</small></button>
+	</div>
+</div>
