@@ -1,3 +1,4 @@
+<div ng-include="'/modules/contest/nav.html'"></div>
 <div class='page-header'>
 	<h1>{{ problem.title }}</h1>
 </div>
@@ -10,4 +11,55 @@
 	</div>
 </div>
 <div class='col-md-4 col-sm-12'>
+	<div class='panel panel-default' ng-if='problem.cases && problem.cases[0]'>
+		<div class='panel-heading'>
+			<p>测试点信息</p>
+		</div>
+		<div class='panel-body'>
+			<table class='table table-hover table-striped'>
+				<thead>
+					<th>#</th>
+					<th ng-if='problem.cases[0].timelimit'>时间限制</th>
+					<th ng-if='problem.cases[0].memlimit'>空间限制</th>
+					<th>答案编号</th>
+					<th>分值</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat='case in problem.cases'>
+						<td>{{ $index }}</td>
+						<td ng-if='case.timelimit'>{{ case.timelimit }} ms</td>
+						<td ng-if='case.memlimit'>{{ case.memlimit }} MB</td>
+						<td>{{ case.ansId }}</td>
+						<td>{{ case.score }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>
+			<p> 递交历史 </p>
+		</div>
+		<div class='panel-body'>
+			<table class='table table-hover table-striped'>
+				<thead>
+					<th>#</th>
+					<th>状态</th>
+					<th>时间</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat='status in history'>
+						<td>{{ $index }}</td>
+						<td>
+							<a href='/#!/contest/{{ contestId }}/detail/{{ status.id }}'>
+								<span class='text-info'>{{ status.status }}</span>
+							</a>
+							<label class='label label-info' ng-if='status.isFinal'>有效递交</label>
+						</td>
+						<td>{{ status.time | date:'hh:mm:ss a' }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

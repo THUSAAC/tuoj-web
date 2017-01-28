@@ -1,0 +1,36 @@
+<div ng-include="'/modules/contest/nav.html'"></div>
+<div class='page-header'>
+	<h1>排行榜</h1>
+</div>
+<div class='row'>
+	<div class='form-group'>
+		<button class='btn btn-default' ng-click='fetch()'>
+			<i class='glyphicon glyphicon-refresh'></i>
+		</button>
+	</div>
+</div>
+<div class='row'>
+	<table class='table table-striped table-hover'>
+		<thead>
+			<th>#</th>
+			<th>用户名</th>
+			<th>学校</th>
+			<th>姓名</th>
+			<th>总分</th>
+			<th ng-repeat='prob in problems'><a href='/#!/contest/{{ contestId }}/problem/{{ prob.id }}'>{{ prob.title }}</a></th>
+		</thead>
+		<tbody>
+			<tr ng-repeat='user in users'>
+				<td>{{ $index }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.school }}</td>
+				<td>{{ user.realname }}</td>
+				<td>{{ user.totalScore }}</td>
+				<td ng-repeat='prob in problems'>
+					<a ng-if='user.score[$index]' href='/#!/contest/{{ contestId }}/detail/{{ user.runId[$index] }}'>{{ user.score[$index] }}</a>
+					<span ng-if='!user.score[$index]'>-</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -57,6 +57,27 @@ angular.module('tuoj-web', [
 					} ]);
 				} ]
 			}
+		}).state('conteststatus', {
+			url: '/contest/:contestId/status',
+			templateUrl: '/modules/contest/status.html',
+			controller: contestStatusCtrl,
+		}).state('contestranklist', {
+			url: '/contest/:contestId/ranklist',
+			templateUrl: '/modules/contest/ranklist.html',
+			controller: contestRanklistCtrl,
+		}).state('contestdetail', {
+			url: '/contest/:contestId/detail/:runId',
+			templateUrl: '/modules/contest/detail.html',
+			controller: contestDetailCtrl,
+			resolve: {
+				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
+					return $ocLazyLoad.load([ {
+						name: 'highlightjs',
+						files: [ '/bower_components/highlightjs/highlight.pack.min.js' ]
+					} ]);
+				} ]
+			}
+
 		}).state('user', {
 			url: '/user',
 			abstract: true
@@ -65,4 +86,26 @@ angular.module('tuoj-web', [
 			template: '<p>login</p>'
 		}).state('404', {});
 	} 
-]).controller('mainCtrl', mainCtrl);
+]).controller('mainCtrl', mainCtrl).filter('statusClass', function() {
+	return function(str) {
+		var map = {
+			"Accepted": "success",
+			"Wrong Answer": "danger",
+			"Time Limit Exceeded": "warning",
+			"Memory Limit Exceeded": "warning",
+			"Runtime Error": "warning",
+			"Compilation Error": "primary",
+			"No Source": "primary",
+			"Dangerous Program": "danger",
+			"Waiting": "info",
+			"Running": "info",
+			"Compilation Success": "info",
+			"Running success": "success",
+			"Compile error": "primary",
+			"Running timeout": "warning",
+			"Running error": "warning",
+			"Invisible": "info" 
+		};
+		return map[str] ? map[str] : 'info';
+	};
+});

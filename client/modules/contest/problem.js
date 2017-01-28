@@ -1,7 +1,15 @@
 var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
+	$scope.contestId = $stateParams.contestId;
 	$scope.problem = {
 		title: 'problem ' + $stateParams.problemId,
-		maxAns: 3
+		maxAns: 3,
+		cases: [ {
+			timelimit: 1, memlimit: 256, ansId: 1, score: 30
+		}, {
+			timelimit: 1, memlimit: 256, ansId: 2, score: 30
+		}, {
+			timelimit: 1, memlimit: 256, ansId: 3, score: 40
+		} ]
 	};
 	($scope.updateProblem = function() {
 		$http.get('/sampleprob.md').then(function(data) {
@@ -80,4 +88,10 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 			}, 200);
 		}
 	};
+	$scope.history = [ {
+		status: 'Pending',
+		id: 1,
+		isFinal: true,
+		time: Date.now()
+	} ];
 } ];
