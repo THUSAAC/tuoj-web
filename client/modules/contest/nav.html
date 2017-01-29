@@ -1,26 +1,26 @@
 <ul class='nav nav-tabs'>
 	<li ui-sref-active='active'>
-		<a href='/#!/contest/{{ contestId }}' ui-sref='contest'>
+		<a ui-sref='contest({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-th-list'></i> 题目列表
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a href='/#!/contest/{{ contestId }}/status' ui-sref='conteststatus'>
+		<a ui-sref='conteststatus({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-signal'></i> 提交状态
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a href='/#!/contest/{{ contestId }}/ranklist' ui-sref='contestranklist'>
+		<a ui-sref='contestranklist({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-sort-by-attributes-alt'></i> 排行榜
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a href='/#!/contest/{{ contestId }}/custom'>
+		<a>
 			<i class='glyphicon glyphicon-console'></i> 自定义测试
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a href='/#!/contest/{{ contestId }}/carlification'>
+		<a>
 			<i class='glyphicon glyphicon-question-sign'></i> 提问
 		</a>
 	</li>

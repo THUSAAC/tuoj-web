@@ -37,7 +37,7 @@ Desktop.ini
 
 # Binary
 #data/problems/
-datas/
+staticdata
 
 # Config
 # server/config_local.js

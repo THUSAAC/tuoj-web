@@ -1,33 +1,42 @@
 var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
+	MathJax.Hub.Config({ 
+		tex2jax: { 
+			inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
+			processEscapes: true 
+		},
+		processSectionDelay: 0
+	});
 	$scope.contestId = $stateParams.contestId;
-	$scope.problem = {
-		title: 'problem ' + $stateParams.problemId,
-		maxAns: 3,
-		cases: [ {
-			timelimit: 1, memlimit: 256, ansId: 1, score: 30
-		}, {
-			timelimit: 1, memlimit: 256, ansId: 2, score: 30
-		}, {
-			timelimit: 1, memlimit: 256, ansId: 3, score: 40
-		} ]
+	$scope.problemId = $stateParams.problemId;
+	$scope.problem = {};
+	$scope.renderDescription = function(content) {
+		$('#problemtext').html(content);
+		MathJax.Callback.Queue([ 'Typeset', MathJax.Hub, 'problemtext' ], function() {
+			var text = $('#problemtext').html();
+			var converter = new showdown.Converter();
+			var newText = converter.makeHtml(text);
+			$('#problemtext').html(newText);
+		});
+	};
+	$scope.fetchData = function() {
+		$http.get('/staticdata/' + $scope.problem.token + '.description').then(function(data) {
+			$scope.renderDescription(data.data);
+			$scope.needReload = false;
+		}).catch(function(data) {
+			$scope.needReload = true;
+		});
+		$http.get('/staticdata/' + $scope.problem.token + '.config').then(function(data) {
+		}).catch(function(data) {
+		});
 	};
 	($scope.updateProblem = function() {
-		$http.get('/sampleprob.md').then(function(data) {
-			$scope.needReload = false;
-			$('#problemtext').html(data.data);
-			MathJax.Hub.Config({ 
-				tex2jax: { 
-					inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
-					processEscapes: true 
-				},
-				processSectionDelay: 0
-			});
-			MathJax.Callback.Queue([ 'Typeset', MathJax.Hub, 'problemtext' ], function() {
-				var text = $('#problemtext').html();
-				var converter = new showdown.Converter();
-				var newText = converter.makeHtml(text);
-			$('#problemtext').html(newText);
-			});
+		$http.post('/api/contest/problemconf', {
+			contestId: $scope.contestId,
+			problemId: $scope.problemId
+		}).then(function(data) {
+			$scope.problem.title = data.data.title;
+			$scope.problem.token = data.data.description;
+			$scope.fetchData();
 		}).catch(function(error) {
 			$scope.needReload = true;
 		});
@@ -94,4 +103,23 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 		isFinal: true,
 		time: Date.now()
 	} ];
+	$scope.submitCode = function() {
+		if ($scope.answers.length === 0) {
+			return alert('你没有选择答案文件');
+		}
+		var frm = {
+			contestId: $scope.contestId,
+			problemId: $scope.problemId,
+			lang: $scope.submit.lang.name
+		};
+		for (var i in $scope.answers) {
+			var ans = $scope.answers[i];
+			frm['answer' + ans.num] = btoa(ans.code);
+		}
+		$http.post('/api/contest/submit', frm).then(function(data) {
+			console.log(data.data);
+		}).catch(function(error) {
+			alert(error.data);
+		});
+	};
 } ];

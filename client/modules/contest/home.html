@@ -7,13 +7,13 @@
 		<div class='panel-heading'>
 			<p>通告</p>
 		</div>
-		<div class='panel-body'></div>
+		<div class='panel-body'>{{ contest.dashboard }}</div>
 	</div>
 </div>
 <div class='col-md-8 col-sm-12'>
 	<div class='list-group'>
 		<a class='list-group-item list-group-item-info'>题目列表</a>
-		<a class='list-group-item' ng-repeat='prob in contest.problems' href='#!/contest/{{ contestId }}/problem/{{ $index }}'>{{ prob }}</a>
+		<a class='list-group-item' ng-repeat='prob in problems' href='#!/contest/{{ contestId }}/problem/{{ $index }}'>{{ prob.title }}</a>
 	</div>
 </div>
 

@@ -1,12 +1,12 @@
 var fs = require('fs-extra')
 var Step = require('step')
+var path = require('path');
+var randomstring = require('randomstring');
 var Contest = require('../models/contest')
 var Problem = require('../models/problem')
-var Judge = require('../models/judge')
 var Role = require('../models/role')
-var path = require('path');
-var upload = require('../config').MULTER_UPLOAD;
-var randomstring = require('randomstring');
+var DelaySrv = require('./delay');
+var JudgeSrv = require('./judge');
 
 module.exports.list = function(userId, callback) {
 	Role.find({
@@ -14,13 +14,13 @@ module.exports.list = function(userId, callback) {
 	}).exec(callback);
 };
 
-module.exports.info = function(contestId, callback) {
-	Contest.findOne({
+module.exports.info = function(contestId) {
+	return Contest.findOne({
 		_id: contestId
-	}).exec(callback);
+	});
 };
 
-module.exports.access = function(req, res, next) {
+module.exports.accessible = function(req, res, next) {
 	if (req.body.contestId == null) {
 		return res.status(400).send('Access deined');
 	}
@@ -35,74 +35,116 @@ module.exports.access = function(req, res, next) {
 	});
 };
 
-/* var checkContestAvailable = function(req, res, next) {
-	var contestId = req.params.cid || req.params.contestId || req.params.id;
-	contest.findOne({
-		_id: contestId
-	}).exec(function(err, doc) {
-		if (!doc) {
-			return res.status(400).send('Contest does not exists');
+var getContestStatus = function(ret) {
+	var now = Date.now();
+	if (now < ret.start_time) { 
+		return 'unstarted';
+	} else if (now > ret.end_time) {
+		return 'ended';
+	} else {
+		return 'in_progress';
+	}
+};
+module.exports.getContestStatus = getContestStatus;
+
+module.exports.available = function(req, res, next) {
+	var contestId = req.body.contestId;
+	if (contestId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	Step(function() {
+		Contest.findOne({
+			_id: contestId
+		}).exec(this);
+	}, function(err, doc) {
+		if (err || !doc) {
+			return res.status(400).send('Contest does not exists'), undefined;
 		}
-		if (doc.hidden && !req.session.is_admin && !req.session.is_staff) {
+		this.contest = doc;
+		Role.findOne({
+			user: req.session.user._id,
+			contest: contestId
+		}).exec(this);
+	}, function(err, doc) {
+		if (err || !doc) {
+			return res.status(400).send('Access denied'), undefined;
+		}
+		if (doc.role === 'master') {
+			return next();
+		}
+		if (doc.hidden || getContestStatus(this.contest) === 'unstarted') {
 			return res.status(400).send('Access denied');
 		}
 		next();
 	});
 };
 
-router.get('/', function(req, res, next) {
-	contest.find({},function(err,contestlist){
-        if (err) return next(err);
-		var dict={
-			user: req.session.user,
-			call: req.session.call,
-			is_admin: req.session.is_admin,
-			prestart: req.session.is_admin || req.session.is_staff
-		};
-		dict.contestlist=[];
-        contestlist.reverse().forEach(function (item) {
-            var d = new Date();
-			if (item.hidden && !req.session.is_admin && !req.session.is_staff) {
-				return;
-			}
-            dict.contestlist.push({
-                id: item._id,
-                name: item.name,
-				hidden: item.hidden,
-                status: item.get_status(Delay.getDelaySync(req.session.uid, item._id)),
-                start_time: helper.timestampToString(item.start_time),
-                end_time: helper.timestampToString(Number(item.end_time) + Delay.getDelaySync(req.session.uid, item._id) * 60 * 1000)
-            });
-        });
-		res.render('contest_home',dict);
+module.exports.submittable = function(req, res, next) {
+	var contestId = req.body.contestId;
+	if (contestId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	Step(function() {
+		Role.findOne({
+			contest: contestId,
+			user: req.session.user._id
+		}).exec(this);
+	}, function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Access denied'), undefined;
+		}
+		if (doc.role === 'master' || doc.role === 'viewer') {
+			return next(), undefined;
+		}
+		Contest.findOne({
+			_id: contestId
+		}).exec(this);
+	}, function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Denied');
+		}
+		if (Date.now() < doc.start_time) {
+			return res.status(400).send('Denied');
+		}
+		if (Date.now() <= doc.end_time) {
+			return next(), undefined;
+		}
+		this.end_time = doc.end_time;
+		DelaySrv.getDelay(req.session.user._id, doc._id, this);
+	}, function(error, del) {
+		if (error) {
+			return res.status(500).send('Internal error');
+		}
+		if (Date.now() <= this.end_time + del) {
+			return next(), undefined;
+		}
+		res.status(400).send('Denied');
 	});
-});
+};
 
-router.get('/:id([0-9]+)', checkContestAvailable, function(req,res,next){
-	var contestid=parseInt(req.params.id)
-	contest.findOne({_id:contestid}).populate('problems').exec(function(err,x){
-		if (err) return next(err)
-		if (!x) return next()
-        if (x.get_status() == 'unstated') return next(new Error('Contest is not in progress!'));
+module.exports.submit = function(userId, contestId, problemId, answers, callback) {
+	Step(function() {
+		Contest.findOne({
+			_id: contestId
+		}).exec(this);
+	}, function(error, doc) {
+		if (error || !doc) {
+			return callback('Contest error'), undefined;
+		}
+		if (doc.problems[problemId] == null) {
+			return callback('Problem error'), undefined;
+		}
+		this.problem = doc.problems[problemId];
+		JudgeSrv.create(this.problem, answers.answer1, answers.lang, userId, contestId, problemId, this);
+	}, function(error, doc) {
+		if (error) {
+			return callback(error), undefined;
+		}
+		callback(false);
+	});
+};
 
-		var dict={
-			user: req.session.user,
-			call: req.session.call,
-			is_admin: req.session.is_admin
-		};
-		dict.contestid=contestid;
-		dict.contesttitle = x.name;
-		dict.problems=x.problems;
-		dict.start = new Date().setTime(x.star).toLocaleString();
-		dict.end = new Date().setTime(x.end).toLocaleString();
-        dict.status = x.get_status(Delay.getDelaySync(req.session.uid, contestid));
-		dict.active = 'problems';
-        dict.dashboard = x.dashboard;
-		//console.log(x.problems[0])
-		res.render('contest',dict);
-	})
-}) 
-
+/*
 
 router.get('/:id([0-9]+)/status', checkContestAvailable,function(req,res,next){
 	var self = this;

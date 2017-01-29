@@ -22,19 +22,11 @@ autoIncrement.initialize(mongoose.connection);
 var EXPRESS_SESSION = require("./config").EXPRESS_SESSION;
 EXPRESS_SESSION.store = new MongoStore({ mongooseConnection: mongoose.connection });
 
-// catch all error to avoid server crash
-app.use(function(req, res, next) {
-    try {
-        next()
-    } catch (err) {
-        next(err)
-    }
-});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, '../client')));
+app.use('/staticdata', express.static(path.resolve(__dirname, '../staticdata')));
 app.use(session(EXPRESS_SESSION));
 
 // add router

@@ -57,59 +57,6 @@ Judge.methods.isSystem = function () {
     return this.lang == 'system_g++' || this.lang == 'system_java';
 };
 
-Judge.statics.new = function (problem, uploaded_file_path, language, user_id, contest, contest_problem_id, callback) {
-    var self = this;
-    if (problem.meta.supported_languages.indexOf(language) < 0) {
-        return callback(new Error('Unsupported languages.'));
-    }
-
-    var suffix = {
-        "pascal": ".pas",
-        "gcc": ".c",
-        "g++": ".cpp",
-        "java": ".java",
-        "system": ".zip",
-        "answer": ".ans",
-        "answerzip": ".zip",
-        "system_g++": ".zip",
-        "system_java": ".zip"
-    };
-    var source_file = randomstring.generate(15) + suffix[language];
-
-    Step(function () {
-        fse.move(uploaded_file_path, path.join(SOURCE_DIR, source_file), this);
-    }, function (err) {
-        if (err) throw err;
-        var judge = new self({
-            user: user_id,
-            contest: contest._id,
-            problem: problem._id,
-            problem_id: contest_problem_id,
-
-            // TODO: remove the concept of subtask
-            subtask_id: 0,
-            case_count: problem.subtasks[0].testcase_count,
-
-            submitted_time: Date.now(),
-            lang: language,
-            source_file: source_file,
-            score: 0,
-            status: "Uploading",
-            results: null
-        });
-        judge.save(this);
-    }, function(err, j) {
-        if (err) throw err;
-        // console.log(problem);
-        // The best practice recommend repopulate it than directly assign object to it.
-        j.problem = problem;
-        j.rejudge(problem, this);
-    }, function (err, j) {
-        if (err) return callback(err);
-        else return callback(null, j);
-    });
-};
-
 // traditional problem only
 Judge.methods.updateStatus = function (results, callback) {
     self = this;
@@ -197,35 +144,6 @@ Judge.methods.rejudge = function (problem, callback) {
     }
     this.markModified('results');
     this.save(callback);
-};
-
-Judge.methods.systemProblemUpdate = function (results, callback) {
-    var self = this;
-    try {
-        if (results.status.code != 0) {
-            this.results[0] = {
-                status: 'Compilation Error'
-            };
-        } else {
-            this.results[0] = {
-                status: 'Compilation Success'
-            };
-        }
-        this.status = results.status.content;
-        Object.keys(results.answers).forEach(function (test_id_str) {
-            var test_id = parseInt(test_id_str) + 1;
-            self.results[test_id] = {
-                time: results.answers[test_id_str].time,
-                total: results.answers[test_id_str].total,
-                correct: results.answers[test_id_str].correct
-            };
-        });
-
-        this.markModified('results');
-        this.save(callback);
-    } catch (err) {
-        callback(err);
-    }
 };
 
 module.exports = mongoose.model("judge", Judge);

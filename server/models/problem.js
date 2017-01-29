@@ -25,6 +25,7 @@ var Problem = new Schema({
     status: String, // new problem/updating/update failed/update success
 
     data: String,
+	description: String,
     data_md5: String,
 
     subtasks: Object
@@ -89,3 +90,4 @@ Problem.methods.getCaseScore = function (subtask_id, case_id) {
 };
 
 module.exports = mongoose.model("problem", Problem);
+
