@@ -6,8 +6,13 @@ fs.readdir(__dirname, function(error, doc) {
         if (id.match(/index/) !== null) {
             return;
         }
-        if (id.match(/\.js$/) !== null) {
-            var moduleName = id.slice(0, -3);
+        if (id.match(/^\w*$/) !== null) {
+            var moduleName = id;
+			try {
+				fs.readFileSync(path.resolve(__dirname, id, 'index.js'));
+			} catch (error) {
+				return;
+			}
             router.use('/' + moduleName, require('./' + moduleName));
             console.log('API module ' + moduleName + ' loaded');
         }

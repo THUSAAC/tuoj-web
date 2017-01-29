@@ -1,12 +1,3 @@
-var mainCtrl = [ '$scope', '$http', function($scope, $http) {
-	$scope.login = {
-		username: '',
-		password: ''
-	};
-	$scope.authLogin = function() {
-	};
-} ];
-
 angular.module('tuoj-web', [
 	'ui.router',
 	'oc.lazyLoad'
@@ -104,8 +95,22 @@ angular.module('tuoj-web', [
 			"Compile error": "primary",
 			"Running timeout": "warning",
 			"Running error": "warning",
-			"Invisible": "info" 
+			"Invisible": "info",
+			"unstarted": "warning",
+			"in_progress": "success",
+			"ended": "info",
 		};
-		return map[str] ? map[str] : 'info';
+		return map[str] ? map[str] : 'warning';
+	};
+}).filter('ojTranslate', function() {
+	return function(str) {
+		var map = {
+			"unstarted": "未开始",
+			"in_progress": "进行中",
+			"ended": "已结束",
+			"master": "管理员",
+			"viewer": "观察者"
+		};
+		return map[str] ? map[str] : '未知';
 	};
 });

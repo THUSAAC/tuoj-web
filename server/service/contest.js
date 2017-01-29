@@ -1,23 +1,41 @@
-var express = require('express')
-var router = express.Router()
-var markdown = require('markdown').markdown
-var fs = require('fs')
-var fse = require('fs-extra')
+var fs = require('fs-extra')
 var Step = require('step')
-var contest = require('../models/contest')
-var problem = require('../models/problem')
-var judge = require('../models/judge')
-var user = require('../models/user')
-var SubmitRecord = require('../models/submit_record');
-var helper = require('../service/helper');
-var path = require('path')
-var upload = require('../config').MULTER_UPLOAD
-var randomstring = require('randomstring')
-var SOURCE_DIR = require('../config').SOURCE_DIR
-var ranklistService = require('../service/ranklist.service');
-var Delay = require('../service/delay.service');
+var Contest = require('../models/contest')
+var Problem = require('../models/problem')
+var Judge = require('../models/judge')
+var Role = require('../models/role')
+var path = require('path');
+var upload = require('../config').MULTER_UPLOAD;
+var randomstring = require('randomstring');
 
-var checkContestAvailable = function(req, res, next) {
+module.exports.list = function(userId, callback) {
+	Role.find({
+		user: userId
+	}).exec(callback);
+};
+
+module.exports.info = function(contestId, callback) {
+	Contest.findOne({
+		_id: contestId
+	}).exec(callback);
+};
+
+module.exports.access = function(req, res, next) {
+	if (req.body.contestId == null) {
+		return res.status(400).send('Access deined');
+	}
+	Role.findOne({
+		contest: req.body.contestId,
+		user: req.session.user._id
+	}).exec(function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Access deined');
+		}
+		next();
+	});
+};
+
+/* var checkContestAvailable = function(req, res, next) {
 	var contestId = req.params.cid || req.params.contestId || req.params.id;
 	contest.findOne({
 		_id: contestId
@@ -126,7 +144,7 @@ router.get('/:id([0-9]+)/status', checkContestAvailable,function(req,res,next){
 				judict.user=judgelist[i].user.username;
 			}
 			judict.status=judgelist[i].status;
-			if (!self.released && judict.status.match(/Compilation*/) === null) {
+			if (!self.released && judict.status.match(/Compilation/) === null) {
 				judict.status = 'Invisible';
 			}
 			judict.score=judgelist[i].score;
@@ -196,7 +214,7 @@ router.get('/:cid([0-9]+)/problems/:pid([0-9]+)', checkContestAvailable,function
                 dict.judge_status = [];
 				var tmpStatus = [];
                 judge_staus.forEach(function (item) {
-					if (!self.released && item.status.match(/Compilation*/) === null) {
+					if (!self.released && item.status.match(/Compilation/) === null) {
 						item.status = 'Invisible';
 					}
 					if (!self.released) {
@@ -292,7 +310,7 @@ router.get('/:contestId/detail/:judgeId', checkContestAvailable, function(req, r
                 message: 'Access denied'
             });
         }
-		if (!self.released && doc.status.match(/Compilation*/) === null) {
+		if (!self.released && doc.status.match(/Compilation/) === null) {
 			doc.status = 'Invisible';
 		}
 		if (!self.released) {
@@ -370,7 +388,6 @@ router.get('/:cid([0-9]+)/rank_list', checkContestAvailable, function (req, res,
 		};
 		res.status(200).render('contest_ranklist', renderArgs);
 	});
-});
+}); */
 
-module.exports = router;
 

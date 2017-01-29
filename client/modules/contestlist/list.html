@@ -1,6 +1,11 @@
 <ul class='list-group'>
 	<li class='list-group-item' ng-repeat='c in list'>
-		<h3><a href='#!/contest/{{ c.id }}'>{{ c.title }}</a></h3>
-		<p>开始时间: {{ c.beginTime | date : 'yyyy:mm:dd hh:mm:ss a' }}</p>
+		<p>
+			<big><a href='#!/contest/{{ c._id }}'>{{ c.title }}</a></big>
+			<label class='label label-{{ c.status | statusClass }}'>{{ c.status | ojTranslate }}</label>
+			<label ng-if='c.role != "player"' class='label label-danger'>{{ c.role | ojTranslate }}</label>
+		</p>
+		<p>开始时间: {{ c.start_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
+		<p>结束时间: {{ c.end_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
 	</li>
 </ul>

@@ -8,3 +8,4 @@ var Delay = new mongoose.Schema({
 Delay.plugin(autoIncrement.plugin, "Delay");
 
 module.exports = mongoose.model('delay', Delay);
+

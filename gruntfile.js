@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         nodemon: {
             dev: {
-                script: './bin/www',
+                script: './server/config/exec.js',
                 callback: function(nodemon) {
                     nodemon.on('log', function(event) {
                         console.log(event.colour);
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 					env: { },
 					cwd: __dirname,
 					ext: 'js',
-					watch: [ 'api/*', 'modules/*', 'app.js', 'index.js' ],
+					watch: [ 'server/*' ],
 	                delay: 1000,
 					legacyWatch: true
 				}
