@@ -21,14 +21,14 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat='user in users'>
-				<td>{{ $index }}</td>
+				<td>{{ user.rank }}</td>
 				<td>{{ user.username }}</td>
 				<td>{{ user.school }}</td>
 				<td>{{ user.realname }}</td>
-				<td>{{ user.totalScore }}</td>
+				<td>{{ user.total_score }}</td>
 				<td ng-repeat='prob in problems'>
-					<a ng-if='user.score[$index]' href='/#!/contest/{{ contestId }}/detail/{{ user.runId[$index] }}'>{{ user.score[$index] }}</a>
-					<span ng-if='!user.score[$index]'>-</span>
+					<a ng-if='user.details[$index]' href='/#!/contest/{{ contestId }}/detail/{{ user.details[$index].judge_id }}'>{{ user.details[$index].score }}</a>
+					<span ng-if='!user.details[$index]'>-</span>
 				</td>
 			</tr>
 		</tbody>

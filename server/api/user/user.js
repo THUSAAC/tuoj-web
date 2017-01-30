@@ -36,5 +36,7 @@ module.exports.lookup = function(req, res, next) {
 };
 
 module.exports.time = function(req, res, next) {
-	res.status(200).send(Date.now());
+	res.status(200).send({
+		time: Date.now()
+	});
 };

@@ -22,13 +22,13 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat='rec in historys'>
-				<td>{{ $index }}</td>
-				<td>{{ rec.username }}</td>
-				<td><a href='/#!/contest/{{ contestId }}/problem/{{ rec.problem.id }}'>{{ rec.problem.title }}</a></td>
+				<td>{{ rec._id }}</td>
+				<td>{{ rec.user.username }}</td>
+				<td><a href='/#!/contest/{{ contestId }}/problem/{{ rec.problem_id }}'>{{ rec.problem.title }}</a></td>
 				<td>{{ rec.lang }}</td>
-				<td><a href='/#!/contest/{{ contestId }}/detail/{{ rec.id }}'><label class='label label-{{ rec.status | statusClass }}'>{{ rec.status }}</label></a></td>
-				<td>{{ rec.score ? rec.score : '-' }}</td>
-				<td>{{ rec.time | date:'yyyy-mm-dd hh:mm:ss a' }}</td>
+				<td><a href='/#!/contest/{{ contestId }}/detail/{{ rec._id }}'><label class='label label-{{ rec.status | statusClass }}'>{{ rec.status }}</label></a></td>
+				<td>{{ rec.score ? rec.score : 'Invisible' }}</td>
+				<td>{{ rec.submitted_time | date:'yyyy-MM-dd hh:mm:ss a' }}</td>
 			</tr>
 		</tbody>
 	</table>

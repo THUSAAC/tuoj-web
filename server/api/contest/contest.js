@@ -1,6 +1,9 @@
 var Promise = require('bluebird');
+var Step = require('step');
 var ContestSrv = require('../../service/contest');
 var DelaySrv = require('../../service/delay');
+var JudgeSrv = require('../../service/judge');
+var RanklistSrv = require('../../service/ranklist');
 
 module.exports.list = function(req, res, next) {
 	ContestSrv.list(req.session.user._id, function(error, doc) {
@@ -69,3 +72,66 @@ module.exports.submit = function(req, res, next) {
 		res.status(200).send('Succeeded');
 	});
 };
+
+module.exports.getStatus = function(req, res, next) {
+	Step(function() {
+		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
+	}, function(resv, isGod) {
+		var attr = {
+			contest: req.body.contestId
+		};
+		if (req.body.requestOwn || !isGod) {
+			attr.user = req.session.user._id;
+		}
+		if (req.body.runId != null) {
+			attr._id = req.body.runId;
+		}
+		if (req.body.problem_id != null) {
+			attr.problem_id = req.body.problem_id;
+		}
+		var getAnswer = (req.body.requestAnswer && ((attr.user === req.session.user._id)|| isGod))|| false;
+		JudgeSrv.findJudges(attr, resv, getAnswer, this);
+	}, function(error, doc) {
+		if (error) {
+			return res.status(500).send(error || 'Internal error');
+		}
+		res.status(200).send(doc);
+	});
+};
+
+module.exports.getCases = function(req, res, next) {
+	Step(function() {
+		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
+	}, function(resv, isGod) {
+		if (!resv) {
+			return res.status(200).send([]), undefined;
+		}
+		JudgeSrv.findCases(req.body.runId, this);
+	}, function(error, doc) {
+		if (error) {
+			return res.status(500).send(error || 'Internal error');
+		}
+		res.status(200).send(doc);
+	});
+};
+
+module.exports.ranklist = function(req, res, next) {
+	Step(function() {
+		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
+	}, function(resv, isGod) {
+		var attr = {
+			contest: req.body.contestId
+		};
+		if (!isGod) {
+			attr.user = req.session.user._id;
+		}
+		RanklistSrv.getRanklist(req.body.contestId, attr, resv, this);
+	}, function(error, data) {
+		if (error) {
+			console.error(error);
+			return res.status(500).send('Internal error');
+		}
+		res.status(200).send(data);
+	});
+};
+

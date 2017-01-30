@@ -97,12 +97,25 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 			}, 200);
 		}
 	};
-	$scope.history = [ {
-		status: 'Pending',
-		id: 1,
-		isFinal: true,
-		time: Date.now()
-	} ];
+	($scope.fetchHistory = function() {
+		$http.post('/api/contest/status', {
+			contestId: $scope.contestId,
+			problem_id: $scope.problemId,
+			requestOwn: true
+		}).then(function(data) {
+			$scope.historys = data.data;
+			for (var i in $scope.historys) {
+				if ($scope.historys[i].status === undefined) {
+					$scope.historys[i].status = 'Invisible';
+				}
+			}
+			$scope.historys.sort(function(a, b) {
+				return b.submitted_time - a.submitted_time;
+			});
+		}).catch(function(error) {
+			console.log(error);
+		});
+	})();
 	$scope.submitCode = function() {
 		if ($scope.answers.length === 0) {
 			return alert('你没有选择答案文件');
@@ -117,9 +130,14 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 			frm['answer' + ans.num] = btoa(ans.code);
 		}
 		$http.post('/api/contest/submit', frm).then(function(data) {
-			console.log(data.data);
+			$state.go('conteststatus', {
+				contestId: $scope.contestId
+			});
 		}).catch(function(error) {
 			alert(error.data);
 		});
+	};
+	$scope.removeAns = function(i) {
+		$scope.answers = $scope.answers.slice(0, i).concat($scope.answers.slice(i + 1));
 	};
 } ];

@@ -13,6 +13,7 @@
 				<li><a ui-sref='contestlist.my'>我的比赛</a></li>
 			</ul>
 			<ul class='nav navbar-nav navbar-right'>
+				<li><a>{{ servertime | date:'hh:mm:ss a' }}</a></li>
 				<li ng-if='username==null'>
 					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>登入<span class='caret'></span></a>
 					<ul class='dropdown-menu'>

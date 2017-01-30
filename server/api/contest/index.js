@@ -9,5 +9,8 @@ router.post('/info', UserSrv.needLogin, ContestSrv.accessible, ContestCtrl.info)
 router.post('/content', UserSrv.needLogin, ContestSrv.available, ContestCtrl.content);
 router.post('/problemconf', UserSrv.needLogin, ContestSrv.available, ContestCtrl.problemConf);
 router.post('/submit', UserSrv.needLogin, ContestSrv.submittable, ContestCtrl.submit);
+router.post('/status', UserSrv.needLogin, ContestSrv.available, ContestCtrl.getStatus);
+router.post('/cases', UserSrv.needLogin, ContestSrv.available, ContestCtrl.getCases);
+router.post('/ranklist', UserSrv.needLogin, ContestSrv.available, ContestCtrl.ranklist);
 
 module.exports = router;

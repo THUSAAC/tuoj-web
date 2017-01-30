@@ -18,7 +18,9 @@
 		<table class='table table-hover table-striped' ng-repeat='ans in answers'>
 			<tr>
 				<td>原文件名</td>
-				<td>{{ ans.filename }}</td>
+				<td>{{ ans.filename }}
+					<button class='btn btn-danger' ng-click='removeAns($index)'>删除</button>
+				</td>
 			</tr>
 			<tr>
 				<td>答案编号</td>

@@ -1,22 +1,22 @@
 var contestStatusCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
 	$scope.contestId = $stateParams.contestId;
-	$scope.historys = [ {
-		id: 2,
-		problem: { title: 'a', id: 1 },
-		lang: 'g++',
-		status: 'Pending',
-		time: Date.now(),
-		username: 'zbonghaoxi'
-	}, {
-		id: 1,
-		problem: { title: 'a', id: 1 },
-		lang: 'g++',
-		status: 'Accepted',
-		score: 100,
-		time: Date.now(),
-		username: 'zbonghaoxi'
-	} ];
-	$scope.fetch = function() {
-		$scope.historys = $scope.historys;
-	};
+	($scope.fetch = function() {
+		$http.post('/api/contest/status', {
+			contestId: $scope.contestId,
+			requestOwn: true
+		}).then(function(data) {
+			$scope.historys = data.data;
+			for (var i in $scope.historys) {
+				if ($scope.historys[i].status === undefined) {
+					$scope.historys[i].status = 'Invisible';
+				}
+			}
+			$scope.historys.sort(function(a, b) {
+				return b.submitted_time - a.submitted_time;
+			});
+		}).catch(function(error) {
+			console.log(error);
+		});
+	})();
 } ];
+

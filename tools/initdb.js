@@ -12,9 +12,31 @@ setTimeout(function() {
 	var Problem = require('../server/models/problem');
 
 	var problemList = [ {
-		title: 'Problem Alice'
+		title: 'Problem Alice',
+		description: 'a',
+		cases: [ {
+			score: 30,
+			time_limit: 400,
+			mem_limit: 400,
+		}, {
+			score: 30,
+			time_limit: 400,
+			mem_limit: 400,
+		}, {
+			score: 40,
+			time_limit: 400,
+			mem_limit: 400,
+		} ]
 	}, {
-		title: 'Problem Bob'
+		title: 'Problem Bob',
+		description: 'b',
+		cases: [ {
+			score: 30,
+		}, {
+			score: 30,
+		}, {
+			score: 40,
+		} ]
 	} ];
 	problemList.forEach(function(d) {
 		var mod = new Problem(d);
@@ -62,14 +84,22 @@ setTimeout(function() {
 	var d = new Date;
 
 	var contestList = [ {
-		start_time: 1485655200000,
-		end_time: 1485691200000,
+		start_time: 485655200000,
+		end_time: 485691200000,
 		title: 'Test Round 0',
+		dashboard: 'Ended contest',
 		problems: [ 0, 1 ]
 	}, {
-		start_time: 1487655200000,
-		end_time: 1487691200000,
+		start_time: 1407655200000,
+		end_time: 1499691200000,
 		title: 'Test Round 1',
+		dashboard: 'Runing contest',
+		problems: [ 0, 1 ]
+	}, {
+		start_time: 2487655200000,
+		end_time: 2487691200000,
+		title: 'Test Round 2',
+		dashboard: 'Unstarted contest',
 		problems: [ 0, 1 ]
 	} ];
 
@@ -90,8 +120,20 @@ setTimeout(function() {
 		contest: 1,
 		role: 'player'
 	}, {
+		user: 0,
+		contest: 2,
+		role: 'player'
+	}, {
 		user: 1,
 		contest: 0,
+		role: 'master'
+	}, {
+		user: 1,
+		contest: 1,
+		role: 'master'
+	}, {
+		user: 1,
+		contest: 2,
 		role: 'master'
 	}, ];
 

@@ -21,6 +21,7 @@ var Problem = new Schema({
 
     title: String,
     meta: Object,
+	cases: Object,
 
     status: String, // new problem/updating/update failed/update success
 
@@ -28,7 +29,6 @@ var Problem = new Schema({
 	description: String,
     data_md5: String,
 
-    subtasks: Object
 });
 Problem.plugin(autoIncrement.plugin, "Problem");
 
@@ -54,7 +54,6 @@ Problem.methods.updateInfo = function(json_file, callback) {
 
         this.title = info.title;
         this.meta = info.meta;
-        this.subtasks = info.subtasks;
         this.save(callback);
     } catch(err) {
         console.warn(err);
@@ -74,19 +73,6 @@ Problem.methods.getRepoPath = function() {
 
 Problem.methods.getDataURL = function() {
     return urljoin(SITE_URL, 'test_data', this.data);
-};
-
-Problem.methods.getCaseScore = function (subtask_id, case_id) {
-    var s = this.subtasks[subtask_id];
-    var score = s.score / s.testcase_count;
-    if (typeof(s.scores) != 'undefined') {
-        try {
-            score = s.scores[case_id];
-        } catch (err) {
-            console.error(err);
-        }
-    }
-    return score;
 };
 
 module.exports = mongoose.model("problem", Problem);

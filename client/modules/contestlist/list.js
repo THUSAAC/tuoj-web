@@ -15,6 +15,9 @@ var contestListCtrl = [ '$scope', '$state', '$http', '$timeout', function($scope
 		}).then(function(data) {
 			data.data.role = role;
 			$scope.list.push(data.data);
+			$scope.list.sort(function(a, b) {
+				return b.start_time - a.start_time;
+			});
 		}).catch(function(error) {
 			console.log(error);
 		});

@@ -1,36 +1,21 @@
 var mongoose = require("mongoose");
 var path = require('path');
-var urljoin = require('url-join');
-var fse = require('fs-extra');
 var autoIncrement = require("mongoose-auto-increment");
-var randomstring = require('randomstring');
 var Step = require('step');
 var Schema = mongoose.Schema;
-
-var SOURCE_DIR = require('../config').SOURCE_DIR;
-var SITE_URL = require('../config').SITE_URL;
 
 var Judge = new Schema({
     user: {type: Number, ref: "user"},
     contest: {type: Number, ref: "contest"},
     problem: {type: Number, ref: "problem"},
-
     problem_id: Number,
-    subtask_id: Number,
-
     submitted_time: Number,
-    judge_start_time: Number,
-    judge_end_time: Number,
-
     // solution information
     lang: String,
     source_file: String,
-
     // judge result
-    status: String,
     score: Number,
     case_count: Number,
-    results: Object
 });
 
 Judge.index({ contest: 1, user: 1 });
@@ -38,24 +23,6 @@ Judge.index({ status: 1 });
 Judge.index({ status: 1, lang: 1 });
 
 Judge.plugin(autoIncrement.plugin, "Judge");
-
-Judge.methods.getSourceURL = function () {
-    return urljoin(SITE_URL, 'source', this.source_file);
-};
-
-Judge.methods.getSource = function () {
-    try {
-        var s_path = path.join(SOURCE_DIR, this.source_file);
-        var source = fse.readFileSync(s_path);
-        return source;
-    } catch (err) {
-        return err.message;
-    }
-};
-
-Judge.methods.isSystem = function () {
-    return this.lang == 'system_g++' || this.lang == 'system_java';
-};
 
 // traditional problem only
 Judge.methods.updateStatus = function (results, callback) {
@@ -74,7 +41,7 @@ Judge.methods.updateStatus = function (results, callback) {
             self.results[test_id].memory = result["memory"];
             self.results[test_id].extInfo = result["extInfo"];
 
-            var case_score = self.problem.getCaseScore(self.subtask_id, test_id - 1);
+            var case_score = self.problem.getCaseScore(self. test_id - 1);
             if (typeof(result.score) == 'undefined') {
                 if (self.results[test_id].status == "Accepted") {
                     self.results[test_id].score = case_score;
@@ -107,43 +74,6 @@ Judge.methods.updateStatus = function (results, callback) {
     } catch (err) {
         callback(err);
     }
-};
-
-Judge.methods.rejudge = function (problem, callback) {
-    this.judge_start_time = undefined;
-    this.judge_end_time = undefined;
-    this.status = 'Waiting';
-    this.score = 0;
-    this.problem = problem;
-    if (this.problem && this.problem.subtasks[0]) {
-        this.case_count = this.problem.subtasks[0].testcase_count;
-    } else {
-    }
-    this.results = [{
-        score: 0,
-        memory: 0,
-        time: 0,
-        status: "Waiting"
-    }];
-    for (var i = 0;  i < this.case_count; i++) {
-        if (this.lang == 'system_g++' || this.lang == 'system_java') {
-            this.results.push({
-                score: 0,
-                total: 0,
-                correct: 0,
-                time: 0
-            });
-        } else {
-            this.results.push({
-                score: 0,
-                memory: 0,
-                time: 0,
-                status: "Waiting"
-            });
-        }
-    }
-    this.markModified('results');
-    this.save(callback);
 };
 
 module.exports = mongoose.model("judge", Judge);

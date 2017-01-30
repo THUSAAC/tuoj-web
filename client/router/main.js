@@ -113,4 +113,20 @@ angular.module('tuoj-web', [
 		};
 		return map[str] ? map[str] : '未知';
 	};
+}).filter('langClass', function() {
+	return function(input) {
+		var str = input;
+		if (typeof(str) !== 'string') {
+			return 'plain';
+		}
+		if (str.match(/g\+\+/) !== null) {
+			return 'cpp';
+		} else if (str.match(/gcc/) !== null) {
+			return 'c';
+		} else if (str.match(/pascal/) !== null) {
+			return 'pascal';
+		} else {
+			return 'plain';
+		}
+	};
 });

@@ -1,24 +1,39 @@
 var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
 	$scope.contestId = $stateParams.contestId;
-	$scope.rec =  {
-		problem: { title: 'a', id: 1 },
-		lang: 'g++',
-		status: 'Pending',
-		time: Date.now(),
-		username: 'zbonghaoxi',
-		answers: [ {
-			langClass: 'cpp',
-			code: '#include <cstdio>\n\nint main() {\n	puts("Hello world\\n");\n}'
-		} ],
-		cases: [ {
-			time: 10, mem: 120, score: 30, status: 'Accepted'
-		}, {
-			time: 1100, mem: 1233200, score: 0, status: 'Time Limit Exceeded', extInfo: 'naiiive'
-		}, {
-			status: 'Pending'
-		} ]
-	};
+	$scope.runId = $stateParams.runId;
 	$timeout(hljs.initHighlighting, 100);
-	$scope.fetch = function() {
-	};
+	($scope.fetch = function() {
+		$http.post('/api/contest/status', {
+			contestId: $scope.contestId,
+			runId: $scope.runId,
+			requestAnswer: true
+		}).then(function(data) {
+			$scope.rec = data.data[0];
+			if (!$scope.rec.status) {
+				$scope.rec.status = 'Invisible';
+			}
+			$scope.answers = [];
+			$http.get('/staticdata/' + $scope.rec.source_file).then(function(code) {
+				$scope.answers.push({
+					lang: $scope.rec.lang,
+					code: code.data
+				});
+				$timeout(hljs.initHighlighting, 100);
+			});
+		}).catch(function(error) {
+			console.log(error);
+		});
+		$http.post('/api/contest/cases', {
+			contestId: $scope.contestId,
+			runId: $scope.runId,
+		}).then(function(data) {
+			$scope.cases = data.data;
+			$scope.cases.sort(function(a, b) {
+				return a.caseId - b.caseId;
+			});
+		}).catch(function(error) {
+			console.log(error);
+		});
+	})();
 } ];
+
