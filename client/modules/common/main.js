@@ -14,9 +14,13 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $
 	};
 	$rootScope.loadUserInfo = function() {
 		$http.post('/api/user/lookup').then(function(data) {
-			$rootScope.username = data.data.realname || data.data.username;
+			if (typeof(data.data) === 'object') {
+				$rootScope.currentUser = data.data;
+			} else {
+				$rootScope.currentUser = null;
+			}
 		}).catch(function(error) {
-			$rootScope.username = null;
+			$rootScope.currentUser = null;
 		});
 	};
 	$rootScope.loadUserInfo();

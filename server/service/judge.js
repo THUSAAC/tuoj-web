@@ -1,4 +1,5 @@
 var Step = require('step');
+var Promise = require('bluebird');
 var randomString = require('randomstring');
 var fs = require('fs-extra');
 var path = require('path');
@@ -30,16 +31,18 @@ var rejudge = function(runId, callback) {
 };
 module.exports.rejudge = rejudge;
 
-module.exports.create = function (problem, codeContent, language, userId, contestId, contestProblemId, callback) {
+module.exports.create = function(problem, codeContent, language, userId, contestId, contestProblemId, callback) {
     Step(function() {
-		this.fileName = randomString.generate(16) + '.' + userId + '.' + contestId + '.' + contestProblemId + '.answer';
-		var stream = fs.createWriteStream(path.resolve(__dirname, '../../staticdata', this.fileName));
-		stream.write(codeContent, 'base64');
-		stream.end(this);
-    }, function (err) {
-        if (err) {
-			return callback(err || 'Internal error'), undefined;
+		this.fileName = {};
+		var tasks = [];
+		for (var i in codeContent) {
+			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) {
+				this.fileName[i] = randomString.generate(16) + '.' + userId + '.' + contestId + '.' + contestProblemId + '.' + i;
+				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
+			}
 		}
+		Promise.all(tasks).then(this);
+    }, function () {
         var judge = new Judge({
 			status: 'Waiting',
             user: userId,

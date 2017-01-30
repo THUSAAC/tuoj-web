@@ -13,13 +13,22 @@ var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 				$scope.rec.status = 'Invisible';
 			}
 			$scope.answers = [];
-			$http.get('/staticdata/' + $scope.rec.source_file).then(function(code) {
-				$scope.answers.push({
-					lang: $scope.rec.lang,
-					code: code.data
-				});
-				$timeout(hljs.initHighlighting, 100);
-			});
+			for (var i in $scope.rec.source_file) {
+				(function(i) {
+					$http.get('/staticdata/' + $scope.rec.source_file[i]).then(function(code) {
+						$scope.answers.push({
+							lang: $scope.rec.lang,
+							code: code.data,
+							num: i
+						});
+						(function(id) {
+							$timeout(function() {
+								hljs.highlightBlock(document.getElementById(id));
+							}, 100);
+						})('code' + i);
+					});
+				})(i);
+			}
 		}).catch(function(error) {
 			console.log(error);
 		});

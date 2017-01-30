@@ -135,7 +135,7 @@ module.exports.submit = function(userId, contestId, problemId, answers, callback
 			return callback('Problem error'), undefined;
 		}
 		this.problem = doc.problems[problemId];
-		JudgeSrv.create(this.problem, answers.answer1, answers.lang, userId, contestId, problemId, this);
+		JudgeSrv.create(this.problem, answers, answers.lang, userId, contestId, problemId, this);
 	}, function(error, doc) {
 		if (error) {
 			return callback(error), undefined;

@@ -8,7 +8,9 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 	});
 	$scope.contestId = $stateParams.contestId;
 	$scope.problemId = $stateParams.problemId;
-	$scope.problem = {};
+	$scope.problem = {
+		maxAns: 3
+	};
 	$scope.renderDescription = function(content) {
 		$('#problemtext').html(content);
 		MathJax.Callback.Queue([ 'Typeset', MathJax.Hub, 'problemtext' ], function() {
@@ -83,10 +85,8 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 	$scope.applyAnswer = function(ans) {
 		if (typeof(ans) === 'object') {
 			ans.num = 1;
-			for (var i = 1; i <= $scope.problem.maxAns; ++ i) {
-				if (ans.filename === i + '.out') {
-					ans.num = i;
-				}
+			if (ans.filename.match(/\d*\.out/)) {
+				ans.num = parseInt(ans.filename.split('.')[0]);
 			}
 			if ($scope.answers.length === $scope.problem.maxAns) {
 				$scope.answers.shift();

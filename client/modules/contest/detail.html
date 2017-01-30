@@ -27,7 +27,8 @@
 	</table>
 </div>
 <div class='row' ng-repeat='ans in answers'>
-	<pre><code class='{{ ans.lang | langClass }}'>{{ ans.code }}</code></pre>
+	<p>{{ ans.num }} in {{ ans.lang }}</p>
+	<pre><code class='{{ ans.lang | langClass }}' id='code{{ $index }}'>{{ ans.code }}</code></pre>
 </div>
 <div class='row'>
 	<div class='form-group'>

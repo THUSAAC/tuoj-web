@@ -49,7 +49,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat='status in historys'>
-						<td>{{ $index }}</td>
+						<td>{{ status._id }}</td>
 						<td>
 							<a href='/#!/contest/{{ contestId }}/detail/{{ status._id }}'>
 								<label class='label label-{{ status.status | statusClass }}'>{{ status.status }}</span>

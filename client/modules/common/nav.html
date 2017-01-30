@@ -14,7 +14,7 @@
 			</ul>
 			<ul class='nav navbar-nav navbar-right'>
 				<li><a>{{ servertime | date:'hh:mm:ss a' }}</a></li>
-				<li ng-if='username==null'>
+				<li ng-if='currentUser==null'>
 					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>登入<span class='caret'></span></a>
 					<ul class='dropdown-menu'>
 						<form class='navbar-form'>
@@ -31,9 +31,10 @@
 						</form>
 					</ul>
 				</li>
-				<li ng-if='username' class='dropdown'>
-					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{{ username }}<span class='caret'></span></a>
+				<li ng-if='currentUser!=null' class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{{ currentUser.realname }}<span class='caret'></span></a>
 					<ul class='dropdown-menu'>
+						<li><a>{{ currentUser.username }}</a></li>
 						<li><a ng-click='authLogout()' href='/'>登出</a></li>
 					</ul>
 				</li>

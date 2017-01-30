@@ -12,7 +12,7 @@ var Judge = new Schema({
     submitted_time: Number,
     // solution information
     lang: String,
-    source_file: String,
+    source_file: Object,
     // judge result
     score: Number,
     case_count: Number,

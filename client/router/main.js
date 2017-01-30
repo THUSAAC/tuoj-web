@@ -125,8 +125,7 @@ angular.module('tuoj-web', [
 			return 'c';
 		} else if (str.match(/pascal/) !== null) {
 			return 'pascal';
-		} else {
-			return 'plain';
 		}
+		return 'plain';
 	};
 });
