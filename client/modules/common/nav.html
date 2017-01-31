@@ -10,7 +10,12 @@
 
 		<div class='collapse navbar-collapse' id='navbar-collapse-1'>
 			<ul class='nav navbar-nav'>
-				<li><a ui-sref='contestlist.my'>我的比赛</a></li>
+				<li ui-sref-active='active'>
+					<a ui-sref='contestlist.my'>我的比赛</a>
+				</li>
+				<li ng-if='isRoot' ui-sref-active='active'>
+					<a ui-sref='admin'>OJ管理</a>
+				</li>
 			</ul>
 			<ul class='nav navbar-nav navbar-right'>
 				<li><a>{{ servertime | date:'hh:mm:ss a' }}</a></li>

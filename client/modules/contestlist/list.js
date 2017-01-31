@@ -22,4 +22,11 @@ var contestListCtrl = [ '$scope', '$state', '$http', '$timeout', function($scope
 			console.log(error);
 		});
 	};
+	$scope.addContest = function() {
+		$http.post('/api/contest/create').then(function(data) {
+			$scope.updateList();
+		}).catch(function(error) {
+			alert(error.data);
+		});
+	};
 } ];

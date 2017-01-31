@@ -1,7 +1,11 @@
 'use strict';
-var angularFiles = [ 'client/bower_components/angular/angular.min.js', 
+var angularFiles = [ 
+	'client/bower_components/moment/moment.js',
+	'client/bower_components/angular/angular.min.js', 
 	'client/bower_components/angular-ui-router/release/angular-ui-router.min.js',
 	'client/bower_components/oclazyload/dist/ocLazyLoad.min.js',
+	'client/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+	'client/bower_components/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.min.js'
 ];
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-nodemon');

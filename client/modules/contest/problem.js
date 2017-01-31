@@ -130,10 +130,11 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 			frm['answer' + ans.num] = btoa(ans.code);
 		}
 		$http.post('/api/contest/submit', frm).then(function(data) {
-			$state.go('conteststatus', {
+			$state.go('contest.status', {
 				contestId: $scope.contestId
 			});
 		}).catch(function(error) {
+			console.log(error);
 			alert(error.data);
 		});
 	};

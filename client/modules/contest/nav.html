@@ -1,16 +1,16 @@
 <ul class='nav nav-tabs'>
 	<li ui-sref-active='active'>
-		<a ui-sref='contest({ contestId: contestId })'>
+		<a ui-sref='contest.home({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-th-list'></i> 题目列表
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a ui-sref='conteststatus({ contestId: contestId })'>
+		<a ui-sref='contest.status({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-signal'></i> 提交状态
 		</a>
 	</li>
 	<li ui-sref-active='active'>
-		<a ui-sref='contestranklist({ contestId: contestId })'>
+		<a ui-sref='contest.ranklist({ contestId: contestId })'>
 			<i class='glyphicon glyphicon-sort-by-attributes-alt'></i> 排行榜
 		</a>
 	</li>
@@ -21,7 +21,19 @@
 	</li>
 	<li ui-sref-active='active'>
 		<a>
-			<i class='glyphicon glyphicon-question-sign'></i> 提问
+			<i class='glyphicon glyphicon-question-sign'></i> 提问和通知
+		</a>
+	</li>
+	<li ng-if='myRole=="master"' ui-sref-active='active'>
+		<a ui-sref='contest.admin({ contestId: contestId })'>
+			<i class='glyphicon glyphicon-wrench'></i> 比赛管理 
+		</a>
+	</li>
+	<li ng-if='myRole=="master"' ui-sref-active='active'>
+		<a ui-sref='contest.player({ contestId: contestId })'>
+			<i class='glyphicon glyphicon-yen'></i> 选手管理 
 		</a>
 	</li>
 </ul>
+
+<div ui-view></div>

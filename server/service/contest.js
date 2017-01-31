@@ -15,9 +15,7 @@ module.exports.list = function(userId, callback) {
 };
 
 module.exports.info = function(contestId) {
-	return Contest.findOne({
-		_id: contestId
-	});
+	return Contest.findById(contestId);
 };
 
 module.exports.accessible = function(req, res, next) {
@@ -165,4 +163,63 @@ module.exports.isResultVisible = function(userId, contestId, callback) {
 		callback(doc.released || false, false);
 	});
 };
+
+module.exports.isMaster = function(req, res, next) {
+	var contestId = req.body.contestId;
+	if (contestId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	Role.findOne({
+		contest: contestId,
+		user: req.session.user._id,
+		role: 'master'
+	}).exec(function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Access denied');
+		}
+		next();
+	});
+};
+
+module.exports.getRole = function(req, res, next) {
+	var contestId = req.body.contestId;
+	if (contestId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	Role.findOne({
+		contest: contestId,
+		user: req.session.user._id,
+		role: 'master'
+	}).exec(function(error, doc) {
+		res.status(200).send(doc);
+	});
+};
+
+module.exports.config = function(conf, callback) {
+	Contest.update({
+		_id: conf._id
+	}, {
+		$set: conf
+	}).exec(callback);
+};
+
+module.exports.create = function(owner, callback) {
+	var contest = new Contest({
+		start_time: Date.now() * 2,
+		end_time: Date.now() * 2,
+		title: 'New contest to be configured',
+		hidden: true
+	});
+	contest.save(function(error, doc) {
+		if (error) {
+			return callback(error);
+		}
+		var role = new Role({
+			user: owner,
+			contest: doc._id,
+			role: 'master'
+		});
+		role.save(callback);
+	});
+};;
 

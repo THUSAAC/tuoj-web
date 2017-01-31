@@ -37,14 +37,17 @@ module.exports.getRanklist = function(contestId, attr, resv, callback) {
 		var userMap = {};
 		for (var i in self.userlist) {
 			var u =  self.userlist[i].user;
-			list[i] = {
+			if (attr.user !== undefined && u._id != attr.user) {
+				continue;
+			}
+			userMap[u._id] = list.length;
+			list.push({
 				_id: u._id,
 				username: u.username,
 				realname: u.realname,
 				school: u.school,
 				details: {}
-			};
-			userMap[list[i]._id] = i;
+			});
 		}
 		for (var i in judges) {
 			var judge = judges[i];

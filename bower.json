@@ -22,6 +22,7 @@
     "datatables": "^1.10.12",
     "angular-ui-router": "^0.4.2",
     "oclazyload": "^1.0.9",
-    "showdown": "^1.6.0"
+    "showdown": "^1.6.0",
+    "angular-eonasdan-datetimepicker": "^0.3.8"
   }
 }

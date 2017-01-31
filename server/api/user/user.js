@@ -1,4 +1,5 @@
 var UserSrv = require('../../service/user');
+var RoleSrv = require('../../service/role');
 
 module.exports.login = function(req, res, next){
 	if (typeof(req.body.username) !== 'string') {
@@ -38,5 +39,16 @@ module.exports.lookup = function(req, res, next) {
 module.exports.time = function(req, res, next) {
 	res.status(200).send({
 		time: Date.now()
+	});
+};
+
+module.exports.isRoot = function(req, res, next) {
+	UserSrv.isRoot(req.session.user._id).exec(function(error, doc) {
+		if (error) {
+			return res.status(500).send('Internal error');
+		}
+		res.status(200).send({
+			isRoot: doc && true
+		});
 	});
 };

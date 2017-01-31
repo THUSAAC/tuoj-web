@@ -22,6 +22,11 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $
 		}).catch(function(error) {
 			$rootScope.currentUser = null;
 		});
+		$http.post('/api/user/isroot').then(function(data) {
+			$rootScope.isRoot = data.data.isRoot;
+		}).catch(function(error) {
+			$rootScope.isRoot = false;
+		});
 	};
 	$rootScope.loadUserInfo();
 	$rootScope.authLogout = function() {

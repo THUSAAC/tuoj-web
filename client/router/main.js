@@ -1,6 +1,7 @@
 angular.module('tuoj-web', [
 	'ui.router',
-	'oc.lazyLoad'
+	'oc.lazyLoad',
+	'ae-datetimepicker'
 ]).run([ 
 	'$rootScope', 
 	'$state', 
@@ -17,9 +18,7 @@ angular.module('tuoj-web', [
 		$stateProvider.state('home', {
 			url: '/',
 			templateUrl: '/modules/home/home.html'
-		}).state('test', {
-			url: '/test',
-			templateUrl: '/modules/contestlist/list.html',
+
 		}).state('contestlist', {
 			url: '/contestlist',
 			controller: contestListCtrl,
@@ -31,10 +30,15 @@ angular.module('tuoj-web', [
 			controller: contestListCtrl,
 		}).state('contest', {
 			url: '/contest/:contestId',
+			templateUrl: '/modules/contest/nav.html',
+			controller: contestNavCtrl,
+			abstract: true
+		}).state('contest.home', {
+			url: '/home',
 			templateUrl: '/modules/contest/home.html',
 			controller: contestHomeCtrl
-		}).state('contestproblem', {
-			url: '/contest/:contestId/problem/:problemId',
+		}).state('contest.problem', {
+			url: '/problem/:problemId',
 			templateUrl: '/modules/contest/problem.html',
 			controller: contestProblemCtrl,
 			resolve: {
@@ -48,16 +52,16 @@ angular.module('tuoj-web', [
 					} ]);
 				} ]
 			}
-		}).state('conteststatus', {
-			url: '/contest/:contestId/status',
+		}).state('contest.status', {
+			url: '/status',
 			templateUrl: '/modules/contest/status.html',
 			controller: contestStatusCtrl,
-		}).state('contestranklist', {
-			url: '/contest/:contestId/ranklist',
+		}).state('contest.ranklist', {
+			url: '/ranklist',
 			templateUrl: '/modules/contest/ranklist.html',
 			controller: contestRanklistCtrl,
-		}).state('contestdetail', {
-			url: '/contest/:contestId/detail/:runId',
+		}).state('contest.detail', {
+			url: '/detail/:runId',
 			templateUrl: '/modules/contest/detail.html',
 			controller: contestDetailCtrl,
 			resolve: {
@@ -68,6 +72,27 @@ angular.module('tuoj-web', [
 					} ]);
 				} ]
 			}
+		}).state('contest.admin', {
+			url: '/admin',
+			templateUrl: '/modules/contest/admin.html',
+			controller: contestAdminCtrl,
+		}).state('contest.player', {
+			url: '/player',
+			templateUrl: '/modules/contest/player.html',
+			controller: contestPlayerCtrl,
+
+		}).state('admin', {
+			url: '/admin',
+			templateUrl: '/modules/admin/nav.html',
+			controller: adminNavCtrl,
+		}).state('admin.problems', {
+			url: '/problems',
+			templateUrl: '/modules/admin/problems.html',
+			controller: adminProblemsCtrl,
+		}).state('admin.problem', {
+			url: '/problem/:problemId',
+			templateUrl: '/modules/admin/problem.html',
+			controller: adminProblemCtrl,
 
 		}).state('user', {
 			url: '/user',

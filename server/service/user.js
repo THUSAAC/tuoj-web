@@ -1,4 +1,5 @@
-var User = require('../models/user.js');
+var User = require('../models/user');
+var Role = require('../models/role');
 
 module.exports.noLogin = function(req, res, next) {
 	if (req.session.user) {
@@ -38,3 +39,23 @@ module.exports.lookup = function(username, callback) {
 	}).exec(callback);
 };
 
+module.exports.isRoot = function(userId) {
+	return Role.findOne({
+		user: userId,
+		contest: -1,
+		role: 'root'
+	});
+};
+
+module.exports.needRoot = function(req, res, next) {
+	Role.findOne({
+		user: req.session.user._id,
+		contest: -1,
+		role: 'root'
+	}).exec(function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Access deined');
+		}
+		next();
+	});
+};

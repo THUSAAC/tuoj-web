@@ -23,7 +23,10 @@ var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 						});
 						(function(id) {
 							$timeout(function() {
-								hljs.highlightBlock(document.getElementById(id));
+								try {
+									hljs.highlightBlock(document.getElementById(id));
+								} catch (error) {
+								}
 							}, 100);
 						})('code' + i);
 					});

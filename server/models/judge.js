@@ -16,6 +16,7 @@ var Judge = new Schema({
     // judge result
     score: Number,
     case_count: Number,
+	status: String,
 });
 
 Judge.index({ contest: 1, user: 1 });

@@ -5,6 +5,7 @@ var UserCtrl = require('./user');
 
 router.post('/login', UserSrv.noLogin, UserCtrl.login);
 router.post('/logout', UserSrv.needLogin, UserCtrl.logout);
+router.post('/isRoot', UserSrv.needLogin, UserCtrl.isRoot);
 router.post('/lookup', UserCtrl.lookup);
 router.post('/time', UserCtrl.time);
 // router.post('/signup', UserSrv.noLogin);
