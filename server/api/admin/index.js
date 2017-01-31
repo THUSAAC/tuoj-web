@@ -1,0 +1,14 @@
+var express = require('express');
+var router = express.Router();
+var UserSrv = require('../../service/user');
+var ProblemCtrl = require('./problem');
+
+router.post('/problemlist', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.list);
+router.post('/problemcreate', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.create);
+router.post('/problemgetConfig', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.getConfig);
+router.post('/problemsyncLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.syncLocal);
+router.post('/problemconfig', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.config);
+router.post('/problemupdateDescription', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.updateDescription);
+router.post('/problemviewLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.viewLocal);
+
+module.exports = router;

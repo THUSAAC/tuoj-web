@@ -11,10 +11,14 @@
 		<div class='collapse navbar-collapse' id='navbar-collapse-1'>
 			<ul class='nav navbar-nav'>
 				<li ui-sref-active='active'>
-					<a ui-sref='contestlist.my'>我的比赛</a>
+					<a ui-sref='contestlist.my'>比赛列表</a>
+				</li>
+				<li ui-sref-active='active' ng-repeat='c in activeContests'>
+					<a ui-sref='contest({ contestId: c._id })' class='hidden'></a>
+					<a ui-sref='contest.home({ contestId: c._id })'>{{ c.title }}</a>
 				</li>
 				<li ng-if='isRoot' ui-sref-active='active'>
-					<a ui-sref='admin'>OJ管理</a>
+					<a ui-sref='admin'>全局管理</a>
 				</li>
 			</ul>
 			<ul class='nav navbar-nav navbar-right'>

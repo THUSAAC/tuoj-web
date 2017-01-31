@@ -10,7 +10,7 @@
 		<script src='/dists/lib.angular.js'></script>
 		<script src='/dists/controller.js'></script>
 		<script src='/dists/router.js'></script>
-		<title ng-bind='$state.current.name'></title>
+		<title>TUOJ.{{ $state.current.name | ojTranslate }}</title>
 	</head>
 	<body>
 		<ng-include src="'/modules/common/nav.html'"></ng-include>

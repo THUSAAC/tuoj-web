@@ -1,4 +1,4 @@
-var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
+var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', function($scope, $rootScope, $state, $stateParams, $http, $timeout) {
 	MathJax.Hub.Config({ 
 		tex2jax: { 
 			inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
@@ -28,6 +28,15 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 			$scope.needReload = true;
 		});
 		$http.get('/staticdata/' + $scope.problem.token + '.config').then(function(data) {
+			$scope.langs = data.data.langs;
+			$scope.submit.lang = $scope.langs[0];
+			$scope.cases = data.data.cases;
+			$scope.problem.maxAns = 0;
+			for (var i in $scope.cases) {
+				if ($scope.cases[i].ansId > $scope.problem.maxAns) {
+					$scope.problem.maxAns = $scope.cases[i].ansId; 
+				}
+			}
 		}).catch(function(data) {
 		});
 	};
@@ -45,16 +54,6 @@ var contestProblemCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeou
 	})();
 	$scope.submit = {
 	};
-	$scope.problem.langs = [ {
-		name: 'g++'
-	}, {
-		name: 'g++ with std11'
-	}, {
-		name: 'gcc'
-	}, {
-		name: 'pascal' 
-	} ];
-	$scope.submit.lang = $scope.problem.langs[0];
 	$scope.answers = [];
 	$scope.addAnswer = function(file) {
 		if (typeof(file) !== 'object') {

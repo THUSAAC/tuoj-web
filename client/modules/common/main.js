@@ -3,6 +3,11 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $
 		username: '',
 		password: ''
 	};
+	$rootScope.leftWid = 8;
+	$rootScope.changeLR = function() {
+		$rootScope.leftWid ^= (8 ^ 12);
+	};
+	$rootScope.activeContests = {};
 	$rootScope.user = {};
 	$rootScope.authLogin = function() {
 		$http.post('/api/user/login', $rootScope.login).then(function(data) {
@@ -41,10 +46,16 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $
 			$rootScope.servertime = data.data.time;
 			$timeout(function() {
 				$rootScope.updateTime();
-			}, 1000);
+			}, 30000);
 		}).catch(function(error) {
-			$timeout($rootScope.updateTime, 12000);
+			$timeout($rootScope.updateTime, 30000);
 		});
+	})();
+	($rootScope.incTime = function() {
+		$rootScope.servertime += 1000;
+		$timeout(function() {
+			$rootScope.incTime();
+		}, 1000);
 	})();
 } ];
 

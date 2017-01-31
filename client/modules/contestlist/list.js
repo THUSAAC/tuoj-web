@@ -4,7 +4,9 @@ var contestListCtrl = [ '$scope', '$state', '$http', '$timeout', function($scope
 		$http.post('/api/contest/list').then(function(data) {
 			$scope.list = [];
 			for (var i in data.data) {
-				$scope.updateContest(data.data[i].contest, data.data[i].role);
+				if (data.data[i].contest != null && data.data[i].contest != -1) {
+					$scope.updateContest(data.data[i].contest, data.data[i].role);
+				}
 			}
 		}).catch(function(error) {
 		});

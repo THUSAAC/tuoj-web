@@ -93,6 +93,17 @@ angular.module('tuoj-web', [
 			url: '/problem/:problemId',
 			templateUrl: '/modules/admin/problem.html',
 			controller: adminProblemCtrl,
+			resolve: {
+				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
+					return $ocLazyLoad.load([ {
+						name: 'MathJax',
+						files: [ '/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML' ]
+					}, {
+						name: 'showdown',
+						files: [ '/bower_components/showdown/dist/showdown.min.js' ]
+					} ]);
+				} ]
+			}
 
 		}).state('user', {
 			url: '/user',
@@ -134,7 +145,21 @@ angular.module('tuoj-web', [
 			"in_progress": "进行中",
 			"ended": "已结束",
 			"master": "管理员",
-			"viewer": "观察者"
+			"viewer": "观察者",
+			"home": "首页",
+			"contestlist": "比赛列表",
+			"contestlist.my": "我的比赛",
+			"contest": "比赛",
+			"contest.home": "比赛信息",
+			"contest.problem": "查看题目",
+			"contest.status": "比赛记录",
+			"contest.ranklist": "比赛排行榜",
+			"contest.detail": "答案详情",
+			"contest.admin": "比赛设置",
+			"contest.player": "选手设置",
+			"admin": "全局配置",
+			"admin.problems": "题目池",
+			"admin.problem": "编辑题目",
 		};
 		return map[str] ? map[str] : '未知';
 	};

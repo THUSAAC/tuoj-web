@@ -6,7 +6,7 @@
 	</li>
 	<li class='list-group-item' ng-repeat='c in list'>
 		<p>
-			<big><a href='/#!/contest/{{ c._id }}/home'>{{ c.title }}</a></big>
+		<big><a ui-sref='contest.home({ contestId: c._id })'>{{ c.title }}</a></big>
 			<label class='label label-{{ c.status | statusClass }}'>{{ c.status | ojTranslate }}</label>
 			<label ng-if='c.role != "player"' class='label label-danger'>{{ c.role | ojTranslate }}</label>
 			<label ng-if='c.hidden' class='label label-info'>已隐藏</label>
