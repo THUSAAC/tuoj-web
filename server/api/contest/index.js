@@ -5,6 +5,7 @@ var ContestSrv = require('../../service/contest');
 var ProblemSrv = require('../../service/problem');
 var RoleSrv = require('../../service/role');
 var ContestCtrl = require('./contest');
+var CarliCtrl = require('./carli');
 
 router.post('/list', UserSrv.needLogin, ContestCtrl.list);
 router.post('/info', UserSrv.needLogin, ContestSrv.accessible, ContestCtrl.info);
@@ -20,5 +21,8 @@ router.post('/problemTitle', UserSrv.needLogin, ContestSrv.isMaster, ProblemSrv.
 router.post('/players', UserSrv.needLogin, ContestSrv.isMaster, RoleSrv.users);
 router.post('/modifyRole', UserSrv.needLogin, ContestSrv.isMaster, ContestCtrl.modifyRole);
 router.post('/create', UserSrv.needLogin, UserSrv.needRoot, ContestCtrl.create);
+router.post('/carliall', UserSrv.needLogin, ContestSrv.accessible, CarliCtrl.getAll);
+router.post('/carlinew', UserSrv.needLogin, ContestSrv.accessible, CarliCtrl.getNew);
+router.post('/carlisend', UserSrv.needLogin, ContestSrv.accessible, CarliCtrl.send);
 
 module.exports = router;

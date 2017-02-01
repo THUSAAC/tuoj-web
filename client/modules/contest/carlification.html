@@ -1,0 +1,37 @@
+<div class='page-header'>
+	<h1>提问和通知</h1>
+</div>
+<form>
+	<div class='input-group'>
+		<span class='input-group-addon' ng-repeat='t in to track by $index'>
+			<a ng-click='removeTo($index)'>@{{ t.realname }}</a>
+		</span>
+		<input class='form-control' ng-model='words' placeholder='说些什么' ng-keyup='checkKey($event)'/>
+		<span class='input-group-btn'>
+			<button class='btn btn-success' ng-click='send()'>
+				<i class='glyphicon glyphicon-send'></i> 发送
+			</button>
+			<button class='btn btn-default' ng-click='fetch()'>
+				&nbsp;<i class='glyphicon glyphicon-refresh'></i>&nbsp;
+			</button>
+		</span>
+	</div>
+</form>
+<ul class='list-group'>
+	<li class='list-group-item' ng-repeat='msg in messages'>
+		<div class='row'>
+			<div class='col-sm-3 col-xs-12'>
+				<p>
+					<a ng-if='msg.from._id !== user._id' ng-click='to.push(msg.from)'> {{ msg.from.realname }} </a>
+					<span ng-if='msg.from._id === user._id'>我</span>
+				: </p>
+			</div>
+			<div class='col-sm-9 col-xs-12'>
+				<p>{{ msg.text }}</p>
+				<p class='text-right'>
+					<small>{{ msg.time | date:'hh:MM:ss a' }}</small>
+				</p>
+			</div>
+		</div>
+	</li>
+</ul>

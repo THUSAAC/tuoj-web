@@ -74,6 +74,20 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		}
 		$scope.problem.cases.push(newCase);
 	};
+	$scope.fillCase = function() {
+		for (var j in $scope.problem.cases) {
+			for (var i in $scope.addCase) {
+				if (typeof($scope.addCase[i]) === 'string') {
+					if ($scope.addCase[i] === '') {
+						continue;
+					}
+					$scope.problem.cases[j][i] = $scope.addCase[i].replace(/\<i\>/g, j);
+				} else if ($scope.addCase[i] != null) {
+					$scope.problem.cases[j][i] = $scope.addCase[i];
+				}
+			}
+		}
+	};
 	($scope.fetchConfig = function() {
 		$http.post('/api/admin/problemgetConfig', {
 			problemId: $scope.problemId
@@ -144,7 +158,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 			$('#preview').html(newText);
 		});
 	};
-	$scope.writeDescription = function() {
+	$scope.writeDoc = function() {
 		$http.post('/api/admin/problemupdateDescription', {
 			problemId: $scope.problemId,
 			descriptionText: $scope.descriptionText

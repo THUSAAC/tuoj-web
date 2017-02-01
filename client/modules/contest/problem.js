@@ -33,8 +33,9 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			$scope.cases = data.data.cases;
 			$scope.problem.maxAns = 0;
 			for (var i in $scope.cases) {
-				if ($scope.cases[i].ansId > $scope.problem.maxAns) {
-					$scope.problem.maxAns = $scope.cases[i].ansId; 
+				var tId = parseInt($scope.cases[i].ansId);
+				if ($scope.problem.maxAns < tId) {
+					$scope.problem.maxAns = tId;
 				}
 			}
 		}).catch(function(data) {

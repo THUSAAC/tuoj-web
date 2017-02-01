@@ -1,0 +1,31 @@
+<div class='page-header'>
+	<h1>编辑文档</h1>
+</div>
+<div class='form-group'>
+	<label>文档ID</label>
+	<div class='input-group'>
+		<input class='form-control' ng-model='docId' placeholder='docId'/>
+		<span class='btn-input-group' ng-click='downloadDoc()'>
+			<button class='btn btn-default'>从服务器加载文档</button>
+		</span>
+	</div>
+</div>
+<div class='form-group'>
+	<div class='row'>
+		<div class='col-md-6 col-xs-12'>
+			<label>Markdown</label>
+			<textarea class='form-control' rows='16' ng-model='descriptionText'></textarea>
+		</div>
+		<div class='col-md-6 col-xs-12'>
+			<label>预览</label>
+			<div class='panel panel-default'>
+				<div class='panel-body'>
+					<div id='preview'></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<button class='btn btn-default' ng-click='generatePreview()'>生成预览</button>
+	<button class='btn btn-success' ng-click='writeDoc()'>更新文档</button>
+</div>
+

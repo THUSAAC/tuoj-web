@@ -90,6 +90,9 @@
 					<button class='btn btn-default' ng-click='addRuledCase()'>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>
+					<button class='btn btn-default' ng-click='fillCase()'>
+						<i class='glyphicon glyphicon-hand-down'></i>
+					</button>
 				</td>
 			</tr>
 			</tr>
@@ -132,10 +135,14 @@
 		</div>
 		<div class='col-md-6 col-xs-12'>
 			<label>预览</label>
-			<div id='preview'></div>
+			<div class='panel panel-default'>
+				<div class='panel-body'>
+					<div id='preview'></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<button class='btn btn-default' ng-click='generatePreview()'>生成预览</button>
-	<button class='btn btn-success' ng-click='writeDescription()'>更新题目描述</button>
+	<button class='btn btn-success' ng-click='writeDoc()'>更新题目描述</button>
 </div>
 

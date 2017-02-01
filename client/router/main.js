@@ -72,6 +72,10 @@ angular.module('tuoj-web', [
 					} ]);
 				} ]
 			}
+		}).state('contest.carlification', {
+			url: '/carlification',
+			templateUrl: '/modules/contest/carlification.html',
+			controller: contestCarlificationCtrl,
 		}).state('contest.admin', {
 			url: '/admin',
 			templateUrl: '/modules/contest/admin.html',
@@ -93,6 +97,40 @@ angular.module('tuoj-web', [
 			url: '/problem/:problemId',
 			templateUrl: '/modules/admin/problem.html',
 			controller: adminProblemCtrl,
+			resolve: {
+				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
+					return $ocLazyLoad.load([ {
+						name: 'MathJax',
+						files: [ '/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML' ]
+					}, {
+						name: 'showdown',
+						files: [ '/bower_components/showdown/dist/showdown.min.js' ]
+					} ]);
+				} ]
+			}
+		}).state('admin.status', {
+			url: '/status',
+			templateUrl: '/modules/admin/status.html',
+			controller: adminStatusCtrl,
+		}).state('admin.doc', {
+			url: '/doc',
+			templateUrl: '/modules/admin/doc.html',
+			controller: adminDocCtrl,
+			resolve: {
+				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
+					return $ocLazyLoad.load([ {
+						name: 'MathJax',
+						files: [ '/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML' ]
+					}, {
+						name: 'showdown',
+						files: [ '/bower_components/showdown/dist/showdown.min.js' ]
+					} ]);
+				} ]
+			}
+		}).state('doc', {
+			url: '/doc/:docId',
+			templateUrl: '/modules/doc/view.html',
+			controller: docViewCtrl,
 			resolve: {
 				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
 					return $ocLazyLoad.load([ {
@@ -157,9 +195,13 @@ angular.module('tuoj-web', [
 			"contest.detail": "答案详情",
 			"contest.admin": "比赛设置",
 			"contest.player": "选手设置",
+			"contest.carlification": "消息",
 			"admin": "全局配置",
 			"admin.problems": "题目池",
 			"admin.problem": "编辑题目",
+			"admin.status": "评测队列",
+			"admin.doc": "编辑文档",
+			"doc": "文档",
 		};
 		return map[str] ? map[str] : '未知';
 	};

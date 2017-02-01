@@ -20,6 +20,9 @@
 				<li ng-if='isRoot' ui-sref-active='active'>
 					<a ui-sref='admin'>全局管理</a>
 				</li>
+				<li ui-sref-active='active'>
+					<a ui-sref='doc({ docId: "faq" })'>FAQ</a>
+				</li>
 			</ul>
 			<ul class='nav navbar-nav navbar-right'>
 				<li><a>{{ servertime | date:'hh:mm:ss a' }}</a></li>

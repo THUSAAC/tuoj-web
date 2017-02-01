@@ -12,5 +12,5 @@ var Role = new Schema({
 	}, role: String
 });
 
-Role.plugin(autoIncrement.plugin, "Delay");
+Role.plugin(autoIncrement.plugin, "Role");
 module.exports = mongoose.model("role", Role);

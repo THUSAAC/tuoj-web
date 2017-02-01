@@ -61,13 +61,17 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 			return callback(err || 'Internal error'), undefined;
 		}
 		for (var i = 0; i <= problem.cases.length; ++ i) {
-			var judgeCase = new Case({
+			JudgeCase.update({
 				judge: j._id,
 				caseId: i,
-				fullScore: ProblemSrv.getCaseScore(problem, i),
-				status: 'Waiting'
+			}, {
+				$set: {
+					fullScore: ProblemSrv.getCaseScore(problem, i),
+					status: 'Waiting'
+				}
+			}, {
+				upsert: true
 			});
-			judgeCase.save();
 		}
 		callback(false);
     });
@@ -151,6 +155,7 @@ module.exports.findJudges = function(attr, resv, ansv, callback) {
 		problem_id: true,
 		submitted_time: true,
 		lang: true,
+		contest: true
 	};
 	if (resv) {
 		keys.status = true;
@@ -171,3 +176,4 @@ module.exports.findCases = function(runId, callback) {
 		judge: runId
 	}).exec(callback);
 };
+
