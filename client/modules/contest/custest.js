@@ -33,7 +33,7 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	};
 	$scope.applyAnswer = function(ans) {
 		if (typeof(ans) === 'object') {
-			ans.num = 1;
+			ans.num = $scope.answers.length + 1;
 			if (ans.filename.match(/\d*\.out/)) {
 				ans.num = parseInt(ans.filename.split('.')[0]);
 			}

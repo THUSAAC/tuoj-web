@@ -237,4 +237,21 @@ angular.module('tuoj-web', [
 		}
 		return data;
 	};
+}).filter('preview', function() {
+	return function(data, filename) {
+		if (typeof(filename) === 'string' && filename.match(/pas$|c$|cpp$/) !== null) {
+			return data;
+		} else {
+			var lines = data.split('\n');
+			if (lines.length < 4) {
+				return data;
+			} else {
+				var last = lines.length - 1;
+				while (last > 3 && lines[last] === '') {
+					-- last;
+				}
+				return [ lines[0], lines[1], lines[2], '...', lines[last] ].join('\n');
+			}
+		}
+	};
 }).factory('poll', pollSrv);
