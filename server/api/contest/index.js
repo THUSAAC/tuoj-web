@@ -7,11 +7,14 @@ var RoleSrv = require('../../service/role');
 var ContestCtrl = require('./contest');
 var CarliCtrl = require('./carli');
 var DelayCtrl = require('./delay');
+var CustestCtrl = require('./custest');
+var CustestSrv = require('../../service/custest');
 
 router.post('/list', UserSrv.needLogin, ContestCtrl.list);
 router.post('/info', UserSrv.needLogin, ContestSrv.accessible, ContestCtrl.info);
 router.post('/content', UserSrv.needLogin, ContestSrv.available, ContestCtrl.content);
 router.post('/problemconf', UserSrv.needLogin, ContestSrv.available, ContestCtrl.problemConf);
+router.post('/submittable', UserSrv.needLogin, ContestSrv.submittable, ContestCtrl.ok);
 router.post('/submit', UserSrv.needLogin, ContestSrv.submittable, ContestCtrl.submit);
 router.post('/status', UserSrv.needLogin, ContestSrv.available, ContestCtrl.getStatus);
 router.post('/cases', UserSrv.needLogin, ContestSrv.available, ContestCtrl.getCases);
@@ -27,5 +30,8 @@ router.post('/carlinew', UserSrv.needLogin, ContestSrv.accessible, CarliCtrl.get
 router.post('/carlisend', UserSrv.needLogin, ContestSrv.accessible, CarliCtrl.send);
 router.post('/delays', UserSrv.needLogin, ContestSrv.isMaster, DelayCtrl.list);
 router.post('/delayupdate', UserSrv.needLogin, ContestSrv.isMaster, DelayCtrl.update);
+router.post('/custestcreate', UserSrv.needLogin, ContestSrv.available, CustestSrv.submittable, CustestCtrl.create);
+router.post('/custestsubmittable', UserSrv.needLogin, ContestSrv.available, CustestSrv.submittable, CustestCtrl.ok);
+router.post('/custeststatus', UserSrv.needLogin, ContestSrv.available, CustestCtrl.getStatus);
 
 module.exports = router;

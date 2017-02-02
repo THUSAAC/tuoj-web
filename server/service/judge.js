@@ -31,7 +31,7 @@ var rejudge = function(runId, callback) {
 };
 module.exports.rejudge = rejudge;
 
-module.exports.create = function(problem, codeContent, language, userId, contestId, contestProblemId, callback) {
+module.exports.create = function(problem, codeContent, language, userId, contestId, contestProblemId, judgeType, callback) {
     Step(function() {
 		this.fileName = {};
 		var tasks = [];
@@ -44,7 +44,7 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 		Promise.all(tasks).then(this);
     }, function () {
         var judge = new Judge({
-			status: 'Waiting',
+			status: 'Creating',
             user: userId,
             contest: contestId,
             problem: problem._id,
@@ -54,14 +54,16 @@ module.exports.create = function(problem, codeContent, language, userId, contest
             lang: language,
             source_file: this.fileName,
             score: 0,
+			type: judgeType
         });
         judge.save(this);
     }, function(err, j) {
 		if (err) {
 			return callback(err || 'Internal error'), undefined;
 		}
+		var tasks = [];
 		for (var i = 0; i <= problem.cases.length; ++ i) {
-			JudgeCase.update({
+			tasks.push(Case.update({
 				judge: j._id,
 				caseId: i,
 			}, {
@@ -71,9 +73,17 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 				}
 			}, {
 				upsert: true
-			});
+			}));
 		}
-		callback(false);
+		Promise.all(tasks).then(function() {
+			Judge.update({
+				_id: j._id
+			}, {
+				status: 'Waiting'
+			}).exec(callback);
+		}).catch(function(error) {
+			callback('Case creating error');
+		});
     });
 };
 
@@ -148,6 +158,10 @@ module.exports.isAnswerVisible = function(runId, userId, callback) {
 	});
 };
 
+var isAlwaysVisible = function(str) {
+	return str.match(/^Compil/) !== null;
+};
+
 module.exports.findJudges = function(attr, resv, ansv, callback) {
 	var keys = {
 		user: true,
@@ -155,10 +169,11 @@ module.exports.findJudges = function(attr, resv, ansv, callback) {
 		problem_id: true,
 		submitted_time: true,
 		lang: true,
-		contest: true
+		contest: true,
+		type: true,
+		status: true
 	};
 	if (resv) {
-		keys.status = true;
 		keys.score = true;
 	}
 	if (ansv) {
@@ -168,7 +183,19 @@ module.exports.findJudges = function(attr, resv, ansv, callback) {
 		username: true
 	}).populate('problem', {
 		title: true
-	}).exec(callback);
+	}).exec(function(error, doc) {
+		if (error) {
+			return callback(error);
+		}
+		if (!resv) {
+			for (var i in doc) {
+				if (doc[i].type === 'formal' && !isAlwaysVisible(doc[i].status)) {
+					doc[i].status = 'Invisible';
+				}
+			}
+		}
+		callback(false, doc);
+	});
 };
 
 module.exports.findCases = function(runId, callback) {
@@ -177,3 +204,6 @@ module.exports.findCases = function(runId, callback) {
 	}).exec(callback);
 };
 
+module.exports.findById = function(id) {
+	return Judge.findById(id);
+};

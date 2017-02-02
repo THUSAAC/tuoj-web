@@ -5,7 +5,12 @@
 	<div class='panel panel-default'>
 		<div class='panel-body'>
 			<div class='pull-right'>
-				<a href=''><i class='glyphicon glyphicon-fullscreen' ng-click='changeLR()'></i></a>
+				<button class='btn btn-default'>
+					<i class='glyphicon glyphicon-refresh' ng-click='fetchData()'></i>
+				</button>
+				<button class='btn btn-default'>
+					<i class='glyphicon glyphicon-fullscreen' ng-click='changeLR()'></i>
+				</button>
 			</div>
 			<div id='problemtext'></div>
 		</div>
@@ -13,7 +18,8 @@
 	<div ng-if='needReload'>
 		<a ng-click='updateProblem()' href=''>题目描述加载出错, 单击此处重新加载</a>
 	</div>
-	<div ng-include="'/modules/common/submit.html'">
+	<div ng-if='submittable'>
+		<ng-include src="'/modules/common/submit.html'"/>
 	</div>
 </div>
 <div class='col-md-{{ 12 - leftWid }} col-sm-12'>

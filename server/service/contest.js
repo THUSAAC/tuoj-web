@@ -1,10 +1,10 @@
-var fs = require('fs-extra')
-var Step = require('step')
+var fs = require('fs-extra');
+var Step = require('step');
 var path = require('path');
 var randomstring = require('randomstring');
-var Contest = require('../models/contest')
-var Problem = require('../models/problem')
-var Role = require('../models/role')
+var Contest = require('../models/contest');
+var Problem = require('../models/problem');
+var Role = require('../models/role');
 var DelaySrv = require('./delay');
 var JudgeSrv = require('./judge');
 
@@ -133,7 +133,7 @@ module.exports.submit = function(userId, contestId, problemId, answers, callback
 			return callback('Problem error'), undefined;
 		}
 		this.problem = doc.problems[problemId];
-		JudgeSrv.create(this.problem, answers, answers.lang, userId, contestId, problemId, this);
+		JudgeSrv.create(this.problem, answers, answers.lang, userId, contestId, problemId, 'formal', this);
 	}, function(error, doc) {
 		if (error) {
 			return callback(error), undefined;

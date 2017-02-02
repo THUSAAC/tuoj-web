@@ -9,7 +9,7 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	$scope.contestId = $stateParams.contestId;
 	$scope.problemId = $stateParams.problemId;
 	$scope.problem = {
-		maxAns: 3
+		maxAns: 1
 	};
 	$scope.renderDescription = function(content) {
 		$('#problemtext').html(content);
@@ -51,6 +51,11 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			$scope.fetchData();
 		}).catch(function(error) {
 			$scope.needReload = true;
+		});
+		$http.post('/api/contest/submittable', {
+			contestId: $scope.contestId,
+		}).then(function(data) {
+			$scope.submittable = true;
 		});
 	})();
 	$scope.submit = {

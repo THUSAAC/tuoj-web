@@ -82,8 +82,11 @@ module.exports.getStatus = function(req, res, next) {
 		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
 	}, function(resv, isGod) {
 		var attr = {
-			contest: req.body.contestId
+			contest: req.body.contestId,
 		};
+		if (req.body.type != null) {
+			attr.type = req.body.type;
+		}
 		if (req.body.requestOwn || !isGod) {
 			attr.user = req.session.user._id;
 		}
@@ -107,10 +110,20 @@ module.exports.getCases = function(req, res, next) {
 	Step(function() {
 		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
 	}, function(resv, isGod) {
+		var next = this;
 		if (!resv) {
-			return res.status(200).send([]), undefined;
+			JudgeSrv.findById(req.body.runId).exec(function(error, doc) {
+				if (error) {
+					return res.status(500).send(error || 'Internal error');
+				}
+				if (doc.type !== 'cus') {
+					return res.status(200).send([]), undefined;
+				}
+				JudgeSrv.findCases(req.body.runId, next);
+			});
+		} else {
+			JudgeSrv.findCases(req.body.runId, this);
 		}
-		JudgeSrv.findCases(req.body.runId, this);
 	}, function(error, doc) {
 		if (error) {
 			return res.status(500).send(error || 'Internal error');
@@ -124,7 +137,8 @@ module.exports.ranklist = function(req, res, next) {
 		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
 	}, function(resv, isGod) {
 		var attr = {
-			contest: req.body.contestId
+			contest: req.body.contestId,
+			type: 'formal'
 		};
 		if (!isGod) {
 			attr.user = req.session.user._id;
@@ -191,3 +205,6 @@ module.exports.create = function(req, res, next) {
 	});
 };
 
+module.exports.ok = function(req, res, next) {
+	res.status(200).send('Succeeded');
+};

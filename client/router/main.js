@@ -37,6 +37,10 @@ angular.module('tuoj-web', [
 			url: '/home',
 			templateUrl: '/modules/contest/home.html',
 			controller: contestHomeCtrl
+		}).state('contest.custest', {
+			url: '/custest',
+			templateUrl: '/modules/contest/custest.html',
+			controller: contestCustestCtrl
 		}).state('contest.problem', {
 			url: '/problem/:problemId',
 			templateUrl: '/modules/contest/problem.html',
@@ -200,11 +204,13 @@ angular.module('tuoj-web', [
 			"contest.admin": "比赛设置",
 			"contest.player": "选手设置",
 			"contest.carlification": "消息",
+			"contest.custest": "自定义测试",
 			"admin": "全局配置",
 			"admin.problems": "题目池",
 			"admin.problem": "编辑题目",
 			"admin.status": "评测队列",
 			"admin.doc": "编辑文档",
+			"admin.user": "用户管理",
 			"doc": "文档",
 		};
 		return map[str] ? map[str] : '未知';
