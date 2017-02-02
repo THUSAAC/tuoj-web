@@ -1,9 +1,18 @@
 <div class='page-header'>
 	<h1>题目池</h1>
 </div>
+<div class='row'>
+	<div class='col-xs-12'>
+		<div class='pull-right'>
+			<label>
+				<input type='checkbox' ng-model='showCustests' ng-checked='showCustests'/> 显示自定义测试
+			</label>
+		</div>
+	</div>
+</div>
 <div class='list-group'>
 	<a class='list-group-item list-group-item-success' ng-click='addProblem()' href=''>
 		<i class='glyphicon glyphicon-plus'></i>添加一道题
 	</a>
-	<a class='list-group-item' ng-repeat='p in problems' ui-sref='admin.problem({ problemId: p._id })'>{{ p._id }}: {{ p.title }}</a>
+	<a class='list-group-item' ng-repeat='p in problems' ui-sref='admin.problem({ problemId: p._id })' ng-if='showCustests || p.title !== "Custom test"'>{{ p._id }}: {{ p.title }}</a>
 </div>
