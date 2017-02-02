@@ -230,4 +230,11 @@ angular.module('tuoj-web', [
 		}
 		return 'plain';
 	};
+}).filter('invisibleFilter', function() {
+	return function(data) {
+		if (data == null) {
+			return 'Invisible';
+		}
+		return data;
+	};
 }).factory('poll', pollSrv);

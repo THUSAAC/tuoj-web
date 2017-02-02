@@ -26,7 +26,7 @@
 				<td><a href='/#!/contest/{{ contestId }}/problem/{{ rec.problem_id }}'>{{ rec.problem.title }}</a></td>
 				<td>{{ rec.lang }}</td>
 				<td><a href='/#!/contest/{{ contestId }}/detail/{{ rec._id }}'><label class='label label-{{ rec.status | statusClass }}'>{{ rec.status }}</label></a></td>
-				<td>{{ rec.score ? rec.score : 'Invisible' }}</td>
+				<td>{{ rec.score | invisibleFilter }}</td>
 				<td>{{ rec.submitted_time | date:'yyyy-MM-dd hh:mm:ss a' }}</td>
 			</tr>
 		</tbody>
