@@ -23,7 +23,9 @@ var adminStatusCtrl = [ '$scope', '$http', '$timeout', 'poll', function($scope, 
 		$http.post('/api/admin/status', { queryAttr: JSON.stringify($scope.filter) }).then(updateList);
 	})();
 	$scope.rejudgeList = function() {
-		$http.post('/api/admin/rejudge', $scope.filter);
+		if (confirm('可能会爆炸. 确定?')) {
+			$http.post('/api/admin/rejudge', $scope.filter);
+		}
 	};
 	$scope.rejudge = function(_id) {
 		$http.post('/api/admin/rejudge', { _id: _id });

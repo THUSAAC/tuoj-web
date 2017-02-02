@@ -8,26 +8,33 @@ var Case = require('../models/case');
 var ProblemSrv = require('./problem');
 
 var rejudge = function(runId, callback) {
-	Judge.update({
-		_id: runId
-	}, {
-		$set: {
-			score: 0
+	Step(function() {
+		Judge.update({
+			_id: runId
+		}, {
+			$set: {
+				score: 0,
+				status: 'Waiting'
+			}
+		}).exec(this);
+	}, function(error) {
+		if (error) {
+			return callback(error);
 		}
+		Case.update({
+			judge: runId
+		}, {
+			$set: {
+				status: 'Waiting',
+				score: 0,
+				time: 0,
+				memory: 0,
+				extInfo: ''
+			}
+		}, {
+			multi: true
+		}).exec(callback);
 	});
-	Case.update({
-		judge: runId
-	}, {
-		$set: {
-			status: 'Waiting',
-			score: 0,
-			time: 0,
-			memory: 0,
-			extInfo: ''
-		}
-	}, {
-		multi: true
-	}).exec(callback);
 };
 module.exports.rejudge = rejudge;
 
