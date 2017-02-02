@@ -15,6 +15,10 @@ var Contest = new Schema({
 	hidden: {
 		type: Boolean,
 		default: false
+	},
+	published: {
+		type: Boolean,
+		default: false
 	}
 });
 Contest.plugin(autoIncrement.plugin, "Contest");

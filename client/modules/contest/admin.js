@@ -54,6 +54,7 @@ var contestAdminCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout'
 			dashboard: $scope.contest.dashboard,
 			hidden: $scope.contest.hidden || false,
 			released: $scope.contest.released || false,
+			published: $scope.contest.published || false,
 			problems: JSON.stringify($scope.problems)
 		}).then($scope.updateInfo);
 	};

@@ -11,6 +11,8 @@ var JudgeSrv = require('./judge');
 module.exports.list = function(userId, callback) {
 	Role.find({
 		user: userId
+	}).populate('contest', {
+		hidden: true
 	}).exec(callback);
 };
 
@@ -25,8 +27,13 @@ module.exports.accessible = function(req, res, next) {
 	Role.findOne({
 		contest: req.body.contestId,
 		user: req.session.user._id
+	}).populate('contest', {
+		hidden: true
 	}).exec(function(error, doc) {
 		if (error || !doc) {
+			return res.status(400).send('Access deined');
+		}
+		if (doc.role === 'player' && doc.contest.hidden) {
 			return res.status(400).send('Access deined');
 		}
 		next();
@@ -70,7 +77,7 @@ module.exports.available = function(req, res, next) {
 		if (doc.role === 'master') {
 			return next();
 		}
-		if (doc.hidden || getContestStatus(this.contest) === 'unstarted') {
+		if (this.contest.hidden || getContestStatus(this.contest) === 'unstarted') {
 			return res.status(400).send('Access denied');
 		}
 		next();
@@ -150,17 +157,17 @@ module.exports.isResultVisible = function(userId, contestId, callback) {
 		}).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
-			return callback(false, false), undefined;
+			return callback(false, false, false), undefined;
 		}
 		if (doc.role === 'master' || doc.role === 'viewer') {
-			return callback(true, true), undefined;
+			return callback(true, true, true), undefined;
 		}
 		Contest.findById(contestId).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
-			return callback(false, false), undefined;
+			return callback(false, false, false), undefined;
 		}
-		callback(doc.released || false, false);
+		callback(doc.released || false, false, doc.published || false);
 	});
 };
 

@@ -13,7 +13,14 @@ module.exports.list = function(req, res, next) {
 			console.error(error);
 			return res.status(500).send(error);
 		}
-		res.status(200).send(doc);
+		var ret = [];
+		for (var i in doc) {
+			if (doc[i].role !== 'player' || !doc[i].contest.hidden) {
+				console.log(doc[i]);
+				ret.push(doc[i]);
+			}
+		}
+		res.status(200).send(ret);
 	});
 };
 
@@ -32,6 +39,7 @@ module.exports.info = function(req, res, next) {
 				title: doc.title,
 				dashboard: doc.dashboard,
 				released: doc.released,
+				published: doc.published,
 				hidden: doc.hidden,
 				_id: doc._id
 			};
@@ -135,12 +143,12 @@ module.exports.getCases = function(req, res, next) {
 module.exports.ranklist = function(req, res, next) {
 	Step(function() {
 		ContestSrv.isResultVisible(req.session.user._id, req.body.contestId, this);
-	}, function(resv, isGod) {
+	}, function(resv, isGod, isPublished) {
 		var attr = {
 			contest: req.body.contestId,
 			type: 'formal'
 		};
-		if (!isGod) {
+		if (!isGod && !isPublished) {
 			attr.user = req.session.user._id;
 		}
 		RanklistSrv.getRanklist(req.body.contestId, attr, resv, this);
@@ -162,6 +170,7 @@ module.exports.config = function(req, res, next) {
 		dashboard: req.body.dashboard,
 		problems: JSON.parse(req.body.problems),
 		released: req.body.released,
+		published: req.body.published,
 		hidden: req.body.hidden
 	};
 	ContestSrv.config(newConfig, function(error) {
