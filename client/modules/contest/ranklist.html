@@ -16,7 +16,7 @@
 			<th>学校</th>
 			<th>姓名</th>
 			<th>总分</th>
-			<th ng-repeat='prob in problems'><a href='/#!/contest/{{ contestId }}/problem/{{ prob.id }}'>{{ prob.title }}</a></th>
+			<th ng-repeat='prob in problems track by $index'><a href='/#!/contest/{{ contestId }}/problem/{{ $index }}'>{{ prob.title }}</a></th>
 		</thead>
 		<tbody>
 			<tr ng-repeat='user in users'>
