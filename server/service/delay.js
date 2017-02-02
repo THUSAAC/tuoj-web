@@ -1,7 +1,8 @@
+var UserSrv = require('./user');
 var Delay = require('../models/delay');
 var Contest = require('../models/contest');
 
-module.exports.updateDelay = function(userId, contestId, value, callback) {
+var updateDelay = function(userId, contestId, value, callback) {
     Delay.update({
         user: userId,
         contest: contestId
@@ -12,6 +13,22 @@ module.exports.updateDelay = function(userId, contestId, value, callback) {
     }, {
         upsert: true
     }).exec(callback);
+};
+module.exports.updateDelay = updateDelay;
+
+module.exports.update = function(attr, callback) {
+	if (attr.userId != null) {
+		return updateDelay(attr.userId, attr.contestId, attr.value, callback);
+	}
+	if (attr.username != null) {
+		return UserSrv.lookup(attr.username, function(error, doc) {
+			if (error || !doc) {
+				return callback('Internal error');
+			}
+			updateDelay(doc._id, attr.contestId, attr.value, callback);
+		});
+	}
+	callback('Wrong query');
 };
 
 module.exports.getDelay = function(userId, contestId, callback) {

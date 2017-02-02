@@ -1,4 +1,4 @@
-var contestCarlificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
+var contestCarlificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', 'poll', function($scope, $state, $stateParams, $http, $timeout, poll) {
 	$scope.contestId = $stateParams.contestId;
 	($scope.fetch = function() {
 		$http.post('/api/contest/carliall', {
@@ -40,12 +40,7 @@ var contestCarlificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$
 			console.log(error.data);
 		});
 	};
-	($scope.autoRef = function() {
-		$timeout(function() {
-			$scope.fetch();
-			$scope.autoRef();
-		}, 2048);
-	})();
+	poll.push($scope.fetch, 2, 'autoRefMsg');
 	$scope.checkKey = function(e) {
 		var keycode = window.event ? e.keyCode : e.which;
 		if (keycode == 13) {  

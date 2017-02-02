@@ -112,6 +112,10 @@ angular.module('tuoj-web', [
 			url: '/status',
 			templateUrl: '/modules/admin/status.html',
 			controller: adminStatusCtrl,
+		}).state('admin.user', {
+			url: '/user',
+			templateUrl: '/modules/admin/user.html',
+			controller: adminUserCtrl,
 		}).state('admin.doc', {
 			url: '/doc',
 			templateUrl: '/modules/admin/doc.html',
@@ -220,4 +224,4 @@ angular.module('tuoj-web', [
 		}
 		return 'plain';
 	};
-});
+}).factory('poll', pollSrv);

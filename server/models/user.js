@@ -13,6 +13,6 @@ var User = new Schema({
 	email: String,
 });
 
-User.plugin(autoIncrement.plugin, "User");
+User.plugin(autoIncrement.plugin, "Users");
 
 module.exports = mongoose.model("user", User);

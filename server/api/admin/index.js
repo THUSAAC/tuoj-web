@@ -4,6 +4,7 @@ var UserSrv = require('../../service/user');
 var ProblemCtrl = require('./problem');
 var JudgeCtrl = require('./judge');
 var DocCtrl = require('./doc');
+var UserCtrl = require('./user');
 
 router.post('/problemlist', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.list);
 router.post('/problemcreate', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.create);
@@ -15,5 +16,7 @@ router.post('/problemviewLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtr
 router.post('/status', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.statusList);
 router.post('/rejudge', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.rejudge);
 router.post('/docupdate', UserSrv.needLogin, UserSrv.needRoot, DocCtrl.update);
+router.post('/useradd', UserSrv.needLogin, UserSrv.needRoot, UserCtrl.add);
+router.post('/userlogoutAll', UserSrv.needLogin, UserSrv.needRoot, UserCtrl.logoutAll);
 
 module.exports = router;

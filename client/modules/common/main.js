@@ -1,4 +1,4 @@
-var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $rootScope, $http, $timeout) {
+var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', 'poll', function($scope, $rootScope, $http, $timeout, poll) {
 	$rootScope.login = {
 		username: '',
 		password: ''
@@ -41,21 +41,13 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', function($scope, $
 			$rootScope.loadUserInfo();
 		});
 	};
-	($rootScope.updateTime = function() {
+	poll.push(function() {
 		$http.post('/api/user/time').then(function(data) {
 			$rootScope.servertime = data.data.time;
-			$timeout(function() {
-				$rootScope.updateTime();
-			}, 30000);
-		}).catch(function(error) {
-			$timeout($rootScope.updateTime, 30000);
 		});
-	})();
-	($rootScope.incTime = function() {
+	}, 30, 'updateTime');
+	poll.push(function() {
 		$rootScope.servertime += 1000;
-		$timeout(function() {
-			$rootScope.incTime();
-		}, 1000);
-	})();
+	}, 1, 'incTime');
 } ];
 

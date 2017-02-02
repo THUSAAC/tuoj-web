@@ -57,3 +57,45 @@
 	</button>
 	<textarea class='form-control' ng-model='batchInput'></textarea>
 </div>
+<label>延时管理</label>
+<table class='table table-hover table-striped'>
+	<thead>
+		<th>#</th>
+		<th>用户名</th>
+		<th>延时</th>
+		<th>操作</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>添加</td>
+			<td><input class='form-control' ng-model='addDelayUsername' placeholder='用户名'/></td>
+			<td>
+				<div class='input-group'>
+					<input class='form-control' ng-model='addDelayVal' type='number' placeholder='延时'/>
+					<span class='input-group-addon'>Min</span>
+				</div>
+			</td>
+			<td>
+				<button class='btn btn-default' ng-click='addDelay()'>
+					<i class='glyphicon glyphicon-plus'></i>
+				</button>
+			</td>
+		</tr>
+		<tr ng-repeat='d in delays track by $index'>
+			<td>{{ $index }}</td>
+			<td>{{ d.user.username }}</td>
+			<td>
+				<div class='input-group'>
+					<input class='form-control' ng-model='d.value' placeholder='延时'/>
+					<span class='input-group-addon'>Min</span>
+				</div>
+			</td>
+			<td>
+				<button class='btn btn-default' ng-click='changeDelay(d)'>
+					<i class='glyphicon glyphicon-ok'></i>
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

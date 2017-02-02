@@ -1,5 +1,8 @@
+var Promise = require('bluebird');
+var Step = require('step');
 var User = require('../models/user');
 var Role = require('../models/role');
+var mongoose = require('mongoose');
 
 module.exports.noLogin = function(req, res, next) {
 	if (req.session.user) {
@@ -57,5 +60,28 @@ module.exports.needRoot = function(req, res, next) {
 			return res.status(400).send('Access deined');
 		}
 		next();
+	});
+};
+
+module.exports.add = function(info) {
+	return new Promise(function(resolve, reject) {
+		User.remove({
+			username: info.username
+		}).exec(function(error) {
+			if (error) {
+				return reject(error);
+			}
+			resolve();
+		});
+	}).then(function() {
+		return User(info).save();
+	});
+};
+
+module.exports.logoutAll = function(callback) {
+	Step(function() {
+		mongoose.connection.db.dropCollection('sessions', this);
+	}, function(error) {
+		callback(error);
 	});
 };

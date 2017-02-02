@@ -8,6 +8,13 @@ var contestPlayerCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 		}).catch(function(error) {
 			console.log(error);
 		});
+		$http.post('/api/contest/delays', {
+			contestId: $scope.contestId
+		}).then(function(data) {
+			$scope.delays = data.data;
+		}).catch(function(error) {
+			console.log(error);
+		});
 	})();
 	$scope.applyQuery = function(username, userId, role) {
 		$http.post('/api/contest/modifyRole', {
@@ -41,6 +48,28 @@ var contestPlayerCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 		}
 		$timeout($scope.loadUsers, 100);
 	}
+	$scope.addDelay = function() {
+		$http.post('/api/contest/delayupdate', {
+			contestId: $scope.contestId,
+			value: $scope.addDelayVal,
+			username: $scope.addDelayUsername
+		}).then(function() {
+			$scope.loadUsers();
+		}).catch(function(error) {
+			alert(error.data);
+		});
+	};
+	$scope.changeDelay = function(d) {
+		$http.post('/api/contest/delayupdate', {
+			contestId: $scope.contestId,
+			value: d.value,
+			userId: d.user._id
+		}).then(function() {
+			$scope.loadUsers();
+		}).catch(function(error) {
+			alert(error.data);
+		});
+	};
 } ];
 
 

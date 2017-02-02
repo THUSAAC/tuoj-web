@@ -1,4 +1,4 @@
-var contestHomeCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', function($scope, $rootScope, $state, $stateParams, $http, $timeout) {
+var contestHomeCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', 'poll', function($scope, $rootScope, $state, $stateParams, $http, poll) {
     $scope.contestId = $stateParams.contestId;
 	($scope.updateInfo = function() {
 		$http.post('/api/contest/info', {

@@ -1,4 +1,4 @@
-var adminStatusCtrl = [ '$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+var adminStatusCtrl = [ '$scope', '$http', '$timeout', 'poll', function($scope, $http, $timeout, poll) {
 	var emptyFilter = function() {
 		var res = undefined;
 		for (var i in $scope.filter) {
@@ -29,12 +29,10 @@ var adminStatusCtrl = [ '$scope', '$http', '$timeout', function($scope, $http, $
 		$http.post('/api/admin/rejudge', { _id: _id });
 		$scope.updateList();
 	};
-	var autoRef = function() {
+	poll.push(function() {
 		if ($scope.autoref) {
 			$scope.updateList();
 		}
-		$timeout(autoRef, 2048);
-	};
-	autoRef();
+	}, 2000, 'autoRef');
 } ]; 
 
