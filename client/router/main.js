@@ -76,10 +76,10 @@ angular.module('tuoj-web', [
 					} ]);
 				} ]
 			}
-		}).state('contest.carlification', {
-			url: '/carlification',
-			templateUrl: '/modules/contest/carlification.html',
-			controller: contestCarlificationCtrl,
+		}).state('contest.clarification', {
+			url: '/clarification',
+			templateUrl: '/modules/contest/clarification.html',
+			controller: contestClarificationCtrl,
 		}).state('contest.admin', {
 			url: '/admin',
 			templateUrl: '/modules/contest/admin.html',
@@ -203,7 +203,7 @@ angular.module('tuoj-web', [
 			"contest.detail": "答案详情",
 			"contest.admin": "比赛设置",
 			"contest.player": "选手设置",
-			"contest.carlification": "消息",
+			"contest.clarification": "消息",
 			"contest.custest": "自定义测试",
 			"admin": "全局配置",
 			"admin.problems": "题目池",

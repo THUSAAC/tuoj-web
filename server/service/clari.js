@@ -1,10 +1,10 @@
 var Promise = require('bluebird');
 var Step = require('step');
-var Carli = require('../models/carli');
+var Clari = require('../models/clari');
 var Role = require('../models/role');
 
 module.exports.list = function(attr) {
-	return Carli.find(attr, {
+	return Clari.find(attr, {
 		from: true,
 		text: true,
 		time: true
@@ -14,9 +14,9 @@ module.exports.list = function(attr) {
 	});
 };
 
-module.exports.read = function(carliId) {
-	return Carli.update({
-		_id: carliId
+module.exports.read = function(clariId) {
+	return Clari.update({
+		_id: clariId
 	}, {
 		$set: {
 			status: 'read'
@@ -25,7 +25,7 @@ module.exports.read = function(carliId) {
 };
 
 var send = function(from, to, text) {
-	var carli = new Carli({
+	var clari = new Clari({
 		from: from,
 		to: to,
 		time: Date.now(),
@@ -33,7 +33,7 @@ var send = function(from, to, text) {
 		status: 'unread'
 	});
 	return new Promise(function(resolve, reject) {
-		carli.save(function(error) {
+		clari.save(function(error) {
 			if (error) {
 				return reject(error);
 			}

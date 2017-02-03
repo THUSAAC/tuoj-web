@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var autoIncrement = require("mongoose-auto-increment");
 var Schema = mongoose.Schema;
 
-var Carli = new Schema({
+var Clari = new Schema({
 	from: {
 		type: Number,
 		ref: 'user'
@@ -16,6 +16,6 @@ var Carli = new Schema({
 	status: String
 });
 
-Carli.plugin(autoIncrement.plugin, "carli");
-module.exports = mongoose.model("carli", Carli);
+Clari.plugin(autoIncrement.plugin, "clari");
+module.exports = mongoose.model("clari", Clari);
 

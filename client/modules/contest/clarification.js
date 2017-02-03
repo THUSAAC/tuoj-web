@@ -1,7 +1,7 @@
-var contestCarlificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', 'poll', function($scope, $state, $stateParams, $http, $timeout, poll) {
+var contestClarificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', 'poll', function($scope, $state, $stateParams, $http, $timeout, poll) {
 	$scope.contestId = $stateParams.contestId;
 	($scope.fetch = function() {
-		$http.post('/api/contest/carliall', {
+		$http.post('/api/contest/clariall', {
 			contestId: $scope.contestId
 		}).then(function(data) {
 			$scope.messages = data.data.reverse();
@@ -20,14 +20,14 @@ var contestCarlificationCtrl = [ '$scope', '$state', '$stateParams', '$http', '$
 		}
 		if ($scope.to.length) {
 			for (var i in $scope.to) {
-				tasks.push($http.post('/api/contest/carlisend', {
+				tasks.push($http.post('/api/contest/clarisend', {
 					contestId: $scope.contestId,
 					text: $scope.words,
 					to: $scope.to[i]._id
 				}));
 			}
 		} else {
-			tasks.push($http.post('/api/contest/carlisend', {
+			tasks.push($http.post('/api/contest/clarisend', {
 				contestId: $scope.contestId,
 				text: $scope.words,
 			}));
