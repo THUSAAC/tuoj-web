@@ -33,5 +33,6 @@
 	</div>
 	<div class='panel-footer'>
 		<button class='btn btn-success' ng-click='submitCode()'>递交评测<small ng-if='submit.left !== undefined'>(剩余{{ submit.left }}次)</small></button>
+		<span ng-if='submitMsg'>{{ submitMsg }}</span>
 	</div>
 </div>

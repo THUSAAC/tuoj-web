@@ -74,6 +74,11 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 		}).catch(function(error) {
 			console.log(error);
 		});
+		$http.post('/api/contest/custestinque', {
+			contestId: $scope.contestId,
+		}).then(function(data) {
+			$scope.submitMsg = '当前等待队列长度: ' + data.data;
+		});
 	})();
 	$scope.submitCode = function() {
 		if ($scope.answers.length === 0) {

@@ -26,3 +26,12 @@ module.exports.getStatus = function(req, res, next) {
 		res.status(200).send(doc);
 	});
 };
+
+module.exports.inQue = function(req, res, next) {
+	CustestSrv.inQue(function(error, cnt) {
+		if (error) {
+			return res.status(400).send('Denied');
+		}
+		res.status(200).send('' + cnt);
+	});
+};

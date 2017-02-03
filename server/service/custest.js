@@ -105,3 +105,9 @@ module.exports.create = function(userId, contestId, attr, callback) {
 	});
 };
 
+module.exports.inQue = function(callback) {
+	Judge.count({
+		status: 'Waiting',
+		type: 'cus'
+	}).exec(callback);
+};

@@ -33,5 +33,6 @@ router.post('/delayupdate', UserSrv.needLogin, ContestSrv.isMaster, DelayCtrl.up
 router.post('/custestcreate', UserSrv.needLogin, ContestSrv.available, CustestSrv.submittable, CustestCtrl.create);
 router.post('/custestsubmittable', UserSrv.needLogin, ContestSrv.available, CustestSrv.submittable, CustestCtrl.ok);
 router.post('/custeststatus', UserSrv.needLogin, ContestSrv.available, CustestCtrl.getStatus);
+router.post('/custestinque', UserSrv.needLogin, ContestSrv.available, CustestCtrl.inQue);
 
 module.exports = router;
