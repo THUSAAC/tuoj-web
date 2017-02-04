@@ -16,7 +16,6 @@ module.exports.list = function(req, res, next) {
 		var ret = [];
 		for (var i in doc) {
 			if (doc[i].role !== 'player' || !doc[i].contest.hidden) {
-				console.log(doc[i]);
 				ret.push(doc[i]);
 			}
 		}

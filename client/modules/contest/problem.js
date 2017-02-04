@@ -22,7 +22,9 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	};
 	$scope.fetchData = function() {
 		$http.get('/staticdata/' + $scope.problem.token + '.description').then(function(data) {
-			$scope.renderDescription(data.data);
+			$timeout(function() {
+				$scope.renderDescription(data.data);
+			}, 500);
 			$scope.needReload = false;
 		}).catch(function(data) {
 			$scope.needReload = true;
