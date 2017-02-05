@@ -9,6 +9,7 @@ var Problem = new Schema({
     langs: Object,
 	cases: Object,
     data: String,
+	dataMD5: String,
 	description: String,
 });
 

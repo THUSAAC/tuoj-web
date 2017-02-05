@@ -13,7 +13,7 @@ You should run following commands to initialize the app.
 ```
 	npm install
 	bower install
-	sudo npm install -g grunt
+	sudo npm install -g grunt-cli
 ```
 
 And run 

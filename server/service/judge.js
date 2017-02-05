@@ -113,30 +113,30 @@ module.exports.updateStatus = function(data, callback) {
 		}).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
-			return callback('Case error');
+			return callback('Case error'), undefined;
 		}
-		this.score = Math.floor(data.score * doc.fullScore / 100);
+		this.score = Math.min(data.score, doc.fullScore);
 		this.status = data.status;
 		Case.update({
 			_id: doc._id
 		}, {
 			$set: {
-				score: data.score,
 				status: data.status,
 				score: data.score,
 				time: data.time,
 				memory: data.time,
+				extInfo: data.extInfo,
 				finishedTime: Date.now()
 			}
 		}).exec(this);
 	}, function(error) {
 		if (error || !doc) {
-			return callback(error || 'Case update error');
+			return callback(error || 'Case update error'), undefined;
 		}
 		Judge.findById(runId).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
-			return callback(error || 'Judge error');
+			return callback(error || 'Judge error'), undefined;
 		}
 		var newStatus = doc.status;
 		if (statusPriority.indexOf(newStatus) < statusPriority.indexOf(this.status)) {
@@ -214,3 +214,4 @@ module.exports.findCases = function(runId, callback) {
 module.exports.findById = function(id) {
 	return Judge.findById(id);
 };
+

@@ -10,6 +10,8 @@ module.exports = {
 		},
         resave: true,
         saveUninitialized: false
-    }
+    },
+	judgerToken: 'faf3ar42q34',
+	siteURL: 'http://localhost:3333'
 };
 

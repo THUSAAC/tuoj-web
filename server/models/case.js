@@ -8,7 +8,7 @@ var Case = new Schema({
 		ref: 'judge'
 	},
 	caseId: Number,
-	score: Number, // in [0, 100]
+	score: Number, // in [0, fullScore]
 	fullScore: Number,
 	status: String,
 	time: String,

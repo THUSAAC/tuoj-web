@@ -123,7 +123,7 @@ module.exports.getCases = function(req, res, next) {
 				if (error) {
 					return res.status(500).send(error || 'Internal error');
 				}
-				if (doc.type !== 'cus') {
+				if (doc.type !== 'cus' && doc.status !== 'Compilation Error') {
 					return res.status(200).send([]), undefined;
 				}
 				JudgeSrv.findCases(req.body.runId, next);

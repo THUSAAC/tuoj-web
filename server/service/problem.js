@@ -2,6 +2,9 @@ var randomString = require('randomstring');
 var fs = require('fs-extra');
 var path = require('path');
 var Step = require('step');
+var fstream = require('fstream');
+var tar = require('tar');
+var md5Dir = require('md5-dir');
 var Problem = require('../models/problem');
 
 module.exports.getCaseScore = function(problem, caseId) {
@@ -24,6 +27,25 @@ module.exports.title = function(req, res, next) {
 			title: doc.title
 		});
 	});
+};
+
+var generateTar = function(dataPath, hash, callback) {
+	try {
+		var data = path.resolve(__dirname, '../../staticdata', dataPath);
+		var dest = path.resolve(__dirname, '../../staticdata', dataPath + '.' + hash + '.tar');
+		fs.removeSync(dest);
+		fs.ensureDirSync(data);
+		var dirDest = fs.createWriteStream(dest);
+		var packer = tar.Pack({ 
+			noProprietary: true
+		}).on('error', callback).on('end', callback);
+		fstream.Reader({ 
+			path: data,
+			type: 'Directory'
+		}).pipe(packer).pipe(dirDest);
+	} catch (error) {
+		callback(error);
+	}
 };
 
 module.exports.create = function(callback) {
@@ -51,11 +73,18 @@ module.exports.list = function(attr) {
 
 module.exports.syncLocal = function(problemId, localPath, callback) {
 	Step(function() {
+		md5Dir(localPath, this);
+	}, function(error, hash) {
+		if (error) {
+			return callback('Problem hash error'), undefined;
+		}
+		this.hash = hash;
 		Problem.update({
 			_id: problemId
 		}, {
 			$set: {
-				local: localPath
+				local: localPath,
+				dataMD5: hash
 			}
 		}).exec(this);
 	}, function(error) {
@@ -67,6 +96,7 @@ module.exports.syncLocal = function(problemId, localPath, callback) {
 		if (error || !doc) {
 			return callback('Problem find error');
 		}
+		this.data = doc.data;
 		var dataPath = path.resolve(__dirname, '../../staticdata', doc.data);
 		var descPath = path.resolve(__dirname, '../../staticdata', doc.description);
 		try {
@@ -92,10 +122,11 @@ module.exports.syncLocal = function(problemId, localPath, callback) {
 					langs: cfg.langs || [],
 					cases: cfg.cases || []
 				}
-			}).exec(callback);
+			}).exec(this);
 		} catch(error) {
-			return callback(error);
+			return callback(error), undefined;
 		}
+		generateTar(this.data, this.hash, callback);
 	});
 };
 
@@ -110,24 +141,48 @@ module.exports.config = function(problemId, config, callback) {
 	} catch (error) {
 		return callback(error);
 	}
-	Problem.findOneAndUpdate({
-		_id: problemId
-	}, {
-		$set: data
-	}).exec(function(error, doc) {
+	Step(function() {
+		Problem.findOneAndUpdate({
+			_id: problemId
+		}, {
+			$set: data
+		}).exec(this);
+	}, function(error, doc) {
 		if (error) {
 			return callback('DB update error');
 		}
+		this.md5 = doc.dataMD5;
+		this.data = doc.data;
 		try {
 			var dataPath = path.resolve(__dirname, '../../staticdata', doc.data);
 			var descPath = path.resolve(__dirname, '../../staticdata', doc.description);
 			fs.ensureDirSync(dataPath);
 			fs.writeFileSync(path.join(dataPath, 'prob.json'), JSON.stringify(data), 'utf-8');
 			fs.ensureSymlinkSync(path.join(dataPath, 'prob.json'), descPath + '.config');
+			newMd5 = md5Dir(dataPath, this);
 		} catch (error) {
 			return callback(error);
 		}
-		callback(false);
+	}, function(error, hash) {
+		if (error) {
+			return callback('md5 calc error');
+		}
+		if (hash === this.md5) {
+			return callback(false), undefined;
+		}
+		this.hash = hash;
+		Problem.update({
+			_id: problemId
+		}, {
+			$set: {
+				dataMD5: hash
+			}
+		}).exec(this);
+	}, function(error) {
+		if (error) {
+			return callback('DB update error');
+		}
+		generateTar(this.data, this.hash, callback);
 	});
 };
 
