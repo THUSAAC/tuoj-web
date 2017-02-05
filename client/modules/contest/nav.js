@@ -5,8 +5,8 @@ var contestNavCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http',
 	}).then(function(data) {
 		$scope.myRole = data.data.role;
 	});
-	($scope.fetchCarli = function() {
-		$http.post('/api/contest/carlinew', {
+	($scope.fetchClari = function() {
+		$http.post('/api/contest/clarinew', {
 			contestId: $scope.contestId
 		}).then(function(data) {
 			if (data.data.length > 0 && !$rootScope.isRoot) {
@@ -17,12 +17,12 @@ var contestNavCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http',
 				alert(info);
 			}
 			$timeout(function() {
-				$scope.fetchCarli()
+				$scope.fetchClari()
 			}, 10000);
 		}).catch(function(error) {
 			console.log(error.data);
 			$timeout(function() {
-				$scope.fetchCarli()
+				$scope.fetchClari()
 			}, 10000);
 		});
 	})();
