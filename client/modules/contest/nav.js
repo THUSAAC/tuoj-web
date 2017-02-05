@@ -1,11 +1,11 @@
-var contestNavCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', '$timeout', function($scope, $rootScope, $state, $stateParams, $http, $timeout) {
+var contestNavCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', '$timeout', 'poll', function($scope, $rootScope, $state, $stateParams, $http, $timeout, poll) {
 	$scope.contestId = $stateParams.contestId;
 	$http.post('/api/contest/role', {
 		contestId: $scope.contestId
 	}).then(function(data) {
 		$scope.myRole = data.data.role;
 	});
-	($scope.fetchClari = function() {
+	poll.push(($scope.fetchClari = function() {
 		$http.post('/api/contest/clarinew', {
 			contestId: $scope.contestId
 		}).then(function(data) {
@@ -16,15 +16,9 @@ var contestNavCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http',
 				}
 				alert(info);
 			}
-			$timeout(function() {
-				$scope.fetchClari()
-			}, 10000);
 		}).catch(function(error) {
 			console.log(error.data);
-			$timeout(function() {
-				$scope.fetchClari()
-			}, 10000);
 		});
-	})();
+	}), 10, 'newClari');
 } ];
 

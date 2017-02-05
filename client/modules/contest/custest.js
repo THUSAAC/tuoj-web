@@ -1,4 +1,4 @@
-var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', function($scope, $rootScope, $state, $stateParams, $http, $timeout) {
+var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', 'mjLoader', function($scope, $rootScope, $state, $stateParams, $http, $timeout, mjLoader) {
 	$scope.contestId = $stateParams.contestId;
 	$scope.submit = {};
 	$scope.answers = [];
@@ -56,9 +56,9 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			contestId: $scope.contestId,
 		}).then(function(data) {
 			$scope.submittable = true;
-			$timeout(function() {
+			mjLoader.waitId('answer', function() {
 				document.getElementById('answer').onchange = $scope.addAnswers;
-			}, 1000);
+			});
 		});
 	})();
 	($scope.fetch = function() {

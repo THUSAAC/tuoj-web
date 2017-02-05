@@ -42,5 +42,23 @@ var mjLoaderSrv = [ '$interval', '$timeout', function($interval, $timeout) {
 			$(elementId).show();
 		});
 	};
+	ret.waitHighlight = function(id) {
+		if (typeof(hljs) !== 'object' || document.getElementById(id) === null) {
+			$timeout(function() {
+				ret.waitHighlight(id);
+			}, 100);
+		} else {
+			hljs.highlightBlock(document.getElementById(id));
+		}
+	};
+	ret.waitId = function(id, exec) {
+		if (document.getElementById(id) === null) {
+			$timeout(function() {
+				ret.waitId(id, exec);
+			}, 100);
+		} else {
+			exec();
+		}
+	};
 	return ret;
 } ];

@@ -1,4 +1,4 @@
-var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', function($scope, $state, $stateParams, $http, $timeout) {
+var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout', 'mjLoader', function($scope, $state, $stateParams, $http, $timeout, mjLoader) {
 	$scope.contestId = $stateParams.contestId;
 	$scope.runId = $stateParams.runId;
 	$timeout(hljs.initHighlighting, 100);
@@ -22,12 +22,7 @@ var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 							num: i
 						});
 						(function(id) {
-							$timeout(function() {
-								try {
-									hljs.highlightBlock(document.getElementById(id));
-								} catch (error) {
-								}
-							}, 100);
+							mjLoader.waitHighlight(id);
 						})('code' + i);
 					});
 				})(i);
