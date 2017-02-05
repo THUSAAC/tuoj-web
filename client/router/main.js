@@ -49,7 +49,7 @@ angular.module('tuoj-web', [
 				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
 					return $ocLazyLoad.load([ {
 						name: 'MathJax',
-						files: [ '/bower_components/MathJax/MathJax.js?config=TeX-AMS_HTML' ]
+						files: [ '/bower_components/MathJax/MathJax.js?config=default' ]
 					}, {
 						name: 'showdown',
 						files: [ '/bower_components/showdown/dist/showdown.min.js' ]
@@ -254,4 +254,4 @@ angular.module('tuoj-web', [
 			}
 		}
 	};
-}).factory('poll', pollSrv);
+}).factory('poll', pollSrv).factory('mjLoader', mjLoaderSrv);

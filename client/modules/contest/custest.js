@@ -58,7 +58,7 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			$scope.submittable = true;
 			$timeout(function() {
 				document.getElementById('answer').onchange = $scope.addAnswers;
-			}, 100);
+			}, 1000);
 		});
 	})();
 	($scope.fetch = function() {

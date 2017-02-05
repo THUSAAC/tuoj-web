@@ -1,30 +1,16 @@
-var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', function($scope, $rootScope, $state, $stateParams, $http, $timeout) {
-	MathJax.Hub.Config({ 
-		tex2jax: { 
-			inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
-			processEscapes: true 
-		},
-		processSectionDelay: 0
-	});
+var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', '$timeout', 'mjLoader', function($scope, $rootScope, $state, $stateParams, $http, $timeout, mjLoader) {
+	mjLoader.init();
 	$scope.contestId = $stateParams.contestId;
 	$scope.problemId = $stateParams.problemId;
 	$scope.problem = {
 		maxAns: 1
 	};
 	$scope.renderDescription = function(content) {
-		$('#problemtext').html(content);
-		MathJax.Callback.Queue([ 'Typeset', MathJax.Hub, 'problemtext' ], function() {
-			var text = $('#problemtext').html();
-			var converter = new showdown.Converter();
-			var newText = converter.makeHtml(text);
-			$('#problemtext').html(newText);
-		});
+		mjLoader.render(content, '#problemtext');
 	};
 	$scope.fetchData = function() {
 		$http.get('/staticdata/' + $scope.problem.token + '.description').then(function(data) {
-			$timeout(function() {
-				$scope.renderDescription(data.data);
-			}, 500);
+			$scope.renderDescription(data.data);
 			$scope.needReload = false;
 		}).catch(function(data) {
 			$scope.needReload = true;
@@ -88,7 +74,7 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	};
 	$timeout(function() {
 		document.getElementById('answer').onchange = $scope.addAnswers;
-	}, 100);
+	}, 1000);
 	$scope.applyAnswer = function(ans) {
 		if (typeof(ans) === 'object') {
 			ans.num = $scope.answers.length + 1;

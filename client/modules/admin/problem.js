@@ -1,11 +1,5 @@
-var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', function($scope, $rootScope, $state, $stateParams, $http) {
-	MathJax.Hub.Config({ 
-		tex2jax: { 
-			inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
-			processEscapes: true 
-		},
-		processSectionDelay: 0
-	});
+var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', 'mjLoader', function($scope, $rootScope, $state, $stateParams, $http, mjLoader) {
+	mjLoader.init();
 	$scope.problemId = $stateParams.problemId;
 	$scope.problem = { langs: [], cases: [] };
 	$scope.removeLang = function(i) {
@@ -150,13 +144,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		});
 	};
 	$scope.generatePreview = function() {
-		$('#preview').html($scope.descriptionText);
-		MathJax.Callback.Queue([ 'Typeset', MathJax.Hub, 'preview' ], function() {
-			var text = $('#preview').html();
-			var converter = new showdown.Converter();
-			var newText = converter.makeHtml(text);
-			$('#preview').html(newText);
-		});
+		mjLoader.render($scope.descriptionText, '#preview');
 	};
 	$scope.writeDoc = function() {
 		$http.post('/api/admin/problemupdateDescription', {
