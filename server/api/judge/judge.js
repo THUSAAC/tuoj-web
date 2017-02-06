@@ -2,15 +2,16 @@ var Promise = require('bluebird');
 var Step = require('step');
 var Judge = require('../../models/judge');
 var JudgerSrv = require('../../service/judger');
+var DaemonSrv = require('../../service/daemon');
 var config = require('../../config');
 
 module.exports.checkJudger = function(req, res, next) {
 	if (config.judgerToken !== req.body.token) {
 		return res.status(400).send('Wrong token');
 	}
+	DaemonSrv.updateStatus(req);
 	next();
 };
-
 
 var sendJudge = function(res, judge) {
 	if (judge != null) {

@@ -116,6 +116,10 @@ angular.module('tuoj-web', [
 			url: '/status',
 			templateUrl: '/modules/admin/status.html',
 			controller: adminStatusCtrl,
+		}).state('admin.daemon', {
+			url: '/daemon',
+			templateUrl: '/modules/admin/daemon.html',
+			controller: adminDaemonCtrl,
 		}).state('admin.user', {
 			url: '/user',
 			templateUrl: '/modules/admin/user.html',
@@ -211,6 +215,7 @@ angular.module('tuoj-web', [
 			"admin.problem": "编辑题目",
 			"admin.status": "评测队列",
 			"admin.doc": "编辑文档",
+			"admin.daemon": "评测机监控",
 			"admin.user": "用户管理",
 			"doc": "文档",
 		};

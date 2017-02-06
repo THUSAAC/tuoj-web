@@ -1,4 +1,5 @@
 var JudgeSrv = require('../../service/judge');
+var DaemonSrv = require('../../service/daemon');
 
 module.exports.statusList = function(req, res, next) {
 	try {
@@ -41,3 +42,8 @@ module.exports.rejudge = function(req, res, next) {
 		res.status(500).send('Internal error');
 	}
 };
+
+module.exports.judgers = function(req, res, next) {
+	res.status(200).send(DaemonSrv.getList());
+};
+
