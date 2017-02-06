@@ -163,5 +163,31 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 			$scope.dirFiles = data.data;
 		});
 	};
+	$scope.addFile = function(file) {
+		if (typeof(file) !== 'object') {
+			return;
+		}
+		var reader = new FileReader;
+		reader.onload = function() {
+			var ret = {
+				problemId: $scope.problemId,
+				code: btoa(this.result),
+				filename: file.name,
+				size: file.size
+			};
+			$http.post('/api/admin/problemaddFile', ret).then(function() {
+			}).catch(function(error) {
+				alert(error.data);
+			});
+		};
+		reader.readAsBinaryString(file);
+	};
+	$scope.uploadFiles = function() {
+		var ele = document.getElementById('answer').files;
+		for (var i in ele) {
+			var file = ele[i];
+			$scope.addFile(file);
+		}
+	};
 } ];
 

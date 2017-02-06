@@ -83,3 +83,16 @@ module.exports.viewLocal = function(req, res, next) {
 		res.status(200).send(FileSrv.enumDir(path.resolve(__dirname, '../../../staticdata', doc[0].data)));
 	});
 };
+
+module.exports.addFile = function(req, res, next) {
+	if (req.body.problemId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	ProblemSrv.addFile(req.body.problemId, req.body, function(error) {
+		if (error) {
+			return res.status(500).send('Internal error');
+		}
+		res.status(200).send('Succeeded');
+	});
+};
+

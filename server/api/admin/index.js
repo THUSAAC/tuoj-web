@@ -13,6 +13,7 @@ router.post('/problemsyncLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtr
 router.post('/problemconfig', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.config);
 router.post('/problemupdateDescription', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.updateDescription);
 router.post('/problemviewLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.viewLocal);
+router.post('/problemaddFile', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.addFile);
 router.post('/status', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.statusList);
 router.post('/rejudge', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.rejudge);
 router.post('/docupdate', UserSrv.needLogin, UserSrv.needRoot, DocCtrl.update);

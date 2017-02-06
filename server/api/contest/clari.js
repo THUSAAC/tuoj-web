@@ -15,6 +15,9 @@ module.exports.getAll = function(req, res, next) {
 module.exports.getNew = function(req, res, next) {
 	ClariSrv.list({
 		to: req.session.user._id,
+		from: {
+			$ne: req.session.user._id
+		},
 		status: 'unread'
 	}).exec(function(error, doc) {
 		if (error) {

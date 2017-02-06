@@ -203,3 +203,20 @@ module.exports.updateDescription = function(problemId, text, callback) {
 		callback(false);
 	});
 };
+
+module.exports.addFile = function(problemId, attr, callback) {
+	Problem.findById(problemId).exec(function(err, doc) {
+		if (err || !doc) {
+			return callback('Problem error');
+		}
+		try {
+			var dataPath = path.resolve(__dirname, '../../staticdata', doc.data);
+			fs.ensureDirSync(dataPath);
+			fs.writeFileSync(path.resolve(dataPath, attr.filename), attr.code, 'base64');
+		} catch (error) {
+			console.log(error);
+			return callback('Writing error');
+		}
+		callback(false);
+	});
+};

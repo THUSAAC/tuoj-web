@@ -68,7 +68,6 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			$scope.applyAnswer(ret);
 		};
 		reader.readAsBinaryString(file);
-	
 	};
 	$scope.addAnswers = function() {
 		var ele = document.getElementById('answer').files;
@@ -102,10 +101,17 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			requestOwn: true
 		}).then(function(data) {
 			$scope.historys = data.data;
+			var fv = -1;
 			for (var i in $scope.historys) {
 				if ($scope.historys[i].status === undefined) {
 					$scope.historys[i].status = 'Invisible';
 				}
+				if ($scope.historys[i].status !== 'Compilaion Error' && (fv === -1 || $scope.historys[fv].submitted_time < $scope.historys[i].submitted_time)) {
+					fv = i;
+				}
+			}
+			if (fv !== -1) {
+				$scope.historys[fv].isFinal = true;
 			}
 			$scope.historys.sort(function(a, b) {
 				return b.submitted_time - a.submitted_time;
