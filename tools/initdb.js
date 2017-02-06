@@ -20,9 +20,19 @@ setTimeout(function() {
 
 	userList.forEach(function(userInfo) {
 		var user = new User(userInfo);
-		user.save().exec(function (err, u) {
+		user.save(function (err, u) {
 			if (err) return console.error(err);
 			else console.log(u);
 		});
+	});
+	
+	var role = new Role({
+		user: 0,
+		contest: -1,
+		role: 'root'
+	});
+	role.save(function(err, u) {
+		if (err) return console.error(err);
+		else console.log(u);
 	});
 })();

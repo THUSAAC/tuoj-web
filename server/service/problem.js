@@ -41,7 +41,7 @@ var generateTar = function(dataPath, hash, callback) {
 		}).on('error', callback).on('end', callback);
 		fstream.Reader({ 
 			path: data,
-			type: 'Directory'
+			// type: 'Directory'
 		}).pipe(packer).pipe(dirDest);
 	} catch (error) {
 		callback(error);

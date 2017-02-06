@@ -12,6 +12,5 @@ module.exports = {
         saveUninitialized: false
     },
 	judgerToken: 'faf3ar42q34',
-	siteURL: 'http://localhost:3333'
+	siteURL: 'http://' + (process.env.ADDR || 'localhost') + ':' + (process.env.PORT || '3333')
 };
-

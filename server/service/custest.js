@@ -67,8 +67,8 @@ module.exports.create = function(userId, contestId, attr, callback) {
 		this.local = dataPath;
 		try {
 			fs.ensureDirSync(dataPath);
-			fs.copySync(path.resolve(dataPath, '../cus.config'), path.join(dataPath, 'prob.json'));
-			fs.copySync(path.resolve(dataPath, '../cus.description'), path.join(dataPath, 'description.md'));
+			fs.copySync(path.resolve(dataPath, '../cus.config.default'), path.join(dataPath, 'prob.json'));
+			fs.copySync(path.resolve(dataPath, '../cus.description.default'), path.join(dataPath, 'description.md'));
 			fs.ensureFileSync(path.join(dataPath, 'in'));
 			if (typeof(attr.answer2) === 'string') {
 				fs.writeFileSync(path.join(dataPath, 'in'), attr.answer2, 'base64');

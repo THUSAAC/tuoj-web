@@ -47,7 +47,7 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 		}
 	};
 	($scope.updateInfo = function() {
-		$http.get('/staticdata/cus.config').then(function(data) {
+		$http.get('/staticdata/cus.config.default').then(function(data) {
 			$scope.langs = data.data.langs;
 			$scope.cases = data.data.cases;
 			$scope.submit.lang = $scope.langs[0];

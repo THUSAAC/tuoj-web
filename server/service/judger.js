@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var Judge = require('../models/judge');
 var Case = require('../models/case');
 var JudgeSrv = require('./judge');
+var config = require('../config');
 
 module.exports.sendJudge = function(judge) {
 	if (judge == null) {
@@ -20,7 +21,7 @@ module.exports.sendJudge = function(judge) {
 		lang: judge.lang,
 		source_url: source_url,
 		data_md5: judge.problem.dataMD5,
-		data_url: config.siteURL + '/staticdata/' + judge.data + '.tar'
+		data_url: config.siteURL + '/staticdata/' + judge.problem.data + '.' + judge.problem.dataMD5 + '.tar'
 	};
 };
 
