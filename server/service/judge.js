@@ -58,30 +58,31 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 			return callback(error || 'Internal error'), undefined;
 		}
 		this.fileName = {};
+		this.runId = this.judge.get('_id');
 		var tasks = [];
 		for (var i in codeContent) {
 			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) {
-				this.fileName[i] = this.judge.get('_id') + '.' + randomString.generate(16) + '.' + i;
+				this.fileName[i] = this.runId + '.' + randomString.generate(16) + '.' + i;
 				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
 			}
 		}
 		Promise.all(tasks).then(this);
     }, function () {
 		Judge.update({
-			_id: this.judge.get('_id')
+			_id: this.runId
 		}, {
 			$set: {
 				source_file: this.fileName,
 			}
 		}).exec(this);
-    }, function(err, j) {
+    }, function(err, raw) {
 		if (err) {
 			return callback(err || 'Internal error'), undefined;
 		}
 		var tasks = [];
 		for (var i = 0; i <= problem.cases.length; ++ i) {
 			tasks.push(Case.update({
-				judge: j._id,
+				judge: this.runId,
 				caseId: i,
 			}, {
 				$set: {
@@ -92,11 +93,14 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 				upsert: true
 			}));
 		}
+		var self = this;
 		Promise.all(tasks).then(function() {
 			Judge.update({
-				_id: j._id
+				_id: self.runId
 			}, {
-				status: 'Waiting'
+				$set: {
+					status: 'Waiting'
+				}
 			}).exec(callback);
 		}).catch(function(error) {
 			callback('Case creating error');
