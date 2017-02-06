@@ -70,12 +70,12 @@ module.exports.create = function(userId, contestId, attr, callback) {
 			fs.copySync(path.resolve(dataPath, '../cus.config.default'), path.join(dataPath, 'prob.json'));
 			fs.copySync(path.resolve(dataPath, '../cus.description.default'), path.join(dataPath, 'description.md'));
 			fs.ensureFileSync(path.join(dataPath, 'in'));
-			if (typeof(attr.answer2) === 'string') {
-				fs.writeFileSync(path.join(dataPath, 'in'), attr.answer2, 'base64');
+			if (typeof(attr.answer1) === 'string') {
+				fs.writeFileSync(path.join(dataPath, 'in'), attr.answer1, 'base64');
 			}
 			fs.ensureFileSync(path.join(dataPath, 'out'));
-			if (typeof(attr.answer3) === 'string') {
-				fs.writeFileSync(path.join(dataPath, 'out'), attr.answer3, 'base64');
+			if (typeof(attr.answer2) === 'string') {
+				fs.writeFileSync(path.join(dataPath, 'out'), attr.answer2, 'base64');
 			}
 		} catch (error) {
 			return callback(error), undefined;
@@ -101,7 +101,13 @@ module.exports.create = function(userId, contestId, attr, callback) {
 		if (error || !doc) {
 			return callback(error), undefined;
 		}
-		JudgeSrv.create(doc, attr, attr.lang, userId, contestId, -1, 'cus', callback);
+		var newAttr = {};
+		for (var i in attr) {
+			if (i.match(/^answer\d*/) === null || i === 'answer0') {
+				newAttr[i] = attr[i];
+			}
+		}
+		JudgeSrv.create(doc, newAttr, attr.lang, userId, contestId, -1, 'cus', callback);
 	});
 };
 

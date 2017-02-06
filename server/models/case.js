@@ -13,7 +13,8 @@ var Case = new Schema({
 	status: String,
 	time: String,
 	memory: String,
-	finishedTime: String
+	finishedTime: String,
+	extInfo: String
 });
 
 Case.plugin(autoIncrement.plugin, "case");

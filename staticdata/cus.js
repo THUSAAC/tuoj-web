@@ -18,7 +18,7 @@ var data = {
 		exec: 'fpc',
 		args: ''
 	} ], cases: [ {
-		ansId: 1,
+		ansId: 0,
 		score: 100,
 		inputFile: 'in',
 		outputFile: 'out',
@@ -26,4 +26,4 @@ var data = {
 		mem_limit: 512
 	} ],
 };
-fs.writeFile('cus.config', JSON.stringify(data));
+fs.writeFile('cus.config.default', JSON.stringify(data));

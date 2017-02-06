@@ -68,18 +68,28 @@ module.exports.startJudge = function(runId) {
 	});
 };
 
-module.exports.updateResults = function(runId, caseId, data) {
-	if (typeof(caseId) === 'string' && caseId.match(/^comp/)) {
-		caseId = 0;
+var parseExtInfo = function(d) {
+	if (typeof(d) === 'string') {
+		return d;
 	}
+	var ret = '';
+	for (var i in d) {
+		if (i !== 'debug') {
+			ret += i + ': ' + d[i] + '\n';
+		}
+	}
+	return ret;
+};
+
+module.exports.updateResults = function(runId, caseId, data) {
 	var frm = {
 		runId: runId,
 		caseId: caseId,
 		status: data.status,
 		score: data.score,
 		time: data.time,
-		memory: data.time,
-		extInfo: JSON.stringify(data.ext_info) 
+		memory: data.memory,
+		extInfo: parseExtInfo(data.ext_info) 
 	};
 	return new Promise(function(resolve, reject) {
 		JudgeSrv.updateStatus(frm, function(error) {

@@ -50,7 +50,7 @@
 				<td>{{ $index }}</td>
 				<td><label class='label label-{{ case.status | statusClass }}'>{{ case.status }}</label></td>
 				<td>{{ case.time !== undefined ? case.time + ' ms' : '-'}}</td>
-				<td>{{ case.mem !== undefined ? case.mem + ' MB' : '-' }}</td>
+				<td>{{ case.memory !== undefined ? case.memory + ' KB' : '-' }}</td>
 				<td>{{ case.score !== undefined ? case.score : '-' }}</td>
 				<td>{{ case.extInfo }}</td>
 			</tr>

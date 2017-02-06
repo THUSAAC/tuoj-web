@@ -98,6 +98,7 @@ module.exports.updateStatus = function(data, callback) {
 	const statusPriority = [
 		'Waiting',
 		'Accepted',
+		'Accept',
 		'Memory Limit Exceeded',
 		'Runtime Error',
 		'Time Limit Exceeded',
@@ -107,6 +108,11 @@ module.exports.updateStatus = function(data, callback) {
 		'System Error'
 	];
 	Step(function() {
+		if (data.status.match(/^Compil/) !== null) {
+			data.caseId = 0;
+		} else {
+			data.caseId = parseInt(data.caseId);
+		}
 		Case.findOne({
 			judge: data.runId,
 			caseId: data.caseId
@@ -115,25 +121,27 @@ module.exports.updateStatus = function(data, callback) {
 		if (error || !doc) {
 			return callback('Case error'), undefined;
 		}
-		this.score = Math.min(data.score, doc.fullScore);
+		this.score = Math.min(data.score || 0, doc.fullScore || 0);
 		this.status = data.status;
+		this.runId = doc.judge;
 		Case.update({
-			_id: doc._id
+			judge: doc.judge,
+			caseId: doc.caseId
 		}, {
 			$set: {
 				status: data.status,
-				score: data.score,
+				score: data.score || 0,
 				time: data.time,
-				memory: data.time,
+				memory: data.memory,
 				extInfo: data.extInfo,
 				finishedTime: Date.now()
 			}
 		}).exec(this);
-	}, function(error) {
-		if (error || !doc) {
+	}, function(error, raw) {
+		if (error) {
 			return callback(error || 'Case update error'), undefined;
 		}
-		Judge.findById(runId).exec(this);
+		Judge.findById(this.runId).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
 			return callback(error || 'Judge error'), undefined;
@@ -143,7 +151,7 @@ module.exports.updateStatus = function(data, callback) {
 			newStatus = this.status;
 		}
 		Judge.update({
-			_id: runId
+			_id: this.runId
 		}, {
 			$set: {
 				status: newStatus
