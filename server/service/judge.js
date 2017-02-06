@@ -39,18 +39,8 @@ var rejudge = function(runId, callback) {
 module.exports.rejudge = rejudge;
 
 module.exports.create = function(problem, codeContent, language, userId, contestId, contestProblemId, judgeType, callback) {
-    Step(function() {
-		this.fileName = {};
-		var tasks = [];
-		for (var i in codeContent) {
-			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) {
-				this.fileName[i] = randomString.generate(16) + '.' + userId + '.' + contestId + '.' + contestProblemId + '.' + i;
-				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
-			}
-		}
-		Promise.all(tasks).then(this);
-    }, function () {
-        var judge = new Judge({
+    Step(function() { 
+        this.judge = new Judge({
 			status: 'Creating',
             user: userId,
             contest: contestId,
@@ -59,11 +49,31 @@ module.exports.create = function(problem, codeContent, language, userId, contest
             case_count: problem.cases.length + 1,
             submitted_time: Date.now(),
             lang: language,
-            source_file: this.fileName,
             score: 0,
 			type: judgeType
         });
-        judge.save(this);
+        this.judge.save(this);
+	}, function(error) {
+		if (error) {
+			return callback(error || 'Internal error'), undefined;
+		}
+		this.fileName = {};
+		var tasks = [];
+		for (var i in codeContent) {
+			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) {
+				this.fileName[i] = this.judge.get('_id') + '.' + randomString.generate(16) + '.' + i;
+				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
+			}
+		}
+		Promise.all(tasks).then(this);
+    }, function () {
+		Judge.update({
+			_id: this.judge.get('_id')
+		}, {
+			$set: {
+				source_file: this.fileName,
+			}
+		}).exec(this);
     }, function(err, j) {
 		if (err) {
 			return callback(err || 'Internal error'), undefined;

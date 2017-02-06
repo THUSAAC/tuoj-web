@@ -9,7 +9,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		$scope.problem.cases = $scope.problem.cases.slice(0, i).concat($scope.problem.cases.slice(i + 1));
 	};
 	$scope.addCase = {
-		ansId: '1',
+		ansId: '0',
 		score: '10',
 		inputFile: 'data/<i>.in',
 		outputFile: 'data/<i>.out',
