@@ -44,7 +44,7 @@ var contestDetailCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout
 	})();
 	$scope.rejudge = function(_id) {
 		$http.post('/api/admin/rejudge', { _id: _id });
-		$scope.updateList();
+		$scope.fetch();
 	};
 } ];
 

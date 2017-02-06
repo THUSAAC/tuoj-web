@@ -2,6 +2,11 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	mjLoader.init();
 	$scope.contestId = $stateParams.contestId;
 	$scope.problemId = $stateParams.problemId;
+	if ($scope.problemId == '-1') {
+		return $state.go('contest.custest', {
+			contestId: $scope.contestId
+		});
+	}
 	$scope.problem = {
 		maxAns: 1
 	};
@@ -21,7 +26,7 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			$scope.cases = data.data.cases;
 			$scope.problem.maxAns = 0;
 			for (var i in $scope.cases) {
-				var tId = parseInt($scope.cases[i].ansId);
+				var tId = parseInt($scope.cases[i].ansId) + 1;
 				if ($scope.problem.maxAns < tId) {
 					$scope.problem.maxAns = tId;
 				}
@@ -81,7 +86,7 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			if (ans.filename.match(/\d*\.out/)) {
 				ans.num = parseInt(ans.filename.split('.')[0]);
 			}
-			if ($scope.answers.length === $scope.problem.maxAns) {
+			if ($scope.answers.length >= $scope.problem.maxAns) {
 				$scope.answers.shift();
 			}
 			$scope.answers.push(ans);

@@ -48,8 +48,8 @@ var contestAdminCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeout'
 	$scope.applyConfig = function() {
 		$http.post('/api/contest/config', {
 			contestId: $scope.contestId,
-			start_time: $scope.contest.start_time._i,
-			end_time: $scope.contest.end_time._i,
+			start_time: $scope.contest.start_time._d.getTime(),
+			end_time: $scope.contest.end_time._d.getTime(),
 			title: $scope.contest.title,
 			dashboard: $scope.contest.dashboard,
 			hidden: $scope.contest.hidden || false,

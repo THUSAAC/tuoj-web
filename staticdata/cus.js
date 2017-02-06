@@ -23,7 +23,8 @@ var data = {
 		inputFile: 'in',
 		outputFile: 'out',
 		time_limit: 5000,
-		mem_limit: 512
+		mem_limit: 512,
+		spjPath: ''
 	} ],
 };
 fs.writeFile('cus.config.default', JSON.stringify(data));

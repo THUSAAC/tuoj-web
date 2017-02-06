@@ -102,6 +102,7 @@ module.exports.updateStatus = function(data, callback) {
 		'Memory Limit Exceeded',
 		'Runtime Error',
 		'Time Limit Exceeded',
+		'Wrong Answer',
 		'Compilation Error',
 		'No Source',
 		'Dangerous Program',

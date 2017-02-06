@@ -4,8 +4,10 @@ var mainCtrl = [ '$scope', '$rootScope', '$http', '$timeout', 'poll', function($
 		password: ''
 	};
 	$rootScope.leftWid = 8;
+	$rootScope.rightWid = 4;
 	$rootScope.changeLR = function() {
 		$rootScope.leftWid ^= (8 ^ 12);
+		$rootScope.rightWid ^= (4 ^ 12);
 	};
 	$rootScope.activeContests = {};
 	$rootScope.user = {};

@@ -40,22 +40,33 @@ module.exports.startJudge = function(runId) {
 		}
 		(function(runId) {
 			setTimeout(function() {
-				Case.findOne({
-					judge: runId,
-					status: 'Waiting'
+				Case.find({
+					$or: [ {
+						judge: runId,
+						status: 'Waiting'
+					} , {
+						judge: runId,
+						status: 'Compilation Error'
+					} ]
 				}).exec(function(error, doc) {
-					if (error || doc) {
-						Judge.update({
-							_id: runId
-						}, {
-							$set: {
-								status: 'System Error'
-							}
-						}).exec(function(error) {
-						});
+					if (error || !doc || doc.length == 0) {
+						return;
 					}
+					for (var i in doc) {
+						if (doc[i].status === 'Compilation Error') {
+							return;
+						}
+					}
+					Judge.update({
+						_id: runId
+					}, {
+						$set: {
+							status: 'System Error'
+						}
+					}).exec(function(error) {
+					});
 				});
-			}, timeEsti);
+			}, timeEsti * 5);
 		})(runId);
 		Judge.update({
 			_id: runId

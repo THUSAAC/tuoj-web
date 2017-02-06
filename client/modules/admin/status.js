@@ -35,6 +35,6 @@ var adminStatusCtrl = [ '$scope', '$http', '$timeout', 'poll', function($scope, 
 		if ($scope.autoref) {
 			$scope.updateList();
 		}
-	}, 2000, 'autoRef');
+	}, 2, 'autoRef');
 } ]; 
 

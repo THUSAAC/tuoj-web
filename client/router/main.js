@@ -162,6 +162,7 @@ angular.module('tuoj-web', [
 ]).controller('mainCtrl', mainCtrl).filter('statusClass', function() {
 	return function(str) {
 		var map = {
+			"System Error": "danger",
 			"Accepted": "success",
 			"Wrong Answer": "danger",
 			"Time Limit Exceeded": "warning",
