@@ -14,6 +14,7 @@ router.post('/problemconfig', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.c
 router.post('/problemupdateDescription', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.updateDescription);
 router.post('/problemviewLocal', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.viewLocal);
 router.post('/problemaddFile', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.addFile);
+router.post('/problemaddPublicFile', UserSrv.needLogin, UserSrv.needRoot, ProblemCtrl.addPublicFile);
 router.post('/status', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.statusList);
 router.post('/judgers', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.judgers);
 router.post('/rejudge', UserSrv.needLogin, UserSrv.needRoot, JudgeCtrl.rejudge);

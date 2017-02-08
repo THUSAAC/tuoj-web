@@ -14,10 +14,14 @@
 	<label>上传文件</label>
 	<input type='file' class='form-control' id='answer' multiple='multiple'/>
 	<button class='btn btn-default' ng-click='viewLocal()'>浏览服务器本地文件夹</button>
-	<button class='btn btn-default' ng-click='uploadFiles()'>上传文件到服务器</button>
+	<button class='btn btn-default' ng-click='uploadFiles()'>上传文件到题目私有目录</button>
+	<button class='btn btn-default' ng-click='uploadPublicFiles()'>上传文件到公共目录</button>
 	<div ng-if='dirFiles'>
 		<label>本地文件夹内容</label>
 		<pre>{{ dirFiles }}</pre>
+	</div>
+	<div>
+		<a ng-repeat='file in publicFiles' href='{{ file }}'>{{ file }}</a>
 	</div>
 </div>
 <div class='form-group'>

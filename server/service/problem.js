@@ -220,3 +220,17 @@ module.exports.addFile = function(problemId, attr, callback) {
 		callback(false);
 	});
 };
+
+module.exports.addPublicFile = function(attr, callback) {
+	var id = 'publicfile.' + randomString.generate(16) + '.' + attr.filename;
+	try {
+		var dataPath = path.resolve(__dirname, '../../staticdata', id);
+		fs.ensureDirSync(dataPath);
+		fs.writeFileSync(path.resolve(dataPath, attr.filename), attr.code, 'base64');
+	} catch (error) {
+		console.log(error);
+		return callback('Writing error');
+	}
+	callback(false, '/staticdata/' + path.join(id, attr.filename));
+};
+

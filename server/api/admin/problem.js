@@ -96,3 +96,15 @@ module.exports.addFile = function(req, res, next) {
 	});
 };
 
+module.exports.addPublicFile = function(req, res, next) {
+	if (req.body.problemId == null) {
+		return res.status(400).send('Wrong query');
+	}
+	ProblemSrv.addPublicFile(req.body, function(error, id) {
+		if (error) {
+			return res.status(500).send('Internal error');
+		}
+		res.status(200).send(id);
+	});
+};
+

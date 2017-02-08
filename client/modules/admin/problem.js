@@ -163,7 +163,8 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 			$scope.dirFiles = data.data;
 		});
 	};
-	$scope.addFile = function(file) {
+	$scope.publicFiles = [];
+	$scope.addFile = function(file, type) {
 		if (typeof(file) !== 'object') {
 			return;
 		}
@@ -175,7 +176,14 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 				filename: file.name,
 				size: file.size
 			};
-			$http.post('/api/admin/problemaddFile', ret).then(function() {
+			var url = '/api/admin/problemaddFile';
+			if (type === 'public') {
+				url = '/api/admin/problemaddPublicFile';
+			}
+			$http.post(url, ret).then(function(data) {
+				if (type === 'public') {
+					$scope.publicFiles.push(data.data);
+				}
 			}).catch(function(error) {
 				alert(error.data);
 			});
@@ -186,7 +194,14 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		var ele = document.getElementById('answer').files;
 		for (var i in ele) {
 			var file = ele[i];
-			$scope.addFile(file);
+			$scope.addFile(file, 'private');
+		}
+	};
+	$scope.uploadPublicFiles = function() {
+		var ele = document.getElementById('answer').files;
+		for (var i in ele) {
+			var file = ele[i];
+			$scope.addFile(file, 'public');
 		}
 	};
 } ];
