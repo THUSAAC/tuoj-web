@@ -61,7 +61,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat='case in cases'>
-						<td>{{ $index }}</td>
+						<td>{{ $index + 1 }}</td>
 						<td ng-if='case.time_limit'>{{ case.time_limit }} ms</td>
 						<td ng-if='case.mem_limit'>{{ case.mem_limit }} MB</td>
 						<td>{{ case.ansId }}</td>

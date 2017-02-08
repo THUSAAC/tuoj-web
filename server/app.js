@@ -22,7 +22,13 @@ autoIncrement.initialize(mongoose.connection);
 var EXPRESS_SESSION = require("./config").EXPRESS_SESSION;
 EXPRESS_SESSION.store = new MongoStore({ mongooseConnection: mongoose.connection });
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ 
+    extended: false,
+    limit: 128 * 1024 * 1024
+}));
+app.use(bodyParser.json({
+    limit: 128 * 1024 * 1024
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, '../client')));

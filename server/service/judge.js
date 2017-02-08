@@ -111,6 +111,7 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 module.exports.updateStatus = function(data, callback) {
 	const statusPriority = [
 		'Waiting',
+		'Compilation Success',
 		'Accepted',
 		'Accept',
 		'Memory Limit Exceeded',

@@ -8,7 +8,7 @@ var md5Dir = require('md5-dir');
 var Problem = require('../models/problem');
 
 module.exports.getCaseScore = function(problem, caseId) {
-	var s = problem.cases[caseId];
+	var s = problem.cases[caseId - 1];
 	if (s == null) {
 		return 0;
 	} else if (s.score != null) {
