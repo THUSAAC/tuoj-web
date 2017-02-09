@@ -11,19 +11,26 @@ module.exports.sendJudge = function(judge) {
 			run_id: -1
 		};
 	}
-	var source_url = [];
-	for (var i in judge.source_file) {
-		if (i.match(/^answer\d*$/)) {
-			source_url[parseInt(i.substr(6))] = config.siteURL + '/staticdata/' + judge.source_file[i];
+	try {
+		var source_url = [];
+		for (var i in judge.source_file) {
+			if (i.match(/^answer\d*$/)) {
+				source_url[parseInt(i.substr(6))] = config.siteURL + '/staticdata/' + judge.source_file[i];
+			}
 		}
+		return {
+			run_id: judge._id,
+			lang: judge.lang,
+			source_url: source_url,
+			data_md5: judge.problem.dataMD5,
+			data_url: config.siteURL + '/staticdata/' + judge.problem.data + '.' + judge.problem.dataMD5 + '.tar'
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			run_id: -1
+		};
 	}
-	return {
-		run_id: judge._id,
-		lang: judge.lang,
-		source_url: source_url,
-		data_md5: judge.problem.dataMD5,
-		data_url: config.siteURL + '/staticdata/' + judge.problem.data + '.' + judge.problem.dataMD5 + '.tar'
-	};
 };
 
 module.exports.startJudge = function(runId) {

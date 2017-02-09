@@ -36,6 +36,7 @@ module.exports.getTask = function(req, res, next) {
 			return res.status(500).send('Internal error'), undefined;
 		}
 		if (doc) {
+			console.log('Found cus test');
 			return sendJudge(res, doc), undefined;
 		}
 		Judge.findOneAndUpdate({
@@ -52,6 +53,7 @@ module.exports.getTask = function(req, res, next) {
 			return res.status(500).send('Internal error'), undefined;
 		}
 		if (doc) {
+			console.log('found formal task');
 			return sendJudge(res, doc), undefined;
 		}
 		sendJudge(res, null);
