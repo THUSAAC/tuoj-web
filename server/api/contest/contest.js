@@ -162,7 +162,6 @@ module.exports.ranklist = function(req, res, next) {
 
 module.exports.config = function(req, res, next) {
 	var newConfig = {
-		_id: req.body.contestId,
 		start_time: req.body.start_time,
 		end_time: req.body.end_time,
 		title: req.body.title,
@@ -172,7 +171,7 @@ module.exports.config = function(req, res, next) {
 		published: req.body.published,
 		hidden: req.body.hidden
 	};
-	ContestSrv.config(newConfig, function(error) {
+	ContestSrv.config(req.body.contestId, newConfig, function(error) {
 		if (error) {
 			return res.status(500).send('Internal error');
 		}
