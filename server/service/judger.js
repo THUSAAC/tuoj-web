@@ -104,6 +104,7 @@ module.exports.updateResults = function(runId, caseId, data) {
 		memory: data.memory,
 		extInfo: parseExtInfo(data.ext_info) 
 	};
+	console.log('result daa parsed');
 	return new Promise(function(resolve, reject) {
 		JudgeSrv.updateStatus(frm, function(error) {
 			if (error) {

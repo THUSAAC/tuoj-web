@@ -55,6 +55,13 @@ module.exports.getTask = function(req, res, next) {
 		}
 		if (doc) {
 			console.log('found formal task');
+			var remoteIp = (function(req) {
+				return req.headers['x-forwarded-for'] ||
+					req.connection.remoteAddress ||
+					req.socket.remoteAddress ||
+					req.connection.socket.remoteAddress;
+			})(req);
+			console.log('given to ' + remoteIp);
 			return sendJudge(res, doc), undefined;
 		}
 		sendJudge(res, null);

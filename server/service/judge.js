@@ -135,6 +135,7 @@ module.exports.updateStatus = function(data, callback) {
 		}).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
+			console.error(error);
 			return callback('Case error'), undefined;
 		}
 		this.score = Math.min(data.score || 0, doc.fullScore || 0);
@@ -155,6 +156,7 @@ module.exports.updateStatus = function(data, callback) {
 		}).exec(this);
 	}, function(error, raw) {
 		if (error) {
+			console.error(error);
 			return callback(error || 'Case update error'), undefined;
 		}
 		Judge.findById(this.runId).exec(this);
