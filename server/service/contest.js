@@ -106,10 +106,10 @@ module.exports.submittable = function(req, res, next) {
 		}).exec(this);
 	}, function(error, doc) {
 		if (error || !doc) {
-			return res.status(400).send('Denied');
+			return res.status(400).send('Denied'), undefined;
 		}
 		if (Date.now() < doc.start_time) {
-			return res.status(400).send('Denied');
+			return res.status(400).send('Denied'), undefined;
 		}
 		if (Date.now() <= doc.end_time) {
 			return next(), undefined;
@@ -118,7 +118,7 @@ module.exports.submittable = function(req, res, next) {
 		DelaySrv.getDelay(req.session.user._id, doc._id, this);
 	}, function(error, del) {
 		if (error) {
-			return res.status(500).send('Internal error');
+			return res.status(500).send('Internal error'), undefined;
 		}
 		if (Date.now() <= this.end_time + del) {
 			return next(), undefined;
