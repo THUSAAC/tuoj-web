@@ -22,26 +22,34 @@ var sendJudge = function(res, judge) {
 };
 module.exports.getTask = function(req, res, next) {
 	Step(function() {
-		Judge.findOne({
+		Judge.findOneAndUpdate({
 			'type': 'cus',
 			'status': 'Waiting', 
+		}, {
+			$set: {
+				'status': 'Running'
+			}
 		}).populate('problem').exec(this);
 	}, function (error, doc) {
 		if (error) {
 			return res.status(500).send('Internal error'), undefined;
 		}
-		if (doc && !LockSrv.lock(doc._id)) {
+		if (doc) {
 			return sendJudge(res, doc), undefined;
 		}
-		Judge.findOne({
+		Judge.findOneAndUpdate({
 			'type': 'formal',
 			'status': 'Waiting', 
+		}, {
+			$set: {
+				'status': 'Running'
+			}
 		}).populate('problem').exec(this);
 	}, function(error, doc) {
 		if (error) {
 			return res.status(500).send('Internal error'), undefined;
 		}
-		if (doc && !LockSrv.lock(doc._id)) {
+		if (doc) {
 			return sendJudge(res, doc), undefined;
 		}
 		sendJudge(res, null);

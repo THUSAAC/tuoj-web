@@ -58,14 +58,6 @@ module.exports.startJudge = function(runId) {
 							return;
 						}
 					}
-					Judge.update({
-						_id: runId
-					}, {
-						$set: {
-							status: 'System Error'
-						}
-					}).exec(function(error) {
-					});
 				});
 			}, timeEsti * 5);
 		})(runId);
@@ -76,7 +68,6 @@ module.exports.startJudge = function(runId) {
 				status: 'Running'
 			}
 		}).exec(function(error) {
-			LockSrv.unlock(runId);
 		});
 	});
 };
