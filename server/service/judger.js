@@ -12,12 +12,14 @@ module.exports.sendJudge = function(judge) {
 		};
 	}
 	try {
+		console.log('Trying to parse ' + judge._id);
 		var source_url = [];
 		for (var i in judge.source_file) {
 			if (i.match(/^answer\d*$/)) {
 				source_url[parseInt(i.substr(6))] = config.siteURL + '/staticdata/' + judge.source_file[i];
 			}
 		}
+		console.log('source parsed');
 		return {
 			run_id: judge._id,
 			lang: judge.lang,

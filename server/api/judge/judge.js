@@ -16,6 +16,7 @@ module.exports.checkJudger = function(req, res, next) {
 
 var sendJudge = function(res, judge) {
 	if (judge != null) {
+		console.log('sending judge ' + judge._id);
 		JudgerSrv.startJudge(judge._id);
 	}
 	return res.status(200).send(JudgerSrv.sendJudge(judge));
