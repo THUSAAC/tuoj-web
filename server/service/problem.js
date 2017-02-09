@@ -157,7 +157,11 @@ module.exports.config = function(problemId, config, callback) {
 			var dataPath = path.resolve(__dirname, '../../staticdata', doc.data);
 			var descPath = path.resolve(__dirname, '../../staticdata', doc.description);
 			fs.ensureDirSync(dataPath);
-			fs.writeFileSync(path.join(dataPath, 'prob.json'), JSON.stringify(data), 'utf-8');
+			var newData = {
+				cases: data.cases,
+				langs: data.langs
+			};
+			fs.writeFileSync(path.join(dataPath, 'prob.json'), JSON.stringify(newData), 'utf-8');
 			fs.ensureSymlinkSync(path.join(dataPath, 'prob.json'), descPath + '.config');
 			newMd5 = md5Dir(dataPath, this);
 		} catch (error) {

@@ -3,6 +3,7 @@ var Judge = require('../models/judge');
 var Case = require('../models/case');
 var JudgeSrv = require('./judge');
 var config = require('../config');
+var LockSrv = require('./lock');
 
 module.exports.sendJudge = function(judge) {
 	if (judge == null) {
@@ -75,6 +76,7 @@ module.exports.startJudge = function(runId) {
 				status: 'Running'
 			}
 		}).exec(function(error) {
+			LockSrv.unlock(runId);
 		});
 	});
 };

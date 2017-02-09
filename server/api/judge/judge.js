@@ -3,6 +3,7 @@ var Step = require('step');
 var Judge = require('../../models/judge');
 var JudgerSrv = require('../../service/judger');
 var DaemonSrv = require('../../service/daemon');
+var LockSrv = require('../../service/lock');
 var config = require('../../config');
 
 module.exports.checkJudger = function(req, res, next) {
@@ -29,7 +30,7 @@ module.exports.getTask = function(req, res, next) {
 		if (error) {
 			return res.status(500).send('Internal error'), undefined;
 		}
-		if (doc) {
+		if (doc && !LockSrv.lock(doc._id)) {
 			return sendJudge(res, doc), undefined;
 		}
 		Judge.findOne({
@@ -40,7 +41,7 @@ module.exports.getTask = function(req, res, next) {
 		if (error) {
 			return res.status(500).send('Internal error'), undefined;
 		}
-		if (doc) {
+		if (doc && !LockSrv.lock(doc._id)) {
 			return sendJudge(res, doc), undefined;
 		}
 		sendJudge(res, null);
