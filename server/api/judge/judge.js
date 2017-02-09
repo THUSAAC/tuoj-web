@@ -32,6 +32,7 @@ module.exports.getTask = function(req, res, next) {
 		}).populate('problem').exec(this);
 	}, function (error, doc) {
 		if (error) {
+			console.error(error);
 			return res.status(500).send('Internal error'), undefined;
 		}
 		if (doc) {
@@ -47,6 +48,7 @@ module.exports.getTask = function(req, res, next) {
 		}).populate('problem').exec(this);
 	}, function(error, doc) {
 		if (error) {
+			console.error(error);
 			return res.status(500).send('Internal error'), undefined;
 		}
 		if (doc) {
@@ -64,6 +66,7 @@ module.exports.updateResults = function(req, res, next) {
 	Promise.all(tasks).then(function() {
 		res.status(200).send('Succeeded');
 	}).catch(function(error) {
+		console.error(error);
 		res.status(500).send('Internal error');
 	});
 };

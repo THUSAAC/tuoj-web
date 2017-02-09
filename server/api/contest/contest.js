@@ -30,6 +30,7 @@ module.exports.info = function(req, res, next) {
 		}
 		DelaySrv.getDelay(req.session.user._id, doc._id, function(error, del) {
 			if (error) {
+				console.error(error);
 				return res.status(500).send('Internal error');
 			}
 			var ret = {
@@ -78,6 +79,7 @@ module.exports.problemConf = function(req, res, next) {
 module.exports.submit = function(req, res, next) {
 	ContestSrv.submit(req.session.user._id, req.body.contestId, req.body.problemId, req.body, function(error) {
 		if (error) {
+			console.error(error);
 			return res.status(500).send('Internal error');
 		}
 		res.status(200).send('Succeeded');
@@ -107,6 +109,7 @@ module.exports.getStatus = function(req, res, next) {
 		JudgeSrv.findJudges(attr, resv, getAnswer, this);
 	}, function(error, doc) {
 		if (error) {
+			console.error(error);
 			return res.status(500).send(error || 'Internal error');
 		}
 		res.status(200).send(doc);
@@ -121,6 +124,7 @@ module.exports.getCases = function(req, res, next) {
 		if (!resv) {
 			JudgeSrv.findById(req.body.runId).exec(function(error, doc) {
 				if (error) {
+					console.error(error);
 					return res.status(500).send(error || 'Internal error');
 				}
 				if (doc.type !== 'cus' && doc.status !== 'Compilation Error') {
@@ -133,6 +137,7 @@ module.exports.getCases = function(req, res, next) {
 		}
 	}, function(error, doc) {
 		if (error) {
+			console.error(error);
 			return res.status(500).send(error || 'Internal error');
 		}
 		res.status(200).send(doc);
