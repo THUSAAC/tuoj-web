@@ -82,13 +82,13 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	$scope.applyAnswer = function(ans) {
 		if (typeof(ans) === 'object') {
 			ans.num = $scope.answers.length;
-			if (ans.filename.match(/\d*\.out/)) {
-				ans.num = parseInt(ans.filename.split('.')[0]);
+			if (ans.filename.match(/\d+\.out/)) {
+				ans.num = parseInt(ans.filename.match(/\d+/)[0]);
 			}
 			if ($scope.answers.length >= $scope.problem.maxAns) {
 				$scope.answers.shift();
 			}
-			$scope.answers.push(ans);
+			$scope.answers.unshift(ans);
 			$timeout(function() {
 				$scope.answers = $scope.answers;
 			}, 200);

@@ -248,16 +248,31 @@ angular.module('tuoj-web', [
 		if (typeof(filename) === 'string' && filename.match(/pas$|c$|cpp$/) !== null) {
 			return data;
 		} else {
-			var lines = data.split('\n');
-			if (lines.length < 4) {
-				return data;
-			} else {
-				var last = lines.length - 1;
-				while (last > 3 && lines[last] === '') {
-					-- last;
+			var rollLines = function(data) {
+				var lines = data.split('\n');
+				if (lines.length < 4) {
+					return data;
+				} else {
+					var last = lines.length - 1;
+					while (last > 3 && lines[last] === '') {
+						-- last;
+					}
+					return [ lines[0], lines[1], lines[2], '...', lines[last] ].join('\n');
 				}
-				return [ lines[0], lines[1], lines[2], '...', lines[last] ].join('\n');
-			}
+			};
+			var rollLine = function(data) {
+				var lines = data.split('\n');
+				var res = [];
+				for (var i in lines) {
+					if (lines[i].length < 40) {
+						res.push(lines[i]);
+					} else {
+						res.push(lines[i].substr(0, 16) + '...' + lines[i].substr(-16));
+					}
+				}
+				return res.join('\n');
+			};
+			return rollLine(rollLines(data));
 		}
 	};
 }).factory('poll', pollSrv).factory('mjLoader', mjLoaderSrv);

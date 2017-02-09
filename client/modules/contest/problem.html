@@ -89,9 +89,11 @@
 							<a href='/#!/contest/{{ contestId }}/detail/{{ status._id }}'>
 								<label class='label label-{{ status.status | statusClass }}'>{{ status.status }}</span>
 							</a>
-							<label class='label label-info' ng-if='status.isFinal'>有效递交</label>
 						</td>
-						<td>{{ status.submitted_time | date:'hh:mm:ss a' }}</td>
+						<td>
+							{{ status.submitted_time | date:'hh:mm:ss a' }}
+							<span ng-if='status.isFinal'><label class='label label-success'>有效递交</label></span>
+						</td>
 					</tr>
 				</tbody>
 			</table>
