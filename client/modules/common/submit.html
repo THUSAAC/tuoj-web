@@ -13,7 +13,7 @@
 		</div>
 		<div class='form-group'>
 			<label for='lang'>语言和编译选项</label>
-			<select ng-options='lang as lang.name for lang in langs' ng-model='submit.lang'></select>
+			<select class='form-control' ng-options='lang as lang.name for lang in langs' ng-model='submit.lang'></select>
 		</div>
 		<table class='table table-hover table-striped' ng-repeat='ans in answers'>
 			<tr>
