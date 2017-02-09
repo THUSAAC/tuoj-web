@@ -202,9 +202,9 @@ module.exports.getRole = function(req, res, next) {
 	});
 };
 
-module.exports.config = function(conf, callback) {
+module.exports.config = function(contestId, conf, callback) {
 	Contest.update({
-		_id: conf._id
+		_id: contestId,
 	}, {
 		$set: conf
 	}).exec(callback);
