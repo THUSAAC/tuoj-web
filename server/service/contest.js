@@ -74,7 +74,7 @@ module.exports.available = function(req, res, next) {
 		if (err || !doc) {
 			return res.status(400).send('Access denied'), undefined;
 		}
-		if (doc.role === 'master') {
+		if (doc.role === 'master' || doc.role === 'viewer') {
 			return next();
 		}
 		if (this.contest.hidden || getContestStatus(this.contest) === 'unstarted') {
