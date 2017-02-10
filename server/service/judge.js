@@ -219,6 +219,8 @@ module.exports.findJudges = function(attr, resv, ansv, callback) {
 		username: true
 	}).populate('problem', {
 		title: true
+	}).sort({
+		_id: -1
 	}).limit(256).exec(function(error, doc) {
 		if (error) {
 			return callback(error);
