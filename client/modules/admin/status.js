@@ -8,7 +8,7 @@ var adminStatusCtrl = [ '$scope', '$http', '$timeout', 'poll', function($scope, 
 	};
 	var updateList = function(res) {
 		if (res.data) {
-			$scope.list = res.data.reverse();
+			$scope.list = res.data;
 		}
 		$scope.lastUpdateTime = Date.now();
 	};
