@@ -15,7 +15,7 @@ var contestRanklistCtrl = [ '$scope', '$state', '$stateParams', '$http', '$timeo
 					if ($scope.users[i].total_score === $scope.users[i - 1].total_score) {
 						$scope.users[i].rank = $scope.users[i - 1].rank;
 					} else {
-						$scope.users[i].rank = i;
+						$scope.users[i].rank = i + 1;
 					}
 				}
 			}
