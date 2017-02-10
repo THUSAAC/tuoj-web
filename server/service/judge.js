@@ -66,6 +66,9 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
 			}
 		}
+		if (tasks.length < 1) {
+			return callback('File error'), undefined;
+		}
 		Promise.all(tasks).then(this);
     }, function () {
 		Judge.update({
@@ -216,7 +219,7 @@ module.exports.findJudges = function(attr, resv, ansv, callback) {
 		username: true
 	}).populate('problem', {
 		title: true
-	}).exec(function(error, doc) {
+	}).limit(256).exec(function(error, doc) {
 		if (error) {
 			return callback(error);
 		}

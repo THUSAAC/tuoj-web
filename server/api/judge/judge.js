@@ -30,6 +30,10 @@ module.exports.getTask = function(req, res, next) {
 			$set: {
 				'status': 'Running'
 			}
+		}, {
+			sort: {
+				_id: 1
+			}
 		}).populate('problem').exec(this);
 	}, function (error, doc) {
 		if (error) {
@@ -46,6 +50,10 @@ module.exports.getTask = function(req, res, next) {
 		}, {
 			$set: {
 				'status': 'Running'
+			}
+		}, {
+			sort: {
+				_id: 1
 			}
 		}).populate('problem').exec(this);
 	}, function(error, doc) {
