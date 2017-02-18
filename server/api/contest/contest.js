@@ -130,6 +130,9 @@ module.exports.getCases = function(req, res, next) {
 				if (doc.type !== 'cus' && doc.status !== 'Compilation Error') {
 					return res.status(200).send([]), undefined;
 				}
+                if (!isGod && doc.user !== req.session.user._id) {
+					return res.status(400).send('Access denied'), undefined;
+                }
 				JudgeSrv.findCases(req.body.runId, next);
 			});
 		} else {
