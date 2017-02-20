@@ -11,6 +11,6 @@ module.exports = {
         resave: true,
         saveUninitialized: false
     },
-	judgerToken: 'faf3ar42q34',
+	judgerToken: 'far',
 	siteURL: 'http://' + (process.env.ADDR || 'localhost') + ':' + (process.env.PORT || '3333')
 };
