@@ -6,14 +6,13 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse\n" > /etc/apt/sources.list ; \
 curl -sL https://deb.nodesource.com/setup_7.x | -E bash - ; \
 apt update ; \
-apt install -y nodejs ; \
-apt install -y npm ; \
+apt install -y nodejs git npm ; \
 ln -s /usr/bin/nodejs /usr/bin/node ; \
 npm install -g nrm ; \
 nrm use taobao ; \
 npm install -g bower grunt-cli ; \
 cd /srv/tuoj-web ; \
 npm i ; \
-bower i ; \
-grunt concat 
+bower --allow-root i ; \
+grunt concat
 
