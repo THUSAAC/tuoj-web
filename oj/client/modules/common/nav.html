@@ -1,0 +1,56 @@
+<nav class='navbar navbar-default' ng-controller='mainCtrl'>
+	<div class='container'>
+		<div class='navbar-header'>
+			<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#navbar-collapse-1' aria-expanded='false'>
+				<span class='sr-only'>Toggle navigation</span>
+				<i class='glyphicon glyphicon-list'></i>
+			</button>
+			<a class='navbar-brand' ui-sref='home'><img src='/images/logo.png' style='height: 120%'/></a>
+		</div>
+
+		<div class='collapse navbar-collapse' id='navbar-collapse-1'>
+			<ul class='nav navbar-nav'>
+				<li ui-sref-active='active'>
+					<a ui-sref='contestlist.my'>比赛列表</a>
+				</li>
+				<li ui-sref-active='active' ng-repeat='c in activeContests'>
+					<a ui-sref='contest({ contestId: c._id })' class='hidden'></a>
+					<a ui-sref='contest.home({ contestId: c._id })'>{{ c.title }}</a>
+				</li>
+				<li ng-if='isRoot' ui-sref-active='active'>
+					<a ui-sref='admin'>全局管理</a>
+				</li>
+				<li ui-sref-active='active'>
+					<a ui-sref='doc({ docId: "faq" })'>FAQ</a>
+				</li>
+			</ul>
+			<ul class='nav navbar-nav navbar-right'>
+				<li><a>{{ servertime | date:'hh:mm:ss a' }}</a></li>
+				<li ng-if='currentUser==null'>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>登入<span class='caret'></span></a>
+					<ul class='dropdown-menu'>
+						<form class='navbar-form'>
+							<div class='form-group'>
+								<input class='form-control' type='text' placeholder='用户名' ng-model='login.username'/>
+							</div>
+							<div class='form-group'>
+								<input class='form-control' type='password' placeholder='密码' ng-model='login.password'/>
+							</div>
+							<div class='form-group'>
+								<button class='btn btn-success' ng-click='authLogin()'>登入</button>
+								<button class='btn btn-primary'>注册</button>
+							</div>
+						</form>
+					</ul>
+				</li>
+				<li ng-if='currentUser!=null' class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{{ currentUser.realname }}<span class='caret'></span></a>
+					<ul class='dropdown-menu'>
+						<li><a>{{ currentUser.username }}</a></li>
+						<li><a ng-click='authLogout()' href='/'>登出</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div>
+</nav>

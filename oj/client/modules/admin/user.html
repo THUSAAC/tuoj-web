@@ -1,0 +1,41 @@
+<div class='page-header'>
+	<h1>用户管理</h1>
+</div>
+<div class='form-group'>
+	<p><label>生成密码条</label></p>
+	<p>说明: 第一行为表头 (realname, school), 同行以tab分隔</p>
+	<textarea class='form-control' ng-model='raw'></textarea>
+</div>
+<div class='form-group'>
+	<label>前缀</label>
+	<input class='form-control' ng-model='prefix' placeholder='prefix'/>
+	<label>起始编号</label>
+	<input class='form-control' ng-model='startno' placeholder='startno' type='number'/>
+	<button class='btn btn-success' ng-click='generate()'>生成</button>
+</div>
+<div class='form-group'>
+	<label>密码条 (刷新就没了)</label>
+	<table class='table table-hover'>
+		<thead>
+			<th>#</th>
+			<th>姓名</th>
+			<th>学校</th>
+			<th>用户名</th>
+			<th>密码</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat='user in res'>
+				<td>{{ $index }}</td>
+				<td>{{ user.realname }}</td>
+				<td>{{ user.school }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.password }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class='form-group'>
+	<p><label>杂项</label></p>
+	<button class='btn btn-success' ng-click='logoutAll()'>注销所有帐号</button>
+</div>
+

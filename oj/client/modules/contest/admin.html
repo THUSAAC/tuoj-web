@@ -1,0 +1,94 @@
+<div class='page-header'>
+	<h1>编辑比赛</h1>
+</div>
+<div class='form-group'>
+	<div class='row'>
+		<div class='col-sm-6 col-xs-12'>
+			<label for='start_time'>开始时间</label>
+			<div class='input-group' datetimepicker ng-model='contest.start_time'>
+				<input class='form-control'/>
+				<span class='input-group-addon'>
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+		<div class='col-sm-6 col-xs-12'>
+			<label for='end_time'>结束时间</label>
+			<div class='input-group' datetimepicker ng-model='contest.end_time'>
+				<input class='form-control'/>
+				<span class='input-group-addon'>
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class='form-group'>
+	<label>比赛标题</label>
+	<input class='form-control' ng-model='contest.title'/>
+</div>
+<div class='form-group'>
+	<label>通告栏</label>
+	<textarea class='form-control' ng-model='contest.dashboard'></textarea>
+</div>
+<div class='form-group'>
+	<p><label>选项</label></p>
+	<p><label>
+		<input type='checkbox' ng-checked='contest.hidden' ng-model='contest.hidden'/>
+		<span>隐藏本场比赛</span>
+	</label></p>
+	<p><label>
+		<input type='checkbox' ng-model='contest.released' ng-checked='contest.released'/>
+		<span>允许选手查看成绩</span>
+	</label></p>
+	<p><label>
+		<input type='checkbox' ng-model='contest.published' ng-checked='contest.published'/>
+		<span>公开成绩</span>
+	</label></p>
+</div>
+<div class='form-group'>
+	<p><label>题目</label></p>
+	<table class='table table-hover table-striped'>
+		<thead>
+			<th>#</th>
+			<th>全局编号</th>
+			<th>标题</th>
+			<th>操作</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>添加</td>
+				<td><input class='form-control' ng-model='addId' placeholder='全局编号'></td>
+				<td></td>
+				<td>
+					<button class='btn btn-default' ng-click='addProblem()'>
+						<i class='glyphicon glyphicon-plus'></i>
+					</button>
+				</td>
+			</tr>
+			<tr ng-repeat='prob in problems track by $index'>
+				<td>{{ $index }}</td>
+				<td>{{ prob }}</td>
+				<td><a ui-sref='contest.problem({ contestId: contestId, problemId: $index })'>{{ titles[prob] || '加载中' }}</a></td>
+				<td>
+					<button class='btn btn-default' ng-click='swapProblem($index, $index - 1)'>
+						<i class='glyphicon glyphicon-arrow-up'></i>
+					</button>
+					<button class='btn btn-default' ng-click='swapProblem($index, $index + 1)'>
+						<i class='glyphicon glyphicon-arrow-down'></i>
+					</button>
+					<button class='btn btn-danger' ng-click='removeProblem($index)'>
+						<i class='glyphicon glyphicon-remove'></i>
+					</button>
+					<button class='btn btn-default' ui-sref='admin.problem({ problemId: prob })'>
+						<i class='glyphicon glyphicon-edit'></i>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class='form-group'>
+	<button class='btn btn-success' ng-click='applyConfig()'>保存修改</button>
+</div>
+

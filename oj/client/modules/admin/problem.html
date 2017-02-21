@@ -1,0 +1,152 @@
+<div class='page-header'>
+	<h1>编辑题目 #{{ problem._id }}</h1>
+</div>
+<div class='form-group'>
+	<label>题目标题</label>
+	<input class='form-control' ng-model='problem.title'/>
+</div>
+<div class='form-group'>
+	<label>服务器本地路径</label>
+	<input class='form-control' ng-model='problem.local'/>
+	<button class='btn btn-primary' ng-click='syncLocal()'>从服务器本地文件夹同步</button>
+</div>
+<div class='form-group'>
+	<label>上传文件</label>
+	<input type='file' class='form-control' id='answer' multiple='multiple'/>
+	<button class='btn btn-default' ng-click='viewLocal()'>浏览服务器本地文件夹</button>
+	<button class='btn btn-default' ng-click='uploadFiles()'>上传文件到题目私有目录</button>
+	<button class='btn btn-default' ng-click='uploadPublicFiles()'>上传文件到公共目录</button>
+	<div ng-if='dirFiles'>
+		<label>本地文件夹内容</label>
+		<pre>{{ dirFiles }}</pre>
+	</div>
+	<div>
+		<a ng-repeat='file in publicFiles' href='{{ file }}'>{{ file }}</a>
+	</div>
+</div>
+<div class='form-group'>
+	<label>语言和编译选项</label>
+	<table class='table table-hover table-striped'>
+		<thead>
+			<th>#</th>
+			<th>名称</th>
+			<th>编译器</th>
+			<th>编译参数</th>
+			<th>操作
+				<button class='btn btn-default' ng-click='problem.langs.push({})'>
+					<i class='glyphicon glyphicon-plus'></i>
+				</button>
+			</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat='lang in problem.langs'>
+				<td>{{ $index }}</td>
+				<td><input class='form-control' ng-model='lang.name' placeholder='如: g++ with std11'/></td>
+				<td><input class='form-control' ng-model='lang.exec' placeholder='如: g++'/></td>
+				<td><input class='form-control' ng-model='lang.args' placeholder='如: -std=c++11 -O2'/></td>
+				<td>
+					<button class='btn btn-danger' ng-click='removeLang($index)'>
+						<i class='glyphicon glyphicon-remove'></i>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class='btn btn-default' ng-click='problem.langs=defLangs.original'>默认传统题设置</button>
+	<button class='btn btn-default' ng-click='problem.langs=defLangs.originalO2'>默认传统题设置(O2)</button>
+	<button class='btn btn-default' ng-click='problem.langs=defLangs.answer'>默认提交答案题设置</button>
+</div>
+<div class='form-group'>
+	<label>测试点信息</label>
+	<table class='table table-hover table-striped'>
+		<thead>
+			<th>#</th>
+			<th>答案编号</th>
+			<th>分值</th>
+			<th>标准输入文件</th>
+			<th>标准输出文件</th>
+			<th>时间限制 (提答留空)</th>
+			<th>空间限制 (提答留空)</th>
+			<th>SPJ路径</th>
+			<th>操作 </th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>添加</td>
+				<td><input class='form-control' ng-model='addCase.ansId' placeholder='ansId'/></td>
+				<td><input class='form-control' ng-model='addCase.score' placeholder='score'/></td>
+				<td><input class='form-control' ng-model='addCase.inputFile' placeholder='inputFile'/></td>
+				<td><input class='form-control' ng-model='addCase.outputFile' placeholder='outputFile'/></td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='addCase.time_limit' placeholder='time_limit'/>
+						<span class='input-group-addon'>ms</span>
+					</div>
+				</td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='addCase.mem_limit' placeholder='mem_limit'/>
+						<span class='input-group-addon'>MB</span>
+					</div>
+				</td>
+				<td><input class='form-control' ng-model='addCase.spjPath' placeholder='spjPath'/></td>
+				<td>
+					<button class='btn btn-default' ng-click='addRuledCase()'>
+						<i class='glyphicon glyphicon-plus'></i>
+					</button>
+					<button class='btn btn-default' ng-click='fillCase()'>
+						<i class='glyphicon glyphicon-hand-down'></i>
+					</button>
+				</td>
+			</tr>
+			</tr>
+			<tr ng-repeat='c in problem.cases'>
+				<td>{{ $index }}</td>
+				<td><input class='form-control' ng-model='c.ansId' placeholder='ansId'/></td>
+				<td><input class='form-control' ng-model='c.score' placeholder='score'/></td>
+				<td><input class='form-control' ng-model='c.inputFile' placeholder='inputFile'/></td>
+				<td><input class='form-control' ng-model='c.outputFile' placeholder='outputFile'/></td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='c.time_limit' placeholder='time_limit'/>
+						<span class='input-group-addon'>ms</span>
+					</div>
+				</td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='c.mem_limit' placeholder='mem_limit'/>
+						<span class='input-group-addon'>MB</span>
+					</div>
+				</td>
+				<td><input class='form-control' ng-model='c.spjPath' placeholder='spjPath'/></td>
+				<td>
+					<button class='btn btn-danger' ng-click='removeCase($index)'>
+						<i class='glyphicon glyphicon-remove'></i>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class='btn btn-success' ng-click='writeConfig()'>同步到配置文件</button>
+	<!--<button class='btn btn-default' ng-click='makeTUS("normal")'>生成传统题评测脚本</button>
+	<button class='btn btn-default' ng-click='makeTUS("answer")'>生成提交答案题评测脚本</button>-->
+</div>
+<div class='form-group'>
+	<div class='row'>
+		<div class='col-md-6 col-xs-12'>
+			<label>题目描述</label>
+			<textarea class='form-control' rows='16' ng-model='descriptionText'></textarea>
+		</div>
+		<div class='col-md-6 col-xs-12'>
+			<label>预览</label>
+			<div class='panel panel-default'>
+				<div class='panel-body'>
+					<div id='preview'></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<button class='btn btn-default' ng-click='generatePreview()'>生成预览</button>
+	<button class='btn btn-success' ng-click='writeDoc()'>更新题目描述</button>
+</div>
+

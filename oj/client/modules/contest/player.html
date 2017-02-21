@@ -1,0 +1,101 @@
+<div class='page-header'>
+	<h1>选手管理</h1>
+</div>
+<button class='btn btn-default' ng-click='loadUsers()'>
+	<i class='glyphicon glyphicon-refresh'></i>
+</button>
+<table class='table table-hover table-striped'>
+	<thead>
+		<th>#</th>
+		<th>用户名</th>
+		<th>真实姓名</th>
+		<th>学校</th>
+		<th>权限角色</th>
+		<th>操作</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>添加</td>
+			<td><input class='form-control' ng-model='addUserId' placeholder='用户名'/></td>
+			<td></td>
+			<td></td>
+			<td>选手</td>
+			<td>
+				<button class='btn btn-default' ng-click='addPlayer()'>
+					<i class='glyphicon glyphicon-plus'></i>
+				</button>
+			</td>
+		</tr>
+		<tr ng-repeat='player in players track by $index'>
+			<td>{{ $index }}</td>
+			<td>{{ player.user.username }}</td>
+			<td>{{ player.user.realname }}</td>
+			<td>{{ player.user.school }}</td>
+			<td>
+				<select ng-model='player.role'>
+					<option value='master'>管理员</option>
+					<option value='viewer'>观察员</option>
+					<option value='player'>选手</option>
+				</select>
+			</td>
+			<td>
+				<button class='btn btn-default' ng-click='changeRole(player)'>
+					<i class='glyphicon glyphicon-ok'></i>
+				</button>
+				<button class='btn btn-danger' ng-click='removeRole(player)'>
+					<i class='glyphicon glyphicon-remove'></i>
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class='form-group'>
+	<label>批量添加选手 (一行一个) </label>
+	<button class='btn btn-default' ng-click='batchAdd()'>
+		<i class='glyphicon glyphicon-plus'></i>
+	</button>
+	<textarea class='form-control' ng-model='batchInput'></textarea>
+</div>
+<label>延时管理</label>
+<table class='table table-hover table-striped'>
+	<thead>
+		<th>#</th>
+		<th>用户名</th>
+		<th>延时</th>
+		<th>操作</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>添加</td>
+			<td><input class='form-control' ng-model='addDelayUsername' placeholder='用户名'/></td>
+			<td>
+				<div class='input-group'>
+					<input class='form-control' ng-model='addDelayVal' type='number' placeholder='延时'/>
+					<span class='input-group-addon'>Min</span>
+				</div>
+			</td>
+			<td>
+				<button class='btn btn-default' ng-click='addDelay()'>
+					<i class='glyphicon glyphicon-plus'></i>
+				</button>
+			</td>
+		</tr>
+		<tr ng-repeat='d in delays track by $index'>
+			<td>{{ $index }}</td>
+			<td>{{ d.user.username }}</td>
+			<td>
+				<div class='input-group'>
+					<input class='form-control' ng-model='d.value' placeholder='延时'/>
+					<span class='input-group-addon'>Min</span>
+				</div>
+			</td>
+			<td>
+				<button class='btn btn-default' ng-click='changeDelay(d)'>
+					<i class='glyphicon glyphicon-ok'></i>
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

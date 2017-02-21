@@ -1,0 +1,102 @@
+<div class='page-header'>
+	<h1>{{ problem.title }}</h1>
+</div>
+<div class='col-md-{{ leftWid }} col-sm-12'>
+	<div class='panel panel-default'>
+		<div class='panel-body'>
+			<div class='pull-right'>
+				<button class='btn btn-default'>
+					<i class='glyphicon glyphicon-refresh' ng-click='fetchData()'></i>
+				</button>
+				<button class='btn btn-default'>
+					<i class='glyphicon glyphicon-fullscreen' ng-click='changeLR()'></i>
+				</button>
+			</div>
+			<div id='problemtext'></div>
+		</div>
+	</div>
+	<div ng-if='needReload'>
+		<a ng-click='updateProblem()' href=''>题目描述加载出错, 单击此处重新加载</a>
+	</div>
+	<div ng-if='submittable'>
+		<ng-include src="'/modules/common/submit.html'"/>
+	</div>
+</div>
+<div class='col-md-{{ rightWid }} col-sm-12'>
+	<div class='panel panel-default' ng-if='langs && langs[0]'>
+		<div class='panel-heading'>
+			<p>语言及编译选项信息</p>
+		</div>
+		<div class='panel-body'>
+			<table class='table table-hover table-striped'>
+				<thead>
+					<th>#</th>
+					<th>名称</th>
+					<th>编译器</th>
+					<th>额外参数</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat='lang in langs'>
+						<td>{{ $index }}</td>
+						<td>{{ lang.name }}</td>
+						<td>{{ lang.exec }}</td>
+						<td>{{ lang.args }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class='panel panel-default' ng-if='cases && cases[0]'>
+		<div class='panel-heading'>
+			<p>测试点信息</p>
+		</div>
+		<div class='panel-body'>
+			<table class='table table-hover table-striped'>
+				<thead>
+					<th>#</th>
+					<th ng-if='cases[0].time_limit'>时间限制</th>
+					<th ng-if='cases[0].mem_limit'>空间限制</th>
+					<th>答案编号</th>
+					<th>分值</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat='case in cases'>
+						<td>{{ $index + 1 }}</td>
+						<td ng-if='case.time_limit'>{{ case.time_limit }} ms</td>
+						<td ng-if='case.mem_limit'>{{ case.mem_limit }} MB</td>
+						<td>{{ case.ansId }}</td>
+						<td>{{ case.score }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>
+			<p> 递交历史 </p>
+		</div>
+		<div class='panel-body'>
+			<table class='table table-hover table-striped'>
+				<thead>
+					<th>#</th>
+					<th>状态</th>
+					<th>时间</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat='status in historys'>
+						<td>{{ status._id }}</td>
+						<td>
+							<a href='/#!/contest/{{ contestId }}/detail/{{ status._id }}'>
+								<label class='label label-{{ status.status | statusClass }}'>{{ status.status }}</span>
+							</a>
+						</td>
+						<td>
+							{{ status.submitted_time | date:'hh:mm:ss a' }}
+							<span ng-if='status.isFinal'><label class='label label-success'>有效递交</label></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

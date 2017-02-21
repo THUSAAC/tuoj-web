@@ -4,14 +4,14 @@
 - Wrong Answer
 - Time Limit Exceeded
 - Memory Limit Exceeded
+- Output Limit Exceeded
 - Runtime Error
 - Compilation Error
-- No Source
-- Dangerous Program
+- Server Error
 
 # 获得一个评测任务
 
-POST /api/judge/get_task/acm
+POST /api/judge/get_task
 
 ## Request body
 
@@ -27,10 +27,10 @@ POST /api/judge/get_task/acm
 {
      "run_id": 32,
      "lang": "g++", // or "java"
-     "source_url": "http://tuoj.com/download/Az23.cpp",
-     // 或者"source_url": ["http://tuoj.com/download/a.cpp", "http://tuoj.com/download/t1.ans", "http://tuoj.com/download/t2.ans"],
+     
+     "source_url": ["http://tuoj.com/download/a.cpp", "http://tuoj.com/download/t1.ans", "http://tuoj.com/download/t2.ans"],
 
-     "total_cases": 10,
+     // "total_cases": 10, 取消这个啦
      "data_md5": "4b4dc93fafa1298f95e731ebac7725d1",
      "data_url": "http://tuoj.com/download/t3.zip"
 }
@@ -56,18 +56,30 @@ POST /api/judge/update_results
      "token": "faf3ar42q34",
 
      "results": {
-          "0": { // 0 用来表示编译情况
+          "Compilation": {
                "status": "Compilation Success"
+               "ext_info": { // "ext_info" 可以都显示到网页上，除了debug那一项
+                   "Compilation Info": "",
+                   "debug": ""
+               }
           }
-          "1": { // 测试点必须在1至total_cases之间
+          "1": {
                "status": "Accepted",
                "time": 864, // ms
                "memory": 27815, // kB
+               "score": 10
+               "ext_info": {
+                   "Judge Info": "Accepted" 
+               }
           }
           "3": {
                "status": "Wrong Answer",
                "time": 999,
                "memory": 27813,
+               "score": 5 // 根据prob.json返回一个范围内的值
+               "ext_info": {
+                   "Judge Info": "Expected 5, but found 10."
+               }
           }
      }
 }
@@ -79,10 +91,12 @@ POST /api/judge/update_results
      "run_id": 32,
      "token": "faf3ar42q34",
      "results": {
-          "0": {
+          "Compilation": {
                "status": "Compilation Error",
-               "time": 0, // ms
-               "memory": 0, // kB
+               "ext_info": {
+                   "Compilation Info": "g++ xxxx"
+                   "debug": "xxx"
+               }
           }
      }
 }

@@ -1,0 +1,22 @@
+<div class='page-header'>
+	<h1>{{ contest.title }}</h1>
+</div>
+<div class='col-md-4 col-sm-12'>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>
+			<p>信息和通告</p>
+		</div>
+		<div class='panel-body'>
+			<p>开始时间: {{ contest.start_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
+			<p>结束时间: {{ contest.end_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
+			<p><pre>{{ contest.dashboard }}</pre></p>
+		</div>
+	</div>
+</div>
+<div class='col-md-8 col-sm-12'>
+	<div class='list-group'>
+		<a class='list-group-item list-group-item-info'>题目列表</a>
+		<a class='list-group-item' ng-repeat='prob in problems' href='#!/contest/{{ contestId }}/problem/{{ $index }}'>{{ prob.title }}</a>
+	</div>
+</div>
+

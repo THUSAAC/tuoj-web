@@ -1,0 +1,19 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  tab-size: 4;
+  -moz-tab-size: 4;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.mono16 {
+	display: inline-block;
+	width: 16em;
+}
+.mono32 {
+	display: inline-block;
+	width: 32em;
+}
+

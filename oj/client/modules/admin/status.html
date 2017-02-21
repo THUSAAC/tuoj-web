@@ -1,0 +1,57 @@
+<div class="page-header">
+	<h1>状态和重测</h1>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<input placeholder="Judge id" ng-model="filter.id" class="form-control"/>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<input placeholder="Problem id" ng-model="filter.problem" class="form-control"/>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<input placeholder="User id" ng-model="filter.user" class="form-control"/>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<input placeholder="Status" ng-model="filter.status" class="form-control"/>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<input placeholder="Score" ng-model="filter.score" class="form-control"/>
+</div>
+<div class="form-group col-xs-6 col-md-4">
+	<button style="margin-right: 10px" ng-click="updateList()" class="btn btn-default">更新</button>
+	<button style="margin-right: 10px" ng-click="rejudgeList()" class="btn btn-danger">重测列表</button>
+	<label>
+		<input type="checkbox" ng-model="autoref" checked="checked"/><span>自动更新</span><span ng-if="autoref">{{ lastUpdateTime | date: 'HH:mm:ss' }}</span>
+	</label>
+</div>
+<table class="table table-hover table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>题目</th>
+			<th>用户</th>
+			<th>语言</th>
+			<th>状态</th>
+			<th>分数</th>
+			<th>提交时间</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="judge in list">
+			<td>
+				<a ui-sref='contest.detail({ contestId: judge.contest, runId: judge._id})'>{{ judge._id }}</a>
+			</td>
+			<td>{{ judge.problem._id }} {{ judge.problem.title }}</td>
+			<td>{{ judge.user._id }} {{ judge.user.username }}</td>
+			<td>{{ judge.lang }}</td>
+			<td>
+				<label ui-sref='contest.detail({ contestId: judge.contest, runId: judge._id})' class='label label-{{ judge.status | statusClass }}'>{{ judge.status }}<label>
+			</td>
+			<td>{{ judge.score }}</td>
+			<td>{{ judge.submitted_time | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+			<td>
+				<button class='btn btn-default' ng-click='rejudge(judge._id)'>重测</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

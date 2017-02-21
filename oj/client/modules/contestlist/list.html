@@ -1,0 +1,17 @@
+<ul class='list-group'>
+	<li class='list-group-item list-group-item-success' ng-if='isRoot'>
+		<a ng-click='addContest()' href=''>
+			<i class='glyphicon glyphicon-plus'></i>添加一场比赛
+		</a>
+	</li>
+	<li class='list-group-item' ng-repeat='c in list'>
+		<p>
+		<big><a ui-sref='contest.home({ contestId: c._id })'>{{ c.title }}</a></big>
+			<label class='label label-{{ c.status | statusClass }}'>{{ c.status | ojTranslate }}</label>
+			<label ng-if='c.role != "player"' class='label label-danger'>{{ c.role | ojTranslate }}</label>
+			<label ng-if='c.hidden' class='label label-info'>已隐藏</label>
+		</p>
+		<p>开始时间: {{ c.start_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
+		<p>结束时间: {{ c.end_time | date : 'yyyy-MM-dd hh:mm:ss a' }}</p>
+	</li>
+</ul>

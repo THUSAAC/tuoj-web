@@ -1,0 +1,51 @@
+# Zipped files
+client/dists/*
+
+# Project
+*.dSYM
+*.swp
+
+# npm
+node_modules
+*.log
+*.log.*
+*.gz
+
+# psb and xcf
+*.psb
+*.xcf
+
+# bower
+bower_components
+
+# OS X
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+# Idea
+.idea
+
+# Binary
+#data/problems/
+staticdata
+
+# Config
+# server/config_local.js
+config/config.js
+
+#zhx
+run.sh
+*.swo
+
+# data
+tools/import_cttc
