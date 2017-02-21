@@ -85,6 +85,9 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 			if (ans.filename.match(/\d+\.out/)) {
 				ans.num = parseInt(ans.filename.match(/\d+/)[0]);
 			}
+			if ($scope.problem.maxAns === 1) {
+				ans.num = 0;
+			}
 			if ($scope.answers.length >= $scope.problem.maxAns) {
 				$scope.answers.shift();
 			}
