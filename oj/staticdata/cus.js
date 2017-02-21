@@ -4,19 +4,23 @@ var data = {
 	langs: [ {
 		name: 'g++',
 		exec: 'g++',
-		args: '-DONLINE_JUDGE'
+		args: '-DONLINE_JUDGE',
+		maxlen: 64 * 1024,
 	}, {
 		name: 'g++ with std11',
 		exec: 'g++',
-		args: '-std=c++11 -DONLINE_JUDGE'
+		args: '-std=c++11 -DONLINE_JUDGE',
+		maxlen: 64 * 1024,
 	}, {
 		name: 'gcc',
 		exec: 'gcc',
-		args: '-DONLINE_JUDGE'
+		args: '-DONLINE_JUDGE',
+		maxlen: 64 * 1024,
 	}, {
 		name: 'pascal',
 		exec: 'fpc',
-		args: ''
+		args: '',
+		maxlen: 64 * 1024,
 	} ], cases: [ {
 		ansId: 0,
 		score: 100,
