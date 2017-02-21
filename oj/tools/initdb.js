@@ -1,6 +1,10 @@
 var mongoose = require('mongoose')
 var autoIncrement = require("mongoose-auto-increment")
-mongoose.connect('mongodb://127.0.0.1/tuoj')
+var dbURL = 'mongodb://127.0.0.1/tuoj';
+if (process.env.DBURL) {
+	dbURL = process.env.DBURL;
+}
+mongoose.connect(dbURL);
 autoIncrement.initialize(mongoose.connection); 
 setTimeout(function() {
 	mongoose.disconnect();
