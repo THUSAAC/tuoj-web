@@ -16,7 +16,11 @@ var app = express();
 // app.set('env', 'release');
 
 // set up mongo connection and session
-mongoose.connect('mongodb://127.0.0.1/tuoj');
+var dbURL = 'mongodb://127.0.0.1/tuoj';
+if (process.env.DBURL) {
+	dbURL = process.env.DBURL;
+}
+mongoose.connect(dbURL);
 
 autoIncrement.initialize(mongoose.connection);
 var EXPRESS_SESSION = require("./config").EXPRESS_SESSION;
