@@ -1,3 +1,3 @@
 var config = require('./sample');
-config.SITE_URL = 'http://aiur.pacman-thu.org:3333';
+config.siteURL = 'https://oj.thusaac.org';
 module.exports = config;

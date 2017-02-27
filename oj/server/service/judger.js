@@ -19,7 +19,6 @@ module.exports.sendJudge = function(judge) {
 				source_url[parseInt(i.substr(6))] = config.siteURL + '/staticdata/' + judge.source_file[i];
 			}
 		}
-		console.log('source parsed');
 		return {
 			run_id: judge._id,
 			lang: judge.lang,
@@ -105,6 +104,7 @@ module.exports.updateResults = function(runId, caseId, data) {
 		extInfo: parseExtInfo(data.ext_info) 
 	};
 	console.log('result daa parsed');
+	console.log(frm);
 	return new Promise(function(resolve, reject) {
 		JudgeSrv.updateStatus(frm, function(error) {
 			if (error) {
