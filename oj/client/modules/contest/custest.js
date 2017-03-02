@@ -34,6 +34,7 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	$scope.applyAnswer = function(ans) {
 		if (typeof(ans) === 'object') {
 			ans.num = $scope.answers.length;
+			$scope.answers.size=ans.size;
 			if (ans.filename.match(/\d*\.out/)) {
 				ans.num = parseInt(ans.filename.split('.')[0]);
 			}
@@ -83,6 +84,9 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 	$scope.submitCode = function() {
 		if ($scope.answers.length === 0) {
 			return alert('你没有选择答案文件');
+		}
+		if ($scope.answers.size > $scope.cases[0].len_limit*1024) {
+			return alert('你的代码长度过长');
 		}
 		var frm = {
 			contestId: $scope.contestId,

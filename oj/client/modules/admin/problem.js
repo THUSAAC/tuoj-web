@@ -15,6 +15,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		outputFile: 'data/<i>.out',
 		time_limit: '1000',
 		mem_limit: '512',
+		len_limit: '64',
 		spjPath: ''
 	};
 	$scope.defLangs = {

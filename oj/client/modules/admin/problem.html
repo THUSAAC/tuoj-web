@@ -67,6 +67,7 @@
 			<th>标准输出文件</th>
 			<th>时间限制 (提答留空)</th>
 			<th>空间限制 (提答留空)</th>
+			<th>码长限制 (提答留空)</th>
 			<th>SPJ路径</th>
 			<th>操作 </th>
 		</thead>
@@ -87,6 +88,12 @@
 					<div class='input-group'>
 						<input class='form-control' ng-model='addCase.mem_limit' placeholder='mem_limit'/>
 						<span class='input-group-addon'>MB</span>
+					</div>
+				</td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='addCase.len_limit' placeholder=len_limit'/>
+						<span class='input-group-addon'>KB</span>
 					</div>
 				</td>
 				<td><input class='form-control' ng-model='addCase.spjPath' placeholder='spjPath'/></td>
@@ -116,6 +123,12 @@
 					<div class='input-group'>
 						<input class='form-control' ng-model='c.mem_limit' placeholder='mem_limit'/>
 						<span class='input-group-addon'>MB</span>
+					</div>
+				</td>
+				<td>
+					<div class='input-group'>
+						<input class='form-control' ng-model='c.len_limit' placeholder='len_limit'/>
+						<span class='input-group-addon'>KB</span>
 					</div>
 				</td>
 				<td><input class='form-control' ng-model='c.spjPath' placeholder='spjPath'/></td>
