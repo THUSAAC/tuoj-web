@@ -197,6 +197,7 @@ angular.module('tuoj-web', [
 			"ended": "已结束",
 			"master": "管理员",
 			"viewer": "观察者",
+			"setter": "可爱的出题人",
 			"home": "首页",
 			"contestlist": "比赛列表",
 			"contestlist.my": "我的比赛",

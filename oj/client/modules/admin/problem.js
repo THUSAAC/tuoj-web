@@ -1,6 +1,7 @@
 var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', 'mjLoader', function($scope, $rootScope, $state, $stateParams, $http, mjLoader) {
 	mjLoader.init();
 	$scope.problemId = $stateParams.problemId;
+	$scope.contestId = $stateParams.contestId;
 	$scope.problem = { langs: [], cases: [] };
 	$scope.removeLang = function(i) {
 		$scope.problem.langs = $scope.problem.langs.slice(0, i).concat($scope.problem.langs.slice(i + 1));
@@ -95,7 +96,8 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	};
 	($scope.fetchConfig = function() {
 		$http.post('/api/admin/problemgetConfig', {
-			problemId: $scope.problemId
+			problemId: $scope.problemId,
+			contestId: $scope.contestId
 		}).then(function(data) {
 			$scope.problem._id = data.data._id;
 			$scope.problem.title = data.data.title;
@@ -116,6 +118,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.syncLocal = function() {
 		$http.post('/api/admin/problemsyncLocal', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			local: $scope.problem.local
 		}).then(function(data) {
 			$scope.fetchConfig();
@@ -144,6 +147,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.writeConfig = function() {
 		$http.post('/api/admin/problemconfig', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			title: $scope.problem.title,
 			local: $scope.problem.local,
 			cases: JSON.stringify(purify($scope.problem.cases)),
@@ -160,6 +164,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.writeDoc = function() {
 		$http.post('/api/admin/problemupdateDescription', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			descriptionText: $scope.descriptionText
 		}).then(function(data) {
 			$scope.fetchConfig();
@@ -170,6 +175,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.viewLocal = function() {
 		$http.post('/api/admin/problemviewLocal', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 		}).then(function(data) {
 			$scope.dirFiles = data.data;
 		});
@@ -183,6 +189,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		reader.onload = function() {
 			var ret = {
 				problemId: $scope.problemId,
+				contestId: $scope.contestId,
 				code: btoa(this.result),
 				filename: file.name,
 				size: file.size
