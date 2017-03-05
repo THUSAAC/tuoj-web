@@ -63,6 +63,9 @@ module.exports.broadcast = function(attr, userId, callback) {
 				}, {
 					contest: attr.contestId,
 					role: 'viewer'
+				}, {
+					contest: attr.contestID,
+					role: 'setter';
 				} ]
 			}).exec(this);
 		} else if (attr.to != null) {

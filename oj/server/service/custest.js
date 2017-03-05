@@ -24,7 +24,7 @@ module.exports.submittable = function(req, res, next) {
 			if (error || !doc) {
 				return res.status(400).send('Denied');
 			}
-			if (doc.role === 'viewer' || doc.role === 'master') {
+			if (doc.role === 'viewer' || doc.role === 'setter' || doc.role === 'master') {
 				next();
 			} else {
 				return res.status(400).send('Denied');

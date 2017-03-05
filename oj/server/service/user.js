@@ -63,6 +63,25 @@ module.exports.needRoot = function(req, res, next) {
 	});
 };
 
+module.exports.needSettingAuthority = function(req, res, next) {
+	Role.findOne({
+		$or: [ {
+			user: req.session.user._id,
+			contest: -1,
+			role: 'root'
+		} ,{
+			user: req.session.user._id,
+			contest: req.body.contestId,
+			role: 'setter'
+		} ]
+	}).exec(function(error, doc) {
+		if (error || !doc) {
+			return res.status(400).send('Access deined');
+		}
+		next();
+	});
+};
+
 module.exports.add = function(info) {
 	return new Promise(function(resolve, reject) {
 		User.remove({
