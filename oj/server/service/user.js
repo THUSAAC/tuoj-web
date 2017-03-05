@@ -64,6 +64,10 @@ module.exports.needRoot = function(req, res, next) {
 };
 
 module.exports.needSettingAuthority = function(req, res, next) {
+	if (req.body.contestId === null){
+		module.exports.needRoot(req,res,next);
+		return;
+	}
 	Role.findOne({
 		$or: [ {
 			user: req.session.user._id,
@@ -71,7 +75,7 @@ module.exports.needSettingAuthority = function(req, res, next) {
 			role: 'root'
 		} ,{
 			user: req.session.user._id,
-			contest: contestId,
+			contest: req.body.contestId,
 			role: 'setter'
 		} ]
 	}).exec(function(error, doc) {
