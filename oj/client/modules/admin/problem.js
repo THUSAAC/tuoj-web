@@ -18,43 +18,53 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		len_limit: '64',
 		spjPath: ''
 	};
+	
 	$scope.defLangs = {
 		answer: [ {
 			name: 'answer',
 			exec: 'cp',
-			args: ''
+			args: '',
+			maxlen: '1048576'
 		} ], original: [ {
 			name: 'g++',
 			exec: 'g++',
-			args: '-DONLINE_JUDGE'
+			args: '-DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'g++ with std11',
 			exec: 'g++',
-			args: '-std=c++11 -DONLINE_JUDGE'
+			args: '-std=c++11 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'gcc',
 			exec: 'gcc',
-			args: '-DONLINE_JUDGE'
+			args: '-DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'pascal',
 			exec: 'fpc',
-			args: ''
+			args: '',
+			maxlen: '65536'
 		} ], originalO2: [ {
 			name: 'g++',
 			exec: 'g++',
-			args: '-O2 -DONLINE_JUDGE'
+			args: '-O2 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'g++ with std11',
 			exec: 'g++',
-			args: '-O2 -std=c++11 -DONLINE_JUDGE'
+			args: '-O2 -std=c++11 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'gcc',
 			exec: 'gcc',
-			args: '-O2 -DONLINE_JUDGE'
+			args: '-O2 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'pascal',
 			exec: 'fpc',
-			args: '-O2'
+			args: '-O2',
+			maxlen: '65536'
 		} ]
 	};
 	$scope.addRuledCase = function() {

@@ -85,9 +85,6 @@ var contestCustestCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 		if ($scope.answers.length === 0) {
 			return alert('你没有选择答案文件');
 		}
-		if ($scope.answers.size > $scope.cases[0].len_limit*1024) {
-			return alert('你的代码长度过长');
-		}
 		var frm = {
 			contestId: $scope.contestId,
 			problemId: $scope.problemId,

@@ -34,6 +34,7 @@
 					<th>名称</th>
 					<th>编译器</th>
 					<th>额外参数</th>
+					<th>代码长度限制（B）</th>
 				</thead>
 				<tbody>
 					<tr ng-repeat='lang in langs'>
@@ -41,6 +42,7 @@
 						<td>{{ lang.name }}</td>
 						<td>{{ lang.exec }}</td>
 						<td>{{ lang.args }}</td>
+						<td>{{ lang.maxlen }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -56,7 +58,6 @@
 					<th>#</th>
 					<th ng-if='cases[0].time_limit'>时间限制</th>
 					<th ng-if='cases[0].mem_limit'>空间限制</th>
-					<th ng-if='cases[0].len_limit'>码长限制</th>
 					<th>答案编号</th>
 					<th>分值</th>
 				</thead>
@@ -65,7 +66,6 @@
 						<td>{{ $index + 1 }}</td>
 						<td ng-if='case.time_limit'>{{ case.time_limit }} ms</td>
 						<td ng-if='case.mem_limit'>{{ case.mem_limit }} MB</td>
-						<td ng-if='case.len_limit'>{{ case.len_limit }} KB</td>
 						<td>{{ case.ansId }}</td>
 						<td>{{ case.score }}</td>
 					</tr>
