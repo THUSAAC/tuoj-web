@@ -71,7 +71,7 @@ module.exports.needSettingAuthority = function(req, res, next) {
 			role: 'root'
 		} ,{
 			user: req.session.user._id,
-			contest: req.body.contestId,
+			contest: contestId,
 			role: 'setter'
 		} ]
 	}).exec(function(error, doc) {
