@@ -43,6 +43,18 @@ sudo npm install -g bower grunt-cli
 bower install
 ```
 
+There is no user by default, while registeration is not allowed currently.
+
+Therefore, you should run
+
+```
+node oj/tools/initdb.js
+```
+
+to create a user with both his username and passwrod set as `root`.
+
+You may change that script to register more users.
+
 # How to start the app
 ## Docker
 We have a `docker-compose` startup config file. You may run 
