@@ -23,5 +23,12 @@ var contestHomeCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http
 			} ];
 		});
 	})();
+	$scope.isSetter = function(){
+		return Role.findOne({
+			user: $scope.userId,
+			contest: $scope.contestId,
+			role: 'setter';
+		});
+	}
 } ];
 
