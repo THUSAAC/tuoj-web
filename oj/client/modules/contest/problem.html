@@ -1,7 +1,8 @@
 <div class='page-header'>
 	<h1>{{ problem.title }}</h1>
 </div>
-<div class='col-md-{{ leftWid }} col-sm-12'>
+<div class="row">
+<div class='col-md-8 col-sm-12'>
 	<div class='panel panel-default'>
 		<div class='panel-body'>
 			<div class='pull-right'>
@@ -20,9 +21,7 @@
 	</div>
 	<div ng-if='submittable'>
 		<ng-include src="'/modules/common/submit.html'"/>
-	</div>
-</div>
-<div class='col-md-{{ rightWid }} col-sm-12'>
+	</div>	
 	<div class='panel panel-default' ng-if='langs && langs[0]'>
 		<div class='panel-heading'>
 			<p>语言及编译选项信息</p>
@@ -73,12 +72,14 @@
 			</table>
 		</div>
 	</div>
+</div>
+<div class='col-md-4'>
 	<div class='panel panel-default'>
 		<div class='panel-heading'>
 			<p> 递交历史 </p>
 		</div>
 		<div class='panel-body'>
-			<table class='table table-hover table-striped'>
+			<table id='abcd' class='table table-hover table-striped'>
 				<thead>
 					<th>#</th>
 					<th>状态</th>

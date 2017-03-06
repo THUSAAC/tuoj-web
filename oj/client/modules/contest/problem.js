@@ -112,7 +112,8 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 				if ($scope.historys[i].status === undefined) {
 					$scope.historys[i].status = 'Invisible';
 				}
-				if ($scope.historys[i].status !== 'Compilaion Error' && (fv === -1 || $scope.historys[fv].submitted_time < $scope.historys[i].submitted_time)) {
+				const ignoreList = [ 'Compilaion Error', 'Creating' ];
+				if (ignoreList.indexOf($scope.historys[i].status) === -1 && (fv === -1 || $scope.historys[fv].submitted_time < $scope.historys[i].submitted_time)) {
 					fv = i;
 				}
 			}
@@ -120,8 +121,19 @@ var contestProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$h
 				$scope.historys[fv].isFinal = true;
 			}
 			$scope.historys.sort(function(a, b) {
-				return b.submitted_time - a.submitted_time;
+				return a.submitted_time - b.submitted_time;
 			});
+			$.extend( true, $.fn.dataTable.defaults, {
+				"bLengthChange": false,
+				"bFilter": false,
+				"bInfo": false,
+				"bAutoWidth": false,
+				"searching": false,
+				"ordering": true
+			} );
+			$timeout(function() {
+				$('#abcd').dataTable({"pagingType": "numbers","order": [[ 0, "desc" ]]});
+			},100);
 		}).catch(function(error) {
 			console.log(error);
 		});
