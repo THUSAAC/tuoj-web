@@ -194,9 +194,15 @@ module.exports.getRole = function(req, res, next) {
 		return res.status(400).send('Wrong query');
 	}
 	Role.findOne({
-		contest: contestId,
-		user: req.session.user._id,
-		role: 'master'
+		$or: [ {
+			contest: contestId,
+			user: req.session.user._id,
+			role: 'master'
+		}, {
+			contest: contestId,
+			user: req.session.user._id,
+			role: 'setter'
+		} ]
 	}).exec(function(error, doc) {
 		res.status(200).send(doc);
 	});

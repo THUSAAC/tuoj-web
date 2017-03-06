@@ -1,5 +1,12 @@
 var contestHomeCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http', 'poll', function($scope, $rootScope, $state, $stateParams, $http, poll) {
     $scope.contestId = $stateParams.contestId;
+	($scope.updateIsSetter = function() {
+		$http.post('/api/contest/role', {
+			contestId: $scope.contestId
+		}).then(function(data) {
+			if (data.data.role === 'setter') $scope.isSetter = 1;
+		});
+	})();
 	($scope.updateInfo = function() {
 		$http.post('/api/contest/info', {
 			contestId: $scope.contestId
@@ -23,12 +30,5 @@ var contestHomeCtrl = [ '$scope', '$rootScope', '$state', '$stateParams', '$http
 			} ];
 		});
 	})();
-	$scope.isSetter = function(){
-		return Role.findOne({
-			user: $scope.userId,
-			contest: $scope.contestId,
-			role: 'setter';
-		});
-	}
 } ];
 
