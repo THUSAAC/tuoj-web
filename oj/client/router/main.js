@@ -101,6 +101,10 @@ angular.module('tuoj-web', [
 			url: '/problem/:problemId',
 			templateUrl: '/modules/admin/problem.html',
 			controller: adminProblemCtrl,
+			params: {
+				contestId: undefined,
+				problemId: undefined,
+			},
 			resolve: {
 				onLoad: [ '$ocLazyLoad', function($ocLazyLoad) { 
 					return $ocLazyLoad.load([ {
