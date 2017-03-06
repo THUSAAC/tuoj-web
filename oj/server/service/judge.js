@@ -65,12 +65,14 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 		{
 			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) 
 			{
-				this.fileName[i] = this.runId + '.' + randomString.generate(16) + '.' + i;
 				var fil = atob(codeContent[i]);
 				for(var j in problem.langs) 
 				{
-					if(problem.langs[j].name==language && fil.length>problem.langs[j].maxlen)
-						return callback('Length exceeded'), undefined;
+					if(problem.langs[j].name==language && fil.length>problem.langs[j].maxlen) {
+						return Judge.remove(this.runId, function(error) {
+							callback('Length exceeded');
+						}), undefined;
+					}
 				}
 			}
 		}
