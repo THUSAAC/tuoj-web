@@ -80,7 +80,7 @@ module.exports.submit = function(req, res, next) {
 	ContestSrv.submit(req.session.user._id, req.body.contestId, req.body.problemId, req.body, function(error) {
 		if (error) {
 			console.error(error);
-			return res.status(500).send('Internal error');
+			return res.status(500).send(error);
 		}
 		res.status(200).send('Succeeded');
 	});
