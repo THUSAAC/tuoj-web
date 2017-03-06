@@ -74,7 +74,7 @@ module.exports.available = function(req, res, next) {
 		if (err || !doc) {
 			return res.status(400).send('Access denied'), undefined;
 		}
-		if (doc.role === 'master' || doc.role === 'viewer') {
+		if (doc.role === 'master' || doc.role === 'viewer' || doc.role === 'setter') {
 			return next();
 		}
 		if (this.contest.hidden || getContestStatus(this.contest) === 'unstarted') {
@@ -98,7 +98,7 @@ module.exports.submittable = function(req, res, next) {
 		if (error || !doc) {
 			return res.status(400).send('Access denied'), undefined;
 		}
-		if (doc.role === 'master' || doc.role === 'viewer') {
+		if (doc.role === 'master' || doc.role === 'viewer' || doc.role === 'setter') {
 			return next(), undefined;
 		}
 		Contest.findOne({
@@ -159,7 +159,7 @@ module.exports.isResultVisible = function(userId, contestId, callback) {
 		if (error || !doc) {
 			return callback(false, false, false), undefined;
 		}
-		if (doc.role === 'master' || doc.role === 'viewer') {
+		if (doc.role === 'master' || doc.role === 'viewer' || doc.role === 'setter') {
 			return callback(true, true, true), undefined;
 		}
 		Contest.findById(contestId).exec(this);
@@ -194,9 +194,15 @@ module.exports.getRole = function(req, res, next) {
 		return res.status(400).send('Wrong query');
 	}
 	Role.findOne({
-		contest: contestId,
-		user: req.session.user._id,
-		role: 'master'
+		$or: [ {
+			contest: contestId,
+			user: req.session.user._id,
+			role: 'master'
+		}, {
+			contest: contestId,
+			user: req.session.user._id,
+			role: 'setter'
+		} ]
 	}).exec(function(error, doc) {
 		res.status(200).send(doc);
 	});

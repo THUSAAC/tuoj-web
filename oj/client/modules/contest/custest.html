@@ -17,6 +17,7 @@
 						<th>名称</th>
 						<th>编译器</th>
 						<th>额外参数</th>
+						<th>代码长度限制（B）</th>
 					</thead>
 					<tbody>
 						<tr ng-repeat='lang in langs'>
@@ -24,6 +25,7 @@
 							<td>{{ lang.name }}</td>
 							<td>{{ lang.exec }}</td>
 							<td>{{ lang.args }}</td>
+							<td>{{ lang.maxlen }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -42,10 +44,6 @@
 					<tr>
 						<td>空间限制</td>
 						<td>{{ cases[0].mem_limit }} MB</td>
-					</tr>
-					<tr>
-						<td>码长限制</td>
-						<td>{{ cases[0].len_limit }} KB</td>
 					</tr>
 					<tr>
 						<td>代码对应答案编号</td>

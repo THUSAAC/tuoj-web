@@ -1,6 +1,7 @@
 var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http', 'mjLoader', function($scope, $rootScope, $state, $stateParams, $http, mjLoader) {
 	mjLoader.init();
 	$scope.problemId = $stateParams.problemId;
+	$scope.contestId = $stateParams.contestId;
 	$scope.problem = { langs: [], cases: [] };
 	$scope.removeLang = function(i) {
 		$scope.problem.langs = $scope.problem.langs.slice(0, i).concat($scope.problem.langs.slice(i + 1));
@@ -18,43 +19,53 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		len_limit: '64',
 		spjPath: ''
 	};
+	
 	$scope.defLangs = {
 		answer: [ {
 			name: 'answer',
 			exec: 'cp',
-			args: ''
+			args: '',
+			maxlen: '1048576'
 		} ], original: [ {
 			name: 'g++',
 			exec: 'g++',
-			args: '-DONLINE_JUDGE'
+			args: '-DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'g++ with std11',
 			exec: 'g++',
-			args: '-std=c++11 -DONLINE_JUDGE'
+			args: '-std=c++11 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'gcc',
 			exec: 'gcc',
-			args: '-DONLINE_JUDGE'
+			args: '-DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'pascal',
 			exec: 'fpc',
-			args: ''
+			args: '',
+			maxlen: '65536'
 		} ], originalO2: [ {
 			name: 'g++',
 			exec: 'g++',
-			args: '-O2 -DONLINE_JUDGE'
+			args: '-O2 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'g++ with std11',
 			exec: 'g++',
-			args: '-O2 -std=c++11 -DONLINE_JUDGE'
+			args: '-O2 -std=c++11 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'gcc',
 			exec: 'gcc',
-			args: '-O2 -DONLINE_JUDGE'
+			args: '-O2 -DONLINE_JUDGE',
+			maxlen: '65536'
 		}, {
 			name: 'pascal',
 			exec: 'fpc',
-			args: '-O2'
+			args: '-O2',
+			maxlen: '65536'
 		} ]
 	};
 	$scope.addRuledCase = function() {
@@ -85,7 +96,8 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	};
 	($scope.fetchConfig = function() {
 		$http.post('/api/admin/problemgetConfig', {
-			problemId: $scope.problemId
+			problemId: $scope.problemId,
+			contestId: $scope.contestId
 		}).then(function(data) {
 			$scope.problem._id = data.data._id;
 			$scope.problem.title = data.data.title;
@@ -106,6 +118,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.syncLocal = function() {
 		$http.post('/api/admin/problemsyncLocal', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			local: $scope.problem.local
 		}).then(function(data) {
 			$scope.fetchConfig();
@@ -134,6 +147,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.writeConfig = function() {
 		$http.post('/api/admin/problemconfig', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			title: $scope.problem.title,
 			local: $scope.problem.local,
 			cases: JSON.stringify(purify($scope.problem.cases)),
@@ -150,6 +164,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.writeDoc = function() {
 		$http.post('/api/admin/problemupdateDescription', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 			descriptionText: $scope.descriptionText
 		}).then(function(data) {
 			$scope.fetchConfig();
@@ -160,6 +175,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 	$scope.viewLocal = function() {
 		$http.post('/api/admin/problemviewLocal', {
 			problemId: $scope.problemId,
+			contestId: $scope.contestId,
 		}).then(function(data) {
 			$scope.dirFiles = data.data;
 		});
@@ -173,6 +189,7 @@ var adminProblemCtrl = [ '$scope', '$rootScope', '$state', '$stateParams','$http
 		reader.onload = function() {
 			var ret = {
 				problemId: $scope.problemId,
+				contestId: $scope.contestId,
 				code: btoa(this.result),
 				filename: file.name,
 				size: file.size

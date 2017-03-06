@@ -60,12 +60,30 @@ module.exports.create = function(problem, codeContent, language, userId, contest
 		this.fileName = {};
 		this.runId = this.judge.get('_id');
 		var tasks = [];
-		for (var i in codeContent) {
-			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) {
+		var atob = require('atob')
+		for (var i in codeContent) 
+		{
+			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) 
+			{
+				var fil = atob(codeContent[i]);
+				for(var j in problem.langs) 
+				{
+					if(problem.langs[j].name==language && fil.length>problem.langs[j].maxlen) {
+						return Judge.remove(this.runId, function(error) {
+							callback('Length exceeded');
+						}), undefined;
+					}
+				}
+			}
+		}
+		for (var i in codeContent) 
+		{
+			if (typeof(i) === 'string' && i.match(/^answer\d*$/) !== null) 
+			{
 				this.fileName[i] = this.runId + '.' + randomString.generate(16) + '.' + i;
 				tasks.push(fs.writeFile(path.resolve(__dirname, '../../staticdata', this.fileName[i]), codeContent[i], 'base64'));
 			}
-		}
+		};
 		if (tasks.length < 1) {
 			return callback('File error'), undefined;
 		}

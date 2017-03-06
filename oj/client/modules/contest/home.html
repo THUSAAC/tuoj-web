@@ -17,6 +17,8 @@
 	<div class='list-group'>
 		<a class='list-group-item list-group-item-info'>题目列表</a>
 		<a class='list-group-item' ng-repeat='prob in problems' href='#!/contest/{{ contestId }}/problem/{{ $index }}'>{{ prob.title }}</a>
+		<a ng-if='isSetter' class='list-group-item list-group-item-warning'>编辑题目</a>
+		<a ng-if='isSetter' class='list-group-item' ng-repeat='prob in problems' ui-sref='admin.problem({ problemId: prob._id , contestId: contestId})'>{{ prob.title }}</a>
 	</div>
 </div>
 
