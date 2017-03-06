@@ -15,6 +15,10 @@ Desktop.ini
 # Idea
 .idea
 
+# vim
+.swp
+.swo
+
 # Binary
 #data/problems/
 oj/staticdata
